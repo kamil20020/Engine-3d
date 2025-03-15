@@ -12,11 +12,64 @@ public class Screen extends JPanel {
 
         Dimension screenSize = getScreenSize();
 
+        System.out.println(screenSize.width + " x " + screenSize.height);
+
         setPreferredSize(screenSize);
 
         content =  new BufferedImage(screenSize.width, screenSize.height, BufferedImage.TYPE_INT_RGB);
 
-        setVisible(true);
+        Line line = new Line(
+            Vector3.of(100, 100, 0),
+            Vector3.of(200, 200, 0),
+            Color.green,
+            2
+        );
+
+        Line line1 = new Line(
+            Vector3.of(300, 400, 0),
+            Vector3.of(400, 300, 0),
+            Color.red,
+            2
+        );
+
+        Line line2 = new Line(
+            Vector3.of(500, 500, 0),
+            Vector3.of(600, 500, 0),
+            Color.blue,
+            2
+        );
+
+        Line line3 = new Line(
+            Vector3.of(700, 700, 0),
+            Vector3.of(700, 800, 0),
+            Color.orange,
+            2
+        );
+
+        line.draw(content);
+        line1.draw(content);
+        line2.draw(content);
+        line3.draw(content);
+
+        Triangle triangle = new Triangle(
+            Vector3.of(800, 800, 0),
+            Vector3.of(900, 900, 0),
+            Vector3.of(1000, 700, 0),
+            Color.green,
+            true
+        );
+
+        triangle.draw(content);
+
+        Triangle triangle1 = new Triangle(
+            Vector3.of(800, 800, 0),
+            Vector3.of(900, 900, 0),
+            Vector3.of(1000, 700, 0),
+            Color.orange,
+            false
+        );
+
+        triangle1.draw(content);
     }
 
     @Override
