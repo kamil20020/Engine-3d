@@ -4,8 +4,10 @@ package pl.engine;
  * Hello world!
  */
 public class App {
+
     public static void main(String[] args) {
 
-        System.out.println("Hello World! :D");
+        Window window = new Window();
+        window.setVisible(true);
     }
 }
