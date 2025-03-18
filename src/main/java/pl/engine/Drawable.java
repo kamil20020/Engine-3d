@@ -5,5 +5,5 @@ import java.awt.image.BufferedImage;
 
 public interface Drawable {
 
-    void draw(BufferedImage content);
+    void draw(Screen screen);
 }

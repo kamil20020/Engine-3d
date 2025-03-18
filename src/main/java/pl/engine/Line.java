@@ -28,7 +28,7 @@ public class Line implements Drawable{
         }
     }
 
-    private void drawInvalidLine(BufferedImage content){
+    private void drawInvalidLine(Screen screen){
 
         int minY = 0;
         int maxY = 0;
@@ -42,7 +42,7 @@ public class Line implements Drawable{
 
             int x = a.x;
 
-            content.setRGB(x, y, color.getRGB());
+            screen.draw(x, y, color);
 
 //            for(int w = 0; w < weight; w++, x++){
 //                content.setRGB(x, y, color.getRGB());
@@ -51,14 +51,14 @@ public class Line implements Drawable{
     }
 
     @Override
-    public void draw(BufferedImage content) {
+    public void draw(Screen screen) {
 
         // y = ax + b
         // b = y - ax
 
         if(a.x == b.x){
 
-            drawInvalidLine(content);
+            drawInvalidLine(screen);
             return;
         }
 
@@ -66,8 +66,8 @@ public class Line implements Drawable{
 
         int bCoef = getBCoef(slope, a);
 
-        a.draw(content);
-        b.draw(content);
+        a.draw(screen);
+        b.draw(screen);
 
         float y = ((float)(a.x - 1) * slope + bCoef);
 
@@ -75,7 +75,7 @@ public class Line implements Drawable{
 
             y += slope;
 
-            content.setRGB(x, (int) y, color.getRGB());
+            screen.draw(x, (int) y, color);
 
 //            for(int w = 0; w < weight; w++, y--){
 //                content.setRGB(x, y, color.getRGB());

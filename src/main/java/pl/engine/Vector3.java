@@ -20,9 +20,9 @@ public class Vector3 implements Drawable{
     }
 
     @Override
-    public void draw(BufferedImage content) {
+    public void draw(Screen screen) {
 
-        content.setRGB(x, y, Color.red.getRGB());
+        screen.draw(x, y, Color.red);
     }
 
     @Override

@@ -46,10 +46,10 @@ public class Screen extends JPanel {
             2
         );
 
-        line.draw(content);
-        line1.draw(content);
-        line2.draw(content);
-        line3.draw(content);
+        line.draw(this);
+        line1.draw(this);
+        line2.draw(this);
+        line3.draw(this);
 
         Triangle triangle = new Triangle(
             Vector3.of(800, 800, 0),
@@ -59,7 +59,7 @@ public class Screen extends JPanel {
             true
         );
 
-        triangle.draw(content);
+        triangle.draw(this);
 
         Triangle triangle1 = new Triangle(
             Vector3.of(800, 800, 0),
@@ -69,7 +69,12 @@ public class Screen extends JPanel {
             false
         );
 
-        triangle1.draw(content);
+        triangle1.draw(this);
+    }
+
+    public void draw(int x, int y, Color color){
+
+        content.setRGB(x, y, color.getRGB());
     }
 
     @Override

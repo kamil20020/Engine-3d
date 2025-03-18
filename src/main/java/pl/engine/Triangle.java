@@ -25,23 +25,23 @@ public class Triangle implements Drawable{
         this.color = color;
     }
 
-    private void drawEdges(BufferedImage content){
+    private void drawEdges(Screen screen){
 
         Line l1 = new Line(v[0], v[1], color);
         Line l2 = new Line(v[1], v[2], color);
         Line l3 = new Line(v[0], v[2], color);
 
-        l1.draw(content);
-        l2.draw(content);
-        l3.draw(content);
+        l1.draw(screen);
+        l2.draw(screen);
+        l3.draw(screen);
     }
 
     @Override
-    public void draw(BufferedImage content) {
+    public void draw(Screen screen) {
 
         if(!isFilled){
 
-            drawEdges(content);
+            drawEdges(screen);
             return;
         }
 
@@ -90,7 +90,7 @@ public class Triangle implements Drawable{
             }
 
             for(int x = minX; x <= maxX; x++){
-                content.setRGB(x, y, color.getRGB());
+                screen.draw(x, y, color);
             }
         }
 
@@ -108,7 +108,7 @@ public class Triangle implements Drawable{
             }
 
             for(int x = minX; x <= maxX; x++){
-                content.setRGB(x, y, color.getRGB());
+                screen.draw(x, y, color);
             }
         }
     }
