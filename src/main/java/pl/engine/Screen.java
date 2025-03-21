@@ -70,6 +70,21 @@ public class Screen extends JPanel {
         );
 
         triangle1.draw(this);
+
+        Disk disk = new Disk(Vector3.of(400, 400, 0), 100, Color.green);
+        disk.draw(this);
+
+        Circle circle = new Circle(Vector3.of(600, 600, 0), 100, Color.gray);
+        circle.draw(this);
+
+        Square square = new Square(Vector3.of(600, 600, 0), 100, Color.magenta);
+        square.draw(this);
+
+        Square square1 = new Square(Vector3.of(700, 700, 0), 160, Color.pink, true);
+        square1.draw(this);
+
+        Rect rect = new Rect(Vector3.of(800, 800, 0), 200, 160, Color.orange, true);
+        rect.draw(this);
     }
 
     public void draw(int x, int y, Color color){

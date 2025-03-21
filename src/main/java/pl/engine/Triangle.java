@@ -36,6 +36,85 @@ public class Triangle implements Drawable{
         l3.draw(screen);
     }
 
+    // ----
+    // | /
+    // |/
+    private void drawFilledOrthodonalTop(Screen screen, Vector3 minYVec, Vector3 middleVec, Vector3 maxYVec){
+
+        float topLine2Slope = Line.getSlope(minYVec, maxYVec);
+
+        int topLine2B = Line.getBCoef(topLine2Slope, maxYVec);
+
+        int x2 = middleVec.x;
+
+        for(int y = maxYVec.y; y >= middleVec.y; y--){
+
+            drawInvalidRow(screen, topLine2Slope, topLine2B, y, x2);
+        }
+    }
+
+    // |\
+    // | \
+    // ----
+    private void drawFilledOrthodonalBottom(Screen screen, Vector3 minYVec, Vector3 middleVec, Vector3 maxYVec){
+
+        float topLine2Slope = Line.getSlope(minYVec, maxYVec);
+
+        int topLine2B = Line.getBCoef(topLine2Slope, maxYVec);
+
+        int x1 = middleVec.x;
+
+        for(int y = minYVec.y; y <= middleVec.y; y++){
+
+            drawInvalidRow(screen, topLine2Slope, topLine2B, y, x1);
+        }
+    }
+
+    private void drawInvalidRow(Screen screen, float topLine2Slope, int topLine2B, int y, int x2){
+
+        int x1 = Line.getX(topLine2Slope, topLine2B, y);
+
+        int minX = x1;
+        int maxX = x2;
+
+        if(x1 > x2){
+            minX = x2;
+            maxX = x1;
+        }
+
+        for(int x = minX; x <= maxX; x++){
+            screen.draw(x, y, color);
+        }
+    }
+
+    private void drawValidRow(Screen screen, float topLine1Slope, int topLine1B, float topLine2Slope, int topLine2B, int y){
+
+        int x1 = Line.getX(topLine1Slope, topLine1B, y);
+
+        drawInvalidRow(screen, topLine2Slope, topLine2B, y, x1);
+    }
+
+    private void drawFilledValid(Screen screen, Vector3 minYVec, Vector3 middleVec, Vector3 maxYVec){
+
+        float topLine1Slope = Line.getSlope(minYVec, middleVec);
+        float topLine2Slope = Line.getSlope(minYVec, maxYVec);
+        float bottomLineSlope = Line.getSlope(middleVec, maxYVec);
+
+        int topLine1B = Line.getBCoef(topLine1Slope, minYVec);
+        int topLine2B = Line.getBCoef(topLine2Slope, maxYVec);
+        int bottomLineB = Line.getBCoef(bottomLineSlope, maxYVec);
+
+        for(int y = minYVec.y; y < middleVec.y; y++){
+
+            drawValidRow(screen, topLine1Slope, topLine1B, topLine2Slope, topLine2B, y);
+        }
+
+        for(int y = maxYVec.y; y >= middleVec.y; y--){
+
+            drawValidRow(screen, topLine2Slope, topLine2B, bottomLineSlope, bottomLineB, y);
+        }
+    }
+
     @Override
     public void draw(Screen screen) {
 
@@ -62,54 +141,38 @@ public class Triangle implements Drawable{
 
         for(int i = 0; i <= 2; i++){
 
-            if(v[i].y >= minYVec.y && v[i].y <= maxYVec.y){
+            if(v[i] != minYVec && v[i] != maxYVec){
                 middleVec = v[i];
                 break;
             }
         }
 
-        float topLine1Slope = Line.getSlope(minYVec, middleVec);
-        float topLine2Slope = Line.getSlope(minYVec, maxYVec);
-        float bottomLineSlope = Line.getSlope(middleVec, maxYVec);
+        if(minYVec.x == maxYVec.x){
 
-        int topLine1B = Line.getBCoef(topLine1Slope, minYVec);
-        int topLine2B = Line.getBCoef(topLine2Slope, maxYVec);
-        int bottomLineB = Line.getBCoef(bottomLineSlope, maxYVec);
+            Vector3 buffer;
 
-        for(int y = minYVec.y; y <= middleVec.y; y++){
+            if(minYVec.y == middleVec.y){
 
-            int x1 = Line.getX(topLine1Slope, topLine1B, y);
-            int x2 = Line.getX(topLine2Slope, topLine2B, y);
+                buffer = minYVec;
+                minYVec = middleVec;
+            }
+            else{
 
-            int minX = x1;
-            int maxX = x2;
-
-            if(x1 > x2){
-                minX = x2;
-                maxX = x1;
+                buffer = maxYVec;
+                maxYVec = middleVec;
             }
 
-            for(int x = minX; x <= maxX; x++){
-                screen.draw(x, y, color);
-            }
+            middleVec = buffer;
         }
 
-        for(int y = maxYVec.y; y >= middleVec.y; y--){
-
-            int x1 = Line.getX(topLine2Slope, topLine2B, y);
-            int x2 = Line.getX(bottomLineSlope, bottomLineB, y);
-
-            int minX = x1;
-            int maxX = x2;
-
-            if(x1 > x2){
-                minX = x2;
-                maxX = x1;
-            }
-
-            for(int x = minX; x <= maxX; x++){
-                screen.draw(x, y, color);
-            }
+        if(middleVec.x == minYVec.x){
+            drawFilledOrthodonalBottom(screen, minYVec, middleVec, maxYVec);
+        }
+        else if(middleVec.x == maxYVec.x){
+            drawFilledOrthodonalTop(screen, minYVec, middleVec, maxYVec);
+        }
+        else{
+            drawFilledValid(screen, minYVec, middleVec, maxYVec);
         }
     }
 
