@@ -71,8 +71,8 @@ public class Texture {
         x += shiftX;
         y += shiftY;
 
-        int pixel = pixels[x * y];
+        int pixel = pixels[y * width + x];
 
-        return new Color(pixel, false);
+        return new Color(pixel);
     }
 }

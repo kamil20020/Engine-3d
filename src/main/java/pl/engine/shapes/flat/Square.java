@@ -9,8 +9,6 @@ public class Square extends Texturable {
 
     private Vector3 topLeft;
     private int a;
-    private Color color;
-    private Texture texture;
     private boolean isFilled;
 
     public Square(Vector3 topLeft, int a, Color color, boolean isFilled){
@@ -40,6 +38,19 @@ public class Square extends Texturable {
 
     @Override
     public void draw() {
+
+        if(texture != null){
+
+            for(int y = topLeft.y; y < topLeft.y + a; y++){
+
+                for(int x = topLeft.x; x < topLeft.x + a; x++) {
+
+                    drawTexturePixel(x, y);
+                }
+            }
+
+            return;
+        }
 
         Vector3 v1 = Vector3.of(topLeft);
         Vector3 v2 = Vector3.of(topLeft.x, topLeft.y + a, topLeft.z);

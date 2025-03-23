@@ -95,19 +95,20 @@ public class Screen extends JPanel {
         Rect rect = new Rect(Vector3.of(800, 800, 0), 200, 160, Color.orange, true);
         rect.draw();
 
-        Texture texture = Texture.of("/textures/grass.png");
-        GridTexture gridTexture = new GridTexture("/textures/grass-grid.jpg", 88, 88, 5, 7);
+        Texture texture = Texture.of("/textures/grass-grid.png");
+        GridTexture gridTexture = new GridTexture("/textures/grass-grid.png", 88, 88, 5, 7);
+        GridTexture gridTexture1 = new GridTexture("/textures/grass-grid1.png", 128, 128, 4, 6);
         Texture tileTexture = gridTexture.getTile(1, 1);
-        Texture tileTexture1 = gridTexture.getTile(1, 1);
+        Texture tileTexture1 = gridTexture1.getTile(1, 1);
 
-//        Square texturedSquare = new Square(Vector3.of(0, 0, 0), 1000, texture);
-//        texturedSquare.draw();
+        Square texturedSquare = new Square(Vector3.of(0, 0, 0), 1000, texture);
+        texturedSquare.draw();
 
 //        Disk texturedDisk = new Disk(Vector3.of(500, 500, 0), 200, texture);
 //        texturedDisk.draw();
 
-        Rect texturedRect = new Rect(Vector3.of(0, 0, 0), 88, 88, tileTexture1);
-        texturedRect.draw();
+//        Rect texturedRect = new Rect(Vector3.of(0, 0, 0), 88, 88, tileTexture1);
+//        texturedRect.draw();
     }
 
     public static Screen getInstance(){
