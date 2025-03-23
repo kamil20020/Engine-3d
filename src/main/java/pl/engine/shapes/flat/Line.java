@@ -1,21 +1,21 @@
-package pl.engine;
+package pl.engine.shapes.flat;
+
+import pl.engine.shapes.Drawable;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
-public class Line implements Drawable{
+public class Line extends Drawable {
 
     private Vector3 a, b;
-    private Color color;
     private int weight = 1;
 
-    public Line(Vector3 a, Vector3 b, Color color, int weight) throws IllegalArgumentException{
+    public Line(Vector3 a, Vector3 b, Color color, int weight){
         this(a, b, color);
 
         this.weight = weight;
     }
 
-    public Line(Vector3 a, Vector3 b, Color color) throws IllegalArgumentException{
+    public Line(Vector3 a, Vector3 b, Color color){
 
         this.a = a;
         this.b = b;
@@ -28,7 +28,7 @@ public class Line implements Drawable{
         }
     }
 
-    private void drawInvalidLine(Screen screen){
+    private void drawInvalidLine(){
 
         int minY = 0;
         int maxY = 0;
@@ -42,7 +42,7 @@ public class Line implements Drawable{
 
             int x = a.x;
 
-            screen.draw(x, y, color);
+            drawPixel(x, y, color);
 
 //            for(int w = 0; w < weight; w++, x++){
 //                content.setRGB(x, y, color.getRGB());
@@ -51,14 +51,14 @@ public class Line implements Drawable{
     }
 
     @Override
-    public void draw(Screen screen) {
+    public void draw() {
 
         // y = ax + b
         // b = y - ax
 
         if(a.x == b.x){
 
-            drawInvalidLine(screen);
+            drawInvalidLine();
             return;
         }
 
@@ -66,16 +66,13 @@ public class Line implements Drawable{
 
         int bCoef = getBCoef(slope, a);
 
-        a.draw(screen);
-        b.draw(screen);
-
         float y = ((float)(a.x - 1) * slope + bCoef);
 
         for(int x = a.x; x <= b.x; x++){
 
             y += slope;
 
-            screen.draw(x, (int) y, color);
+            drawPixel(x, (int) y, color);
 
 //            for(int w = 0; w < weight; w++, y--){
 //                content.setRGB(x, y, color.getRGB());

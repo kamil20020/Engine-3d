@@ -1,5 +1,9 @@
 package pl.engine;
 
+import pl.engine.shapes.flat.*;
+import pl.engine.texture.GridTexture;
+import pl.engine.texture.Texture;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -8,7 +12,7 @@ public class Screen extends JPanel {
 
     private final BufferedImage content;
 
-    public Screen(){
+    private Screen(){
 
         Dimension screenSize = getScreenSize();
 
@@ -17,13 +21,18 @@ public class Screen extends JPanel {
         setPreferredSize(screenSize);
 
         content =  new BufferedImage(screenSize.width, screenSize.height, BufferedImage.TYPE_INT_RGB);
+    }
+
+    public void initDraw(){
 
         Line line = new Line(
-            Vector3.of(100, 100, 0),
-            Vector3.of(200, 200, 0),
-            Color.green,
-            2
+                Vector3.of(100, 100, 0),
+                Vector3.of(200, 200, 0),
+                Color.green,
+                2
         );
+
+        line.draw();
 
         Line line1 = new Line(
             Vector3.of(300, 400, 0),
@@ -46,10 +55,10 @@ public class Screen extends JPanel {
             2
         );
 
-        line.draw(this);
-        line1.draw(this);
-        line2.draw(this);
-        line3.draw(this);
+        line.draw();
+        line1.draw();
+        line2.draw();
+        line3.draw();
 
         Triangle triangle = new Triangle(
             Vector3.of(800, 800, 0),
@@ -59,7 +68,7 @@ public class Screen extends JPanel {
             true
         );
 
-        triangle.draw(this);
+        triangle.draw();
 
         Triangle triangle1 = new Triangle(
             Vector3.of(800, 800, 0),
@@ -69,22 +78,41 @@ public class Screen extends JPanel {
             false
         );
 
-        triangle1.draw(this);
+        triangle1.draw();
 
         Disk disk = new Disk(Vector3.of(400, 400, 0), 100, Color.green);
-        disk.draw(this);
+        disk.draw();
 
         Circle circle = new Circle(Vector3.of(600, 600, 0), 100, Color.gray);
-        circle.draw(this);
+        circle.draw();
 
         Square square = new Square(Vector3.of(600, 600, 0), 100, Color.magenta);
-        square.draw(this);
+        square.draw();
 
         Square square1 = new Square(Vector3.of(700, 700, 0), 160, Color.pink, true);
-        square1.draw(this);
+        square1.draw();
 
         Rect rect = new Rect(Vector3.of(800, 800, 0), 200, 160, Color.orange, true);
-        rect.draw(this);
+        rect.draw();
+
+        Texture texture = Texture.of("/textures/grass.png");
+        GridTexture gridTexture = new GridTexture("/textures/grass-grid.jpg", 88, 88, 5, 7);
+        Texture tileTexture = gridTexture.getTile(1, 1);
+        Texture tileTexture1 = gridTexture.getTile(1, 1);
+
+//        Square texturedSquare = new Square(Vector3.of(0, 0, 0), 1000, texture);
+//        texturedSquare.draw();
+
+//        Disk texturedDisk = new Disk(Vector3.of(500, 500, 0), 200, texture);
+//        texturedDisk.draw();
+
+        Rect texturedRect = new Rect(Vector3.of(0, 0, 0), 88, 88, tileTexture1);
+        texturedRect.draw();
+    }
+
+    public static Screen getInstance(){
+
+        return Holder.INSTANCE;
     }
 
     public void draw(int x, int y, Color color){
@@ -101,5 +129,10 @@ public class Screen extends JPanel {
 
     public static Dimension getScreenSize(){
         return Toolkit.getDefaultToolkit().getScreenSize();
+    }
+
+    private static class Holder{
+
+        private static final Screen INSTANCE = new Screen();
     }
 }

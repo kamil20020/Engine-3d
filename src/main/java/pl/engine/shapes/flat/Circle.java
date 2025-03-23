@@ -1,12 +1,13 @@
-package pl.engine;
+package pl.engine.shapes.flat;
+
+import pl.engine.shapes.Drawable;
 
 import java.awt.*;
 
-public class Circle implements Drawable{
+public class Circle extends Drawable {
 
     private Vector3 mid;
     private int r;
-    private Color color;
 
     public Circle(Vector3 mid, int r, Color color){
 
@@ -16,7 +17,7 @@ public class Circle implements Drawable{
     }
 
     @Override
-    public void draw(Screen screen) {
+    public void draw() {
 
         int x;
         int y;
@@ -28,7 +29,7 @@ public class Circle implements Drawable{
             x = (int) ((double) r * Math.cos(degInRadians)) + mid.x;
             y = (int) ((double) r *  Math.sin(degInRadians)) + mid.y;
 
-            screen.draw(x, y, color);
+            drawPixel(x, y, color);
         }
     }
 }

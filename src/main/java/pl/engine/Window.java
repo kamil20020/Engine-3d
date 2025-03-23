@@ -14,8 +14,10 @@ public class Window extends JFrame {
         setResizable(false);
         setExtendedState(MAXIMIZED_BOTH);
 
-        Screen screen = new Screen();
+        Screen screen = Screen.getInstance();
         add(screen);
+
+        screen.initDraw();
 
         setVisible(true);
     }

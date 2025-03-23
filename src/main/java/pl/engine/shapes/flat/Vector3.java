@@ -1,10 +1,8 @@
-package pl.engine;
+package pl.engine.shapes.flat;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.Objects;
 
-public class Vector3 implements Drawable{
+public class Vector3 {
 
     public int x, y, z;
 
@@ -40,12 +38,6 @@ public class Vector3 implements Drawable{
         Vector3 v = (Vector3) o;
 
         return x == v.x && y == v.y && z == v.z;
-    }
-
-    @Override
-    public void draw(Screen screen) {
-
-        screen.draw(x, y, Color.red);
     }
 
     @Override

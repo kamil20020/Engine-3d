@@ -1,25 +1,41 @@
-package pl.engine;
+package pl.engine.shapes.flat;
+
+import pl.engine.texture.Texturable;
+import pl.engine.texture.Texture;
 
 import java.awt.*;
+import java.util.function.BiConsumer;
 
-public class Disk implements Drawable{
+public class Disk extends Texturable {
 
     private Vector3 mid;
     private int r;
-    private Color color;
 
     public Disk(Vector3 mid, int r, Color color){
+        this(mid, r);
 
-        this.mid = mid;
-        this.r = r;
         this.color = color;
     }
 
+    public Disk(Vector3 mid, int r, Texture texture){
+        this(mid, r);
+
+        this.texture = texture;
+    }
+
+    private Disk(Vector3 mid, int r){
+
+        this.mid = mid;
+        this.r = r;
+    }
+
     @Override
-    public void draw(Screen screen) {
+    public void draw() {
 
         int y;
         int prevY = Integer.MIN_VALUE;
+
+        BiConsumer<Integer, Integer> draw = getDrawTextureOrColorPixelFunction();
 
         for(double deg = 90; deg >= -90; deg--){
 
@@ -38,7 +54,7 @@ public class Disk implements Drawable{
 
                     for(int x = leftX; x <= rightX; x++){
 
-                        screen.draw(x, missingY, color);
+                        draw.accept(x, missingY);
                     }
                 }
             }
@@ -46,11 +62,17 @@ public class Disk implements Drawable{
 
                 for(int x = leftX; x <= rightX; x++){
 
-                    screen.draw(x, y, color);
+                    draw.accept(x, y);
                 }
             }
 
             prevY = y;
         }
+    }
+
+    @Override
+    protected Vector3 getMinXY() {
+
+        return Vector3.of(mid.x - r, mid.y - r, 0);
     }
 }
