@@ -98,10 +98,10 @@ public class Screen extends JPanel {
         Texture texture = Texture.of("/textures/grass-grid.png");
         GridTexture gridTexture = new GridTexture("/textures/grass-grid.png", 88, 88, 5, 7);
         GridTexture gridTexture1 = new GridTexture("/textures/grass-grid1.png", 128, 128, 4, 6);
-        Texture tileTexture = gridTexture.getTile(1, 1);
+        Texture tileTexture = gridTexture.getTile(1, 4);
         Texture tileTexture1 = gridTexture1.getTile(1, 1);
 
-        Square texturedSquare = new Square(Vector3.of(0, 0, 0), 1000, texture);
+        Square texturedSquare = new Square(Vector3.of(0, 0, 0), 1000, tileTexture);
         texturedSquare.draw();
 
 //        Disk texturedDisk = new Disk(Vector3.of(500, 500, 0), 200, texture);

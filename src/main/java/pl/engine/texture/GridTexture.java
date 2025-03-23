@@ -43,6 +43,6 @@ public class GridTexture {
         int shiftX = (tileGridCol - 1) * tileWidth;
         int shiftY = (tileGridRow - 1) * tileHeight;
 
-        return new Texture(texture.getPixels(), tileWidth, tileHeight, shiftX, shiftY);
+        return new Texture(texture.getPixels(), texture.getWidth(), texture.getHeight(), tileWidth, tileHeight, shiftX, shiftY);
     }
 }
