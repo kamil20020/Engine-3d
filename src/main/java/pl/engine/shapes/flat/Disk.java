@@ -1,5 +1,6 @@
 package pl.engine.shapes.flat;
 
+import pl.engine.Vector3;
 import pl.engine.texture.Texturable;
 import pl.engine.texture.Texture;
 
@@ -44,7 +45,7 @@ public class Disk extends Texturable {
             y = (int) Math.round((double) r * Math.sin(degInRadians)) + mid.y;
 
             int rightX = (int) ((double) r * Math.cos(degInRadians)) + mid.x;
-            int leftX = 2 * mid.x - rightX; //mid.x - (rightX - mid.x)
+            int leftX = 2 * mid.x - rightX; // got from mid.x - (rightX - mid.x)
 
             int yDiff = prevY - y;
 

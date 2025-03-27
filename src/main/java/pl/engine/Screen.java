@@ -32,7 +32,7 @@ public class Screen extends JPanel {
                 2
         );
 
-        line.draw();
+//        line.draw();
 
         Line line1 = new Line(
             Vector3.of(300, 400, 0),
@@ -55,10 +55,10 @@ public class Screen extends JPanel {
             2
         );
 
-        line.draw();
-        line1.draw();
-        line2.draw();
-        line3.draw();
+//        line.draw();
+//        line1.draw();
+//        line2.draw();
+//        line3.draw();
 
         Triangle triangle = new Triangle(
             Vector3.of(800, 800, 0),
@@ -68,46 +68,80 @@ public class Screen extends JPanel {
             true
         );
 
-        triangle.draw();
+//        triangle.draw();
 
         Triangle triangle1 = new Triangle(
             Vector3.of(800, 800, 0),
             Vector3.of(900, 900, 0),
             Vector3.of(1000, 700, 0),
-            Color.orange,
-            false
+            Color.red,
+            true
         );
 
         triangle1.draw();
 
+        Triangle triangle2 = new Triangle(
+            Perspective.transform(Vector3.of(800, 800, 20)),
+            Perspective.transform(Vector3.of(900, 900, 20)),
+            Perspective.transform(Vector3.of(1000, 700, 20)),
+            Color.orange,
+            true
+        );
+
+        triangle2.draw();
+
+        Triangle triangle3 = new Triangle(
+            Perspective.transform(Vector3.of(800, 800, 5)),
+            Perspective.transform(Vector3.of(900, 900, 5)),
+            Perspective.transform(Vector3.of(1000, 700, 5)),
+            Color.green,
+            true
+        );
+
+        triangle3.draw();
+
+        Camera camera = new Camera(
+            Vector3.of(400, 400, 0),
+            Vector3.of(0, 0, 0),
+            Vector3.of(0, 0, 0),
+            Vector3.of(0, -10, 0)
+        );
+
+        Triangle triangle4 = new Triangle(
+            Perspective.transform(camera.transform(Vector3.of(500, 500, 1))),
+            Perspective.transform(camera.transform(Vector3.of(600, 600, 1))),
+            Perspective.transform(camera.transform(Vector3.of(700, 400, 1))),
+            Color.green,
+            true
+        );
+
+        triangle4.draw();
+
         Disk disk = new Disk(Vector3.of(400, 400, 0), 100, Color.green);
-        disk.draw();
+//        disk.draw();
 
         Circle circle = new Circle(Vector3.of(600, 600, 0), 100, Color.gray);
-        circle.draw();
+//        circle.draw();
 
         Square square = new Square(Vector3.of(600, 600, 0), 100, Color.magenta);
-        square.draw();
+//        square.draw();
 
         Square square1 = new Square(Vector3.of(700, 700, 0), 160, Color.pink, true);
-        square1.draw();
+//        square1.draw();
 
-        Rect rect = new Rect(Vector3.of(800, 800, 0), 200, 160, Color.orange, true);
-        rect.draw();
-
-        Texture texture = Texture.of("/textures/grass-grid.png");
+        Texture texture = Texture.of("/textures/grass.png");
         GridTexture gridTexture = new GridTexture("/textures/grass-grid.png", 88, 88, 5, 7);
         GridTexture gridTexture1 = new GridTexture("/textures/grass-grid1.png", 128, 128, 4, 6);
         Texture tileTexture = gridTexture.getTile(1, 4);
         Texture tileTexture1 = gridTexture1.getTile(1, 1);
 
-        Square texturedSquare = new Square(Vector3.of(0, 0, 0), 1000, tileTexture);
-        texturedSquare.draw();
+        Square texturedSquare = new Square(Vector3.of(0, 0, 0), 400, texture);
+//        texturedSquare.draw();
 
 //        Disk texturedDisk = new Disk(Vector3.of(500, 500, 0), 200, texture);
 //        texturedDisk.draw();
 
-//        Rect texturedRect = new Rect(Vector3.of(0, 0, 0), 88, 88, tileTexture1);
+//        Rect texturedRect = new Rect(Vector3.of(0, 0, 0), 100, 200, tileTexture);
 //        texturedRect.draw();
     }
 

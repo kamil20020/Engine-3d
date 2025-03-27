@@ -18,7 +18,5 @@ public class Window extends JFrame {
         add(screen);
 
         screen.initDraw();
-
-        setVisible(true);
     }
 }

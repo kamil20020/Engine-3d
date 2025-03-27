@@ -1,5 +1,6 @@
 package pl.engine.shapes.flat;
 
+import pl.engine.Vector3;
 import pl.engine.texture.Texturable;
 import pl.engine.texture.Texture;
 

@@ -1,5 +1,6 @@
 package pl.engine.shapes.flat;
 
+import pl.engine.Vector3;
 import pl.engine.shapes.Drawable;
 
 import java.awt.*;

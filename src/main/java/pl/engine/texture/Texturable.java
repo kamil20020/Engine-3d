@@ -1,7 +1,7 @@
 package pl.engine.texture;
 
 import pl.engine.shapes.Drawable;
-import pl.engine.shapes.flat.Vector3;
+import pl.engine.Vector3;
 
 import java.awt.*;
 import java.util.function.BiConsumer;
