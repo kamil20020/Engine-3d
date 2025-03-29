@@ -1,25 +1,25 @@
-package pl.engine;
+package pl.engine.math;
 
 public class Matrix {
 
-    private int[][] m;
+    private double[][] m;
 
-    public Matrix(int[][] m){
+    public Matrix(double[][] m){
 
         this.m = m;
     }
 
     public Matrix(int numberOfRows, int numberOfColumns){
 
-        this.m = new int[numberOfRows][numberOfColumns];
+        this.m = new double[numberOfRows][numberOfColumns];
 
         for(int i = 0; i < numberOfRows; i++){
 
-            this.m[i] = new int[numberOfColumns];
+            this.m[i] = new double[numberOfColumns];
         }
     }
 
-    public int get(int row, int col) throws IllegalArgumentException{
+    public double get(int row, int col) throws IllegalArgumentException{
 
         if(row < 0 || row >= getNumberOfRows()){
             throw new IllegalArgumentException("Invalid row number: " + row + " for " + getHeader() + " matrix");
@@ -52,7 +52,7 @@ public class Matrix {
 
             for(int i = 0; i < this.getNumberOfCols(); i++){
 
-                int sum = 0;
+                double sum = 0;
 
                 for(int c = 0; c < this.getNumberOfCols(); c++){
 
@@ -75,9 +75,9 @@ public class Matrix {
 
         StringBuilder stringBuilder = new StringBuilder();
 
-        for (int[] row : this.m) {
+        for (double[] row : this.m) {
 
-            for (int c : row) {
+            for (double c : row) {
 
                 stringBuilder.append(c);
                 stringBuilder.append(" ");
@@ -96,14 +96,14 @@ public class Matrix {
 
     public static void main(String[] args){
 
-        int[][] m = {
+        double[][] m = {
             {1, 0, 1},
             {2, 1, 1},
             {0, 1, 1},
             {1, 1, 2}
         };
 
-        int[][] m1 = {
+        double[][] m1 = {
             {1, 2, 1},
             {2, 3, 1},
             {4, 2, 2}

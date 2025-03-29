@@ -1,6 +1,6 @@
 package pl.engine.shapes;
 
-import pl.engine.Screen;
+import pl.engine.render.Screen;
 
 import java.awt.*;
 
@@ -10,7 +10,7 @@ public abstract class Drawable {
 
     private static final Screen screen = Screen.getInstance();
 
-    public void drawPixel(int x, int y, Color color){
+    public void drawPixel(double x, double y, Color color){
 
         screen.draw(x, y, color);
     }

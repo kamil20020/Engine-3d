@@ -1,6 +1,6 @@
 package pl.engine.shapes.flat;
 
-import pl.engine.Vector3;
+import pl.engine.math.Vector3;
 import pl.engine.texture.Texturable;
 import pl.engine.texture.Texture;
 
@@ -9,7 +9,7 @@ import java.awt.*;
 public class Square extends Texturable {
 
     private Vector3 topLeft;
-    private int a;
+    private double a;
     private boolean isFilled;
 
     public Square(Vector3 topLeft, int a, Color color, boolean isFilled){
@@ -42,9 +42,9 @@ public class Square extends Texturable {
 
         if(texture != null){
 
-            for(int y = topLeft.y; y < topLeft.y + a; y++){
+            for(double y = topLeft.y; y < topLeft.y + a; y++){
 
-                for(int x = topLeft.x; x < topLeft.x + a; x++) {
+                for(double x = topLeft.x; x < topLeft.x + a; x++) {
 
                     drawTexturePixel(x, y);
                 }

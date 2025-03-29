@@ -1,10 +1,13 @@
-package pl.engine;
+package pl.engine.math;
+
+import pl.engine.math.Matrix;
+import pl.engine.math.Vector3;
 
 public class Transformations {
 
     public static Matrix getTransitionMatrix(Vector3 transition){
 
-        int[][] t = {
+        double[][] t = {
             {1, 0, 0, transition.x},
             {0, 1, 0, transition.y},
             {0, 0, 1, transition.z},
@@ -18,10 +21,10 @@ public class Transformations {
 
         double angleInRadians = Math.toRadians(angleDegree);
 
-        int cosValue = (int) Math.cos(angleInRadians);
-        int sinValue = (int) Math.sin(angleInRadians);
+        double cosValue = Math.cos(angleInRadians);
+        double sinValue = Math.sin(angleInRadians);
 
-        int[][] r = {
+        double[][] r = {
             {cosValue, 0, sinValue, 0},
             {0, 1, 0, 0},
             {-sinValue, 0, cosValue, 0},

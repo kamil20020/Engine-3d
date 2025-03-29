@@ -1,6 +1,6 @@
 package pl.engine.shapes.flat;
 
-import pl.engine.Vector3;
+import pl.engine.math.Vector3;
 import pl.engine.shapes.Drawable;
 
 import java.awt.*;
@@ -31,17 +31,17 @@ public class Line extends Drawable {
 
     private void drawInvalidLine(){
 
-        int minY = 0;
-        int maxY = 0;
+        double minY = 0;
+        double maxY = 0;
 
         if(a.y < b.y){
             minY = a.y;
             maxY = b.y;
         }
 
-        for(int y = minY; y <= maxY; y++){
+        for(double y = minY; y <= maxY; y++){
 
-            int x = a.x;
+            double x = a.x;
 
             drawPixel(x, y, color);
 
@@ -63,17 +63,17 @@ public class Line extends Drawable {
             return;
         }
 
-        float slope = getSlope(a, b);
+        double slope = getSlope(a, b);
 
-        int bCoef = getBCoef(slope, a);
+        double bCoef = getBCoef(slope, a);
 
-        float y = ((float)(a.x - 1) * slope + bCoef);
+        double y = (a.x - 1) * slope + bCoef;
 
-        for(int x = a.x; x <= b.x; x++){
+        for(double x = a.x; x <= b.x; x++){
 
             y += slope;
 
-            drawPixel(x, (int) y, color);
+            drawPixel(x, y, color);
 
 //            for(int w = 0; w < weight; w++, y--){
 //                content.setRGB(x, y, color.getRGB());
@@ -81,12 +81,12 @@ public class Line extends Drawable {
         }
     }
 
-    public static float getSlope(Vector3 v1, Vector3 v2){
+    public static double getSlope(Vector3 v1, Vector3 v2){
 
         return  (float) (v2.y - v1.y) / (float) (v2.x - v1.x);
     }
 
-    public static int getBCoef(float slope, Vector3 v){
+    public static double getBCoef(double slope, Vector3 v){
 
         // y = ax + b
         // b = y - ax
@@ -94,7 +94,7 @@ public class Line extends Drawable {
         return (int) (v.y - (slope * v.x));
     }
 
-    public static int getX(float slope, int bCoef, int y){
+    public static int getX(double slope, double bCoef, double y){
 
         // y = ax + b
         // ax = y - b

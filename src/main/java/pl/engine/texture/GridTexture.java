@@ -28,6 +28,12 @@ public class GridTexture {
         this.gridCols = gridCols;
     }
 
+    public void exampleTextures(){
+
+        GridTexture gridTexture = new GridTexture("/textures/grass-grid.png", 88, 88, 5, 7);
+        GridTexture gridTexture1 = new GridTexture("/textures/grass-grid1.png", 128, 128, 4, 6);
+    }
+
     public Texture getTile(int tileGridRow, int tileGridCol) throws IllegalArgumentException{
 
         if(tileGridRow <= 0 || tileGridRow > gridRows){

@@ -1,6 +1,6 @@
 package pl.engine.shapes.flat;
 
-import pl.engine.Vector3;
+import pl.engine.math.Vector3;
 import pl.engine.texture.Texturable;
 import pl.engine.texture.Texture;
 
@@ -9,8 +9,8 @@ import java.awt.*;
 public class Rect extends Texturable {
 
     private Vector3 topLeft;
-    private int height;
-    private int width;
+    private double height;
+    private double width;
     private boolean isFilled;
 
     public Rect(Vector3 topLeft, int width, int height, Color color, boolean isFilled){

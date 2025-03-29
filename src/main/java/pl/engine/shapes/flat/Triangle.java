@@ -1,6 +1,7 @@
 package pl.engine.shapes.flat;
 
-import pl.engine.Vector3;
+import pl.engine.math.Vector3;
+import pl.engine.render.Perspective;
 import pl.engine.texture.Texturable;
 import pl.engine.texture.Texture;
 
@@ -40,6 +41,11 @@ public class Triangle extends Texturable {
         this.v[2] = c;
     }
 
+    public Vector3[] getVertices() {
+
+        return v;
+    }
+
     private void drawEdges(){
 
         Line l1 = new Line(v[0], v[1], color);
@@ -56,15 +62,15 @@ public class Triangle extends Texturable {
     // |/
     private void drawFilledOrthodonalTop(Vector3 minYVec, Vector3 middleVec, Vector3 maxYVec){
 
-        float topLine2Slope = Line.getSlope(minYVec, maxYVec);
+        double topLine2Slope = Line.getSlope(minYVec, maxYVec);
 
-        int topLine2B = Line.getBCoef(topLine2Slope, maxYVec);
+        double topLine2B = Line.getBCoef(topLine2Slope, maxYVec);
 
-        int x2 = middleVec.x;
+        double x2 = middleVec.x;
 
-        BiConsumer<Integer, Integer> draw = getDrawTextureOrColorPixelFunction();
+        BiConsumer<Double, Double> draw = getDrawTextureOrColorPixelFunction();
 
-        for(int y = maxYVec.y; y >= middleVec.y; y--){
+        for(double y = maxYVec.y; y >= middleVec.y; y--){
 
             drawInvalidRow(topLine2Slope, topLine2B, y, x2, draw);
         }
@@ -75,63 +81,63 @@ public class Triangle extends Texturable {
     // ----
     private void drawFilledOrthodonalBottom(Vector3 minYVec, Vector3 middleVec, Vector3 maxYVec){
 
-        float topLine2Slope = Line.getSlope(minYVec, maxYVec);
+        double topLine2Slope = Line.getSlope(minYVec, maxYVec);
 
-        int topLine2B = Line.getBCoef(topLine2Slope, maxYVec);
+        double topLine2B = Line.getBCoef(topLine2Slope, maxYVec);
 
-        int x1 = middleVec.x;
+        double x1 = middleVec.x;
 
-        BiConsumer<Integer, Integer> draw = getDrawTextureOrColorPixelFunction();
+        BiConsumer<Double, Double> draw = getDrawTextureOrColorPixelFunction();
 
-        for(int y = minYVec.y; y <= middleVec.y; y++){
+        for(double y = minYVec.y; y <= middleVec.y; y++){
 
             drawInvalidRow(topLine2Slope, topLine2B, y, x1, draw);
         }
     }
 
-    private void drawInvalidRow(float topLine2Slope, int topLine2B, int y, int x2, BiConsumer<Integer, Integer> draw){
+    private void drawInvalidRow(double topLine2Slope, double topLine2B, double y, double x2, BiConsumer<Double, Double> draw){
 
-        int x1 = Line.getX(topLine2Slope, topLine2B, y);
+        double x1 = Line.getX(topLine2Slope, topLine2B, y);
 
-        int minX = x1;
-        int maxX = x2;
+        double minX = x1;
+        double maxX = x2;
 
         if(x1 > x2){
             minX = x2;
             maxX = x1;
         }
 
-        for(int x = minX; x <= maxX; x++){
+        for(double x = minX; x <= maxX; x++){
 
             draw.accept(x, y);
         }
     }
 
-    private void drawValidRow(float topLine1Slope, int topLine1B, float topLine2Slope, int topLine2B, int y, BiConsumer<Integer, Integer> draw){
+    private void drawValidRow(double topLine1Slope, double topLine1B, double topLine2Slope, double topLine2B, double y, BiConsumer<Double, Double> draw){
 
-        int x1 = Line.getX(topLine1Slope, topLine1B, y);
+        double x1 = Line.getX(topLine1Slope, topLine1B, y);
 
         drawInvalidRow(topLine2Slope, topLine2B, y, x1, draw);
     }
 
     private void drawFilledValid(Vector3 minYVec, Vector3 middleVec, Vector3 maxYVec){
 
-        float topLine1Slope = Line.getSlope(minYVec, middleVec);
-        float topLine2Slope = Line.getSlope(minYVec, maxYVec);
-        float bottomLineSlope = Line.getSlope(middleVec, maxYVec);
+        double topLine1Slope = Line.getSlope(minYVec, middleVec);
+        double topLine2Slope = Line.getSlope(minYVec, maxYVec);
+        double bottomLineSlope = Line.getSlope(middleVec, maxYVec);
 
-        int topLine1B = Line.getBCoef(topLine1Slope, minYVec);
-        int topLine2B = Line.getBCoef(topLine2Slope, maxYVec);
-        int bottomLineB = Line.getBCoef(bottomLineSlope, maxYVec);
+        double topLine1B = Line.getBCoef(topLine1Slope, minYVec);
+        double topLine2B = Line.getBCoef(topLine2Slope, maxYVec);
+        double bottomLineB = Line.getBCoef(bottomLineSlope, maxYVec);
 
-        BiConsumer<Integer, Integer> draw = getDrawTextureOrColorPixelFunction();
+        BiConsumer<Double, Double> draw = getDrawTextureOrColorPixelFunction();
 
-        for(int y = minYVec.y; y < middleVec.y; y++){
+        for(double y = minYVec.y; y < middleVec.y; y++){
 
             drawValidRow(topLine1Slope, topLine1B, topLine2Slope, topLine2B, y, draw);
         }
 
-        for(int y = maxYVec.y; y >= middleVec.y; y--){
+        for(double y = maxYVec.y; y >= middleVec.y; y--){
 
             drawValidRow(topLine2Slope, topLine2B, bottomLineSlope, bottomLineB, y, draw);
         }
@@ -201,8 +207,8 @@ public class Triangle extends Texturable {
     @Override
     protected Vector3 getMinXY() {
 
-        int minX = Integer.MAX_VALUE;
-        int minY = Integer.MAX_VALUE;
+        double minX = Integer.MAX_VALUE;
+        double minY = Integer.MAX_VALUE;
 
         for(Vector3 vec : v){
 

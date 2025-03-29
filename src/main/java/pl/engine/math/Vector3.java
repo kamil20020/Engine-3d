@@ -1,19 +1,19 @@
-package pl.engine;
+package pl.engine.math;
 
 import java.util.Objects;
 
 public class Vector3 {
 
-    public int x, y, z;
+    public double x, y, z;
 
-    public Vector3(Integer x, Integer y, Integer z){
+    public Vector3(double x, double y, double z){
 
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public static Vector3 of(Integer x, Integer y, Integer z){
+    public static Vector3 of(double x, double y, double z){
 
         return new Vector3(x, y, z);
     }
@@ -25,7 +25,7 @@ public class Vector3 {
 
     public Vector3 multiply(Matrix m){
 
-        int weight = multiplyWithMatrixRow(m, 3);
+        double weight = multiplyWithMatrixRow(m, 3);
 
         if(weight == 0){
             weight = 1;
@@ -43,7 +43,16 @@ public class Vector3 {
         return Vector3.of(-x, -y, -z);
     }
 
-    private int multiplyWithMatrixRow(Matrix m, int rowIndex){
+    public Vector3 add(Vector3 vec){
+
+        return Vector3.of(
+            x + vec.x,
+            y + vec.y,
+            z + vec.z
+        );
+    }
+
+    private double multiplyWithMatrixRow(Matrix m, int rowIndex){
 
         return m.get(rowIndex, 0) * x + m.get(rowIndex, 1) * y + m.get(rowIndex, 2) * z + m.get(rowIndex, 3);
     }

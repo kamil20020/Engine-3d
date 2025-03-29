@@ -1,7 +1,7 @@
 package pl.engine.texture;
 
 import pl.engine.shapes.Drawable;
-import pl.engine.Vector3;
+import pl.engine.math.Vector3;
 
 import java.awt.*;
 import java.util.function.BiConsumer;
@@ -12,21 +12,21 @@ public abstract class Texturable extends Drawable {
 
     protected abstract Vector3 getMinXY();
 
-    private int normalizeX(int x){
+    private int normalizeX(double x){
 
-        int diff = x - getMinXY().x;
+        double diff = x - getMinXY().x;
 
-        return diff % texture.getWidth();
+        return (int) diff % texture.getWidth();
     }
 
-    private int normalizeY(int y){
+    private int normalizeY(double y){
 
-        int diff = y - getMinXY().y;
+        double diff = y - getMinXY().y;
 
-        return diff % texture.getHeight();
+        return (int) diff % texture.getHeight();
     }
 
-    public BiConsumer<Integer, Integer> getDrawTextureOrColorPixelFunction(){
+    public BiConsumer<Double, Double> getDrawTextureOrColorPixelFunction(){
 
         if(texture == null){
 
@@ -39,7 +39,7 @@ public abstract class Texturable extends Drawable {
         return this::drawTexturePixel;
     }
 
-    public void drawTexturePixel(int x, int y){
+    public void drawTexturePixel(double x, double y){
 
         int textureX = normalizeX(x);
         int textureY = normalizeY(y);
