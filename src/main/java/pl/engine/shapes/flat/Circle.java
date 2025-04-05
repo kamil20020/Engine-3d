@@ -11,10 +11,10 @@ public class Circle extends Drawable {
     private double r;
 
     public Circle(Vector3 mid, int r, Color color){
+        super(color);
 
         this.mid = mid;
         this.r = r;
-        this.color = color;
     }
 
     @Override

@@ -10,9 +10,19 @@ public abstract class Drawable {
 
     private static final Screen screen = Screen.getInstance();
 
-    public void drawPixel(double x, double y, Color color){
+    public Drawable(Color color){
+
+        this.color = color;
+    }
+
+    protected static void drawPixel(double x, double y, Color color){
 
         screen.draw(x, y, color);
+    }
+
+    public Color getColor(){
+
+        return color;
     }
 
     public abstract void draw();

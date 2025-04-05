@@ -10,6 +10,10 @@ public abstract class Texturable extends Drawable {
 
     protected Texture texture;
 
+    public Texturable(Color color){
+        super(color);
+    }
+
     protected abstract Vector3 getMinXY();
 
     private int normalizeX(double x){
@@ -19,7 +23,7 @@ public abstract class Texturable extends Drawable {
         return (int) diff % texture.getWidth();
     }
 
-    private int normalizeY(double y){
+    private  int normalizeY(double y){
 
         double diff = y - getMinXY().y;
 
@@ -32,14 +36,14 @@ public abstract class Texturable extends Drawable {
 
             return (x, y) -> {
 
-                drawPixel(x, y, this.color);
+                drawPixel(x, y, color);
             };
         }
 
-        return this::drawTexturePixel;
+        return (Double x, Double y) -> drawPixel(x, y, color);
     }
 
-    public void drawTexturePixel(double x, double y){
+    public void drawTexturePixel(Texture texture, double x, double y){
 
         int textureX = normalizeX(x);
         int textureY = normalizeY(y);

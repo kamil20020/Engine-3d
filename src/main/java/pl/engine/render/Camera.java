@@ -1,8 +1,10 @@
 package pl.engine.render;
 
+import pl.engine.exceptions.InvalidCloneException;
 import pl.engine.math.Matrix;
 import pl.engine.math.Transformations;
 import pl.engine.math.Vector3;
+import pl.engine.shapes.flat.Triangle;
 
 import java.awt.event.KeyEvent;
 
@@ -41,20 +43,28 @@ public class Camera{
 
         switch (keyCode){
 
-            case KeyEvent.VK_LEFT:
+            case KeyEvent.VK_LEFT, KeyEvent.VK_A:
                 rotate(Vector3.of(10, 10, 0));
                 break;
 
-            case KeyEvent.VK_RIGHT:
+            case KeyEvent.VK_RIGHT, KeyEvent.VK_D:
                 rotate(Vector3.of(0, -10, 0));
                 break;
 
-            case KeyEvent.VK_UP:
+            case KeyEvent.VK_UP, KeyEvent.VK_W:
                 move(Vector3.of(0, 0, 10));
                 break;
 
-            case KeyEvent.VK_DOWN:
+            case KeyEvent.VK_DOWN, KeyEvent.VK_S:
                 move(Vector3.of(0, 0, -10));
+                break;
+
+            case KeyEvent.VK_SPACE:
+                move(Vector3.of(0, -10, 0));
+                break;
+
+            case KeyEvent.VK_Z:
+                move(Vector3.of(0, 10, 0));
                 break;
         }
     }

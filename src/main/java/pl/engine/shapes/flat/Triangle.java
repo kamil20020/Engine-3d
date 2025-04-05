@@ -1,52 +1,30 @@
 package pl.engine.shapes.flat;
 
+import pl.engine.Triangleable;
 import pl.engine.math.Vector3;
 import pl.engine.render.Perspective;
+import pl.engine.shapes.Drawable;
 import pl.engine.texture.Texturable;
 import pl.engine.texture.Texture;
 
 import java.awt.*;
 import java.util.Arrays;
+import java.util.Vector;
 import java.util.function.BiConsumer;
 
-public class Triangle extends Texturable {
+public class Triangle extends Drawable {
 
     private Vector3[] v;
     private boolean isFilled = false;
 
     public Triangle(Vector3 a, Vector3 b, Vector3 c, Color color, boolean isFilled){
-        this(a, b, c, color);
+        super(color);
 
+        this.v = new Vector3[]{a, b, c};
         this.isFilled = isFilled;
     }
 
-    public Triangle(Vector3 a, Vector3 b, Vector3 c, Color color){
-        this(a, b, c);
-
-        this.color = color;
-    }
-
-    public Triangle(Vector3 a, Vector3 b, Vector3 c, Texture texture){
-        this(a, b, c);
-
-        this.isFilled = true;
-        this.texture = texture;
-    }
-
-    private Triangle(Vector3 a, Vector3 b, Vector3 c){
-
-        this.v = new Vector3[3];
-        this.v[0] = a;
-        this.v[1] = b;
-        this.v[2] = c;
-    }
-
-    public Vector3[] getVertices() {
-
-        return v;
-    }
-
-    private void drawEdges(){
+    public static void drawEdges(Vector3[] v, Color color){
 
         Line l1 = new Line(v[0], v[1], color);
         Line l2 = new Line(v[1], v[2], color);
@@ -60,7 +38,7 @@ public class Triangle extends Texturable {
     // ----
     // | /
     // |/
-    private void drawFilledOrthodonalTop(Vector3 minYVec, Vector3 middleVec, Vector3 maxYVec){
+    private static void drawFilledOrthodonalTop(Vector3 minYVec, Vector3 middleVec, Vector3 maxYVec, Color color){
 
         double topLine2Slope = Line.getSlope(minYVec, maxYVec);
 
@@ -68,18 +46,16 @@ public class Triangle extends Texturable {
 
         double x2 = middleVec.x;
 
-        BiConsumer<Double, Double> draw = getDrawTextureOrColorPixelFunction();
-
         for(double y = maxYVec.y; y >= middleVec.y; y--){
 
-            drawInvalidRow(topLine2Slope, topLine2B, y, x2, draw);
+            drawInvalidRow(topLine2Slope, topLine2B, y, x2, color);
         }
     }
 
     // |\
     // | \
     // ----
-    private void drawFilledOrthodonalBottom(Vector3 minYVec, Vector3 middleVec, Vector3 maxYVec){
+    private static void drawFilledOrthodonalBottom(Vector3 minYVec, Vector3 middleVec, Vector3 maxYVec, Color color){
 
         double topLine2Slope = Line.getSlope(minYVec, maxYVec);
 
@@ -87,15 +63,13 @@ public class Triangle extends Texturable {
 
         double x1 = middleVec.x;
 
-        BiConsumer<Double, Double> draw = getDrawTextureOrColorPixelFunction();
-
         for(double y = minYVec.y; y <= middleVec.y; y++){
 
-            drawInvalidRow(topLine2Slope, topLine2B, y, x1, draw);
+            drawInvalidRow(topLine2Slope, topLine2B, y, x1, color);
         }
     }
 
-    private void drawInvalidRow(double topLine2Slope, double topLine2B, double y, double x2, BiConsumer<Double, Double> draw){
+    private static void drawInvalidRow(double topLine2Slope, double topLine2B, double y, double x2, Color color){
 
         double x1 = Line.getX(topLine2Slope, topLine2B, y);
 
@@ -109,18 +83,18 @@ public class Triangle extends Texturable {
 
         for(double x = minX; x <= maxX; x++){
 
-            draw.accept(x, y);
+            drawPixel(x, y, color);
         }
     }
 
-    private void drawValidRow(double topLine1Slope, double topLine1B, double topLine2Slope, double topLine2B, double y, BiConsumer<Double, Double> draw){
+    private static void drawValidRow(double topLine1Slope, double topLine1B, double topLine2Slope, double topLine2B, double y, Color color){
 
         double x1 = Line.getX(topLine1Slope, topLine1B, y);
 
-        drawInvalidRow(topLine2Slope, topLine2B, y, x1, draw);
+        drawInvalidRow(topLine2Slope, topLine2B, y, x1, color);
     }
 
-    private void drawFilledValid(Vector3 minYVec, Vector3 middleVec, Vector3 maxYVec){
+    private static void drawFilledValid(Vector3 minYVec, Vector3 middleVec, Vector3 maxYVec, Color color){
 
         double topLine1Slope = Line.getSlope(minYVec, middleVec);
         double topLine2Slope = Line.getSlope(minYVec, maxYVec);
@@ -130,27 +104,18 @@ public class Triangle extends Texturable {
         double topLine2B = Line.getBCoef(topLine2Slope, maxYVec);
         double bottomLineB = Line.getBCoef(bottomLineSlope, maxYVec);
 
-        BiConsumer<Double, Double> draw = getDrawTextureOrColorPixelFunction();
-
         for(double y = minYVec.y; y < middleVec.y; y++){
 
-            drawValidRow(topLine1Slope, topLine1B, topLine2Slope, topLine2B, y, draw);
+            drawValidRow(topLine1Slope, topLine1B, topLine2Slope, topLine2B, y, color);
         }
 
         for(double y = maxYVec.y; y >= middleVec.y; y--){
 
-            drawValidRow(topLine2Slope, topLine2B, bottomLineSlope, bottomLineB, y, draw);
+            drawValidRow(topLine2Slope, topLine2B, bottomLineSlope, bottomLineB, y, color);
         }
     }
 
-    @Override
-    public void draw() {
-
-        if(!isFilled){
-
-            drawEdges();
-            return;
-        }
+    public static void drawFilled(Vector3[] v, Color color){
 
         Vector3 minYVec = v[0];
         Vector3 maxYVec = v[0];
@@ -194,34 +159,26 @@ public class Triangle extends Texturable {
         }
 
         if(middleVec.x == minYVec.x){
-            drawFilledOrthodonalBottom(minYVec, middleVec, maxYVec);
+            drawFilledOrthodonalBottom(minYVec, middleVec, maxYVec, color);
         }
         else if(middleVec.x == maxYVec.x){
-            drawFilledOrthodonalTop(minYVec, middleVec, maxYVec);
+            drawFilledOrthodonalTop(minYVec, middleVec, maxYVec, color);
         }
         else{
-            drawFilledValid(minYVec, middleVec, maxYVec);
+            drawFilledValid(minYVec, middleVec, maxYVec, color);
         }
     }
 
     @Override
-    protected Vector3 getMinXY() {
+    public void draw() {
 
-        double minX = Integer.MAX_VALUE;
-        double minY = Integer.MAX_VALUE;
+        if(!isFilled){
 
-        for(Vector3 vec : v){
-
-            if(vec.x < minX){
-                minX = vec.x;
-            }
-
-            if(vec.y < minY){
-                minY = vec.y;
-            }
+            drawEdges(v, color);
+            return;
         }
 
-        return Vector3.of(minX, minY, 0);
+        drawFilled(v, color);
     }
 
     @Override

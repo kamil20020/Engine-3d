@@ -1,75 +1,34 @@
 package pl.engine.shapes.flat;
 
+import pl.engine.Triangleable;
 import pl.engine.math.Vector3;
-import pl.engine.texture.Texturable;
-import pl.engine.texture.Texture;
 
 import java.awt.*;
 
-public class Rect extends Texturable {
+public class Rect extends Triangleable {
 
-    private Vector3 topLeft;
-    private double height;
-    private double width;
-    private boolean isFilled;
-
-    public Rect(Vector3 topLeft, int width, int height, Color color, boolean isFilled){
-        this(topLeft, width, height, color);
-
-        this.isFilled = isFilled;
+    public Rect(Vector3 topLeft, Vector3 bottomRight, Color color, boolean isFilled){
+        super(
+            getVertices(topLeft, bottomRight),
+            new Integer[]{0, 1, 2, 0, 3, 2},
+            color,
+            isFilled
+        );
     }
 
-    public Rect(Vector3 topLeft, int width, int height, Color color){
-        this(topLeft, width, height);
+    public static Vector3[] getVertices(Vector3 topLeft, Vector3 bottomRight){
 
-        this.color = color;
-    }
-
-    public Rect(Vector3 topLeft, int width, int height, Texture texture){
-        this(topLeft, width, height);
-
-        this.texture = texture;
-    }
-
-    private Rect(Vector3 topLeft, int width, int height){
-
-        this.topLeft = topLeft;
-        this.width = width;
-        this.height = height;
+        return new Vector3[]{
+            Vector3.of(topLeft),
+            Vector3.of(topLeft.x, bottomRight.y, bottomRight.z),
+            Vector3.of(bottomRight.x, bottomRight.y, bottomRight.z),
+            Vector3.of(bottomRight.x, topLeft.y, bottomRight.z)
+        };
     }
 
     @Override
-    public void draw() {
+    public String toString() {
 
-        Vector3 v1 = Vector3.of(topLeft);
-        Vector3 v2 = Vector3.of(topLeft.x, topLeft.y + height, topLeft.z);
-        Vector3 v3 = Vector3.of(topLeft.x + width, topLeft.y + height, topLeft.z);
-
-        Vector3 v4 = Vector3.of(topLeft);
-        Vector3 v5 = Vector3.of(topLeft.x + width, topLeft.y, topLeft.z);
-        Vector3 v6 = Vector3.of(topLeft.x + width, topLeft.y + height, topLeft.z);
-
-        Triangle bottom;
-        Triangle top;
-
-        if(texture == null){
-
-            bottom = new Triangle(v1, v2, v3, color, isFilled);
-            top = new Triangle(v4, v5, v6, color, isFilled);
-        }
-        else{
-
-            bottom = new Triangle(v1, v2, v3, texture);
-            top = new Triangle(v4, v5, v6, texture);
-        }
-
-        bottom.draw();
-        top.draw();
-    }
-
-    @Override
-    protected Vector3 getMinXY() {
-
-        return Vector3.of(topLeft);
+        return "Square {\n" + triangles[0].toString() + "\n" + triangles[1] + "\n}";
     }
 }

@@ -17,10 +17,10 @@ public class Line extends Drawable {
     }
 
     public Line(Vector3 a, Vector3 b, Color color){
+        super(color);
 
         this.a = a;
         this.b = b;
-        this.color = color;
 
         if(a.x > b.x){
 

@@ -2,60 +2,40 @@ package pl.engine.shapes.spatial;
 
 import pl.engine.math.Vector3;
 import pl.engine.shapes.Mesh;
-import pl.engine.shapes.flat.Square;
-import pl.engine.shapes.flat.Triangle;
-import pl.engine.texture.Texturable;
+import pl.engine.shapes.flat.Rect;
 import pl.engine.texture.Texture;
 
 import java.awt.*;
 
 public class Cube extends Mesh {
 
-    private Vector3 leftDownFrontCorner;
-    private Square walls;
-    private double a;
-    private boolean isFilled = false;
+    public Cube(Vector3 leftTopFrontCorner, int a, Color color, boolean isFilled){
 
-    public Cube(Vector3 leftDownFrontCorner, int a, Color color, boolean isFilled){
-        this(leftDownFrontCorner, a, color);
-
-        this.color = color;
-        this.isFilled = isFilled;
+        super(
+            getVertices(leftTopFrontCorner, a),
+            new Integer[]{0, 1, 2, 0, 3, 2},
+            color,
+            isFilled
+        );
     }
 
-    public Cube(Vector3 leftDownFrontCorner, int a, Color color){
-       this(leftDownFrontCorner, a);
+    private static Vector3[] getVertices(Vector3 leftTopFrontCorner, int a){
 
-       this.color = color;
-    }
+        Vector3[] top = Rect.getVertices(
+            Vector3.of(leftTopFrontCorner.x, leftTopFrontCorner.y, leftTopFrontCorner.z - a),
+            Vector3.of(leftTopFrontCorner.x + a, leftTopFrontCorner.y, leftTopFrontCorner.z)
+        );
 
-    private Cube(Vector3 leftDownFrontCorner, int a, Texture texture){
-        this(leftDownFrontCorner, a);
+        Vector3[] bottom = Rect.getVertices(
+            Vector3.of(leftTopFrontCorner.x, leftTopFrontCorner.y + a, leftTopFrontCorner.z - a),
+            Vector3.of(leftTopFrontCorner.x + a, leftTopFrontCorner.y + a, leftTopFrontCorner.z)
+        );
 
-        this.texture = texture;
-    }
+        Vector3[] result = new Vector3[8];
 
-    private Cube(Vector3 leftDownFrontCorner, int a){
-        super(new Triangle[12]);
+        System.arraycopy(top, 0, result, 0, 4);
+        System.arraycopy(bottom, 0, result, 4, 4);
 
-        this.leftDownFrontCorner = leftDownFrontCorner;
-        this.a = a;
-
-        init();
-    }
-
-    private void init(){
-
-
-    }
-
-    @Override
-    public void draw() {
-
-    }
-
-    @Override
-    protected Vector3 getMinXY() {
-        return null;
+        return result;
     }
 }

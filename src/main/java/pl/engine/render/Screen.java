@@ -32,7 +32,12 @@ public class Screen extends JPanel {
 
         Dimension screenSize = getScreenSize();
 
-        clearRect = new Rect(Vector3.of(0, 0, 0), screenSize.width - 1, screenSize.height - 1, Color.black, true);
+        clearRect = new Rect(
+            Vector3.of(0, 0, 0),
+            Vector3.of(screenSize.width - 1, screenSize.height - 1, 0),
+            Color.black,
+            true
+        );
     }
 
     public void clearContent(){
