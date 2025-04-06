@@ -7,7 +7,7 @@ import java.awt.event.KeyListener;
 
 public class EventsHandler implements KeyListener {
 
-    private Camera camera;
+    private final Camera camera;
 
     public EventsHandler(Camera camera){
 

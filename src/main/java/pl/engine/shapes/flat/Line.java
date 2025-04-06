@@ -19,17 +19,18 @@ public class Line extends Drawable {
     public Line(Vector3 a, Vector3 b, Color color){
         super(color);
 
-        this.a = a;
-        this.b = b;
-
         if(a.x > b.x){
 
             this.b = a;
             this.a = b;
         }
+        else{
+            this.a = a;
+            this.b = b;
+        }
     }
 
-    private void drawInvalidLine(){
+    private static void drawInvalidLine(Vector3 a, Vector3 b, Color color){
 
         double minY = 0;
         double maxY = 0;
@@ -51,15 +52,21 @@ public class Line extends Drawable {
         }
     }
 
-    @Override
-    public void draw() {
+    public static void draw(Vector3 a, Vector3 b, Color color){
+
+        if(a.x > b.x){
+
+            Vector3 buffer = a;
+            a = b;
+            b = buffer;
+        }
 
         // y = ax + b
         // b = y - ax
 
         if(a.x == b.x){
 
-            drawInvalidLine();
+            drawInvalidLine(a, b, color);
             return;
         }
 
@@ -81,9 +88,15 @@ public class Line extends Drawable {
         }
     }
 
+    @Override
+    public void draw() {
+
+        draw(a, b, color);
+    }
+
     public static double getSlope(Vector3 v1, Vector3 v2){
 
-        return  (float) (v2.y - v1.y) / (float) (v2.x - v1.x);
+        return  (v2.y - v1.y) / (v2.x - v1.x);
     }
 
     public static double getBCoef(double slope, Vector3 v){
@@ -91,16 +104,16 @@ public class Line extends Drawable {
         // y = ax + b
         // b = y - ax
 
-        return (int) (v.y - (slope * v.x));
+        return v.y - (slope * v.x);
     }
 
-    public static int getX(double slope, double bCoef, double y){
+    public static double getX(double slope, double bCoef, double y){
 
         // y = ax + b
         // ax = y - b
         // x = (y - b) / a
 
-        return (int) ((y - bCoef) / slope);
+        return (y - bCoef) / slope;
     }
 
     @Override

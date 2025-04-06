@@ -13,7 +13,14 @@ public class Cube extends Mesh {
 
         super(
             getVertices(leftTopFrontCorner, a),
-            new Integer[]{0, 1, 2, 0, 3, 2},
+            new Integer[]{
+                0, 1, 2, 2, 3, 1, //top
+                4, 5, 6, 6, 7, 5, //bottom
+                0, 1, 4, 1, 4, 5, //front
+                2, 3, 6, 6, 7, 3, //back
+                6, 2, 4, 4, 0, 2, //left
+                3, 1, 5, 3, 5, 7 //right
+            },
             color,
             isFilled
         );
@@ -21,21 +28,15 @@ public class Cube extends Mesh {
 
     private static Vector3[] getVertices(Vector3 leftTopFrontCorner, int a){
 
-        Vector3[] top = Rect.getVertices(
-            Vector3.of(leftTopFrontCorner.x, leftTopFrontCorner.y, leftTopFrontCorner.z - a),
-            Vector3.of(leftTopFrontCorner.x + a, leftTopFrontCorner.y, leftTopFrontCorner.z)
-        );
-
-        Vector3[] bottom = Rect.getVertices(
-            Vector3.of(leftTopFrontCorner.x, leftTopFrontCorner.y + a, leftTopFrontCorner.z - a),
-            Vector3.of(leftTopFrontCorner.x + a, leftTopFrontCorner.y + a, leftTopFrontCorner.z)
-        );
-
-        Vector3[] result = new Vector3[8];
-
-        System.arraycopy(top, 0, result, 0, 4);
-        System.arraycopy(bottom, 0, result, 4, 4);
-
-        return result;
+        return new Vector3[]{
+            Vector3.of(leftTopFrontCorner),
+            Vector3.of(leftTopFrontCorner.x + a, leftTopFrontCorner.y, leftTopFrontCorner.z),
+            Vector3.of(leftTopFrontCorner.x, leftTopFrontCorner.y, leftTopFrontCorner.z + a),
+            Vector3.of(leftTopFrontCorner.x + a, leftTopFrontCorner.y, leftTopFrontCorner.z + a),
+            Vector3.of(leftTopFrontCorner.x, leftTopFrontCorner.y + a, leftTopFrontCorner.z),
+            Vector3.of(leftTopFrontCorner.x + a, leftTopFrontCorner.y + a, leftTopFrontCorner.z),
+            Vector3.of(leftTopFrontCorner.x, leftTopFrontCorner.y + a, leftTopFrontCorner.z + a),
+            Vector3.of(leftTopFrontCorner.x + a, leftTopFrontCorner.y + a, leftTopFrontCorner.z + a),
+        };
     }
 }

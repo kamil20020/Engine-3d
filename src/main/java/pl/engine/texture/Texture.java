@@ -20,12 +20,10 @@ public class Texture {
 
     public Texture(String path) {
 
-        URL resourceURL = getClass().getResource(path);
-
         BufferedImage img;
 
         try{
-            img = ImageIO.read(resourceURL);
+            img = loadImg(path);
         }
         catch(IOException e){
             throw new FileLoadException(e.getMessage());
@@ -51,6 +49,13 @@ public class Texture {
         this.height = height;
         this.shiftX = shiftX;
         this.shiftY = shiftY;
+    }
+
+    private BufferedImage loadImg(String path) throws IOException{
+
+        URL resourceURL = getClass().getResource(path);
+
+        return ImageIO.read(resourceURL);
     }
 
     public static Texture of(String path){

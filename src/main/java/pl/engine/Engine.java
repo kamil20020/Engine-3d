@@ -19,9 +19,7 @@ public class Engine extends Thread {
     public Engine(){
 
         camera = new Camera(
-            Vector3.of(0, 0, 0),
-            Vector3.of(0, 0, 0),
-            Vector3.of(0, 0, 0),
+            Vector3.of(-500, -500, 0), //Vector3.of(-500, -500, 10),
             Vector3.of(0, 0, 0)
         );
 
@@ -44,7 +42,6 @@ public class Engine extends Thread {
 
             try {
                 screen.repaint();
-                renderer.draw();
 
                 sleep(1000 / FPS);
             }

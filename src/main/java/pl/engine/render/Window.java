@@ -8,7 +8,7 @@ import java.awt.event.KeyListener;
 
 public class Window extends JFrame {
 
-    private Screen screen;
+    private final Screen screen;
 
     public Window(EventsHandler eventsHandler) {
         super();

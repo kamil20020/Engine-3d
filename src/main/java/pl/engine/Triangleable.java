@@ -42,16 +42,9 @@ public abstract class Triangleable extends Drawable {
     @Override
     public final void draw(){
 
-        BiConsumer<Vector3[], Color> drawFunction;
+        BiConsumer<Vector3[], Color> drawFunction = getDrawFunction();
 
-        if(isFilled){
-            drawFunction = Triangle::drawEdges;
-        }
-        else {
-            drawFunction = Triangle::drawFilled;
-        }
-
-        for(int i=0; i < triangles.length - 3; i += 3){
+        for(int i=0; i <= triangles.length - 3; i += 3){
 
             drawFunction.accept(
                 new Vector3[]{
@@ -62,5 +55,14 @@ public abstract class Triangleable extends Drawable {
                 color
             );
         }
+    }
+
+    public BiConsumer<Vector3[], Color> getDrawFunction(){
+
+        if(isFilled){
+            return Triangle::drawFilled;
+        }
+
+        return Triangle::drawEdges;
     }
 }

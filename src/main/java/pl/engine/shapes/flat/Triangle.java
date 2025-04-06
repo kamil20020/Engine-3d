@@ -9,6 +9,7 @@ import pl.engine.texture.Texture;
 
 import java.awt.*;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.Vector;
 import java.util.function.BiConsumer;
 
@@ -24,15 +25,81 @@ public class Triangle extends Drawable {
         this.isFilled = isFilled;
     }
 
+    @Override
+    public void draw() {
+
+        if(!isFilled){
+
+            drawEdges(v, color);
+            return;
+        }
+
+        drawFilled(v, color);
+    }
+
     public static void drawEdges(Vector3[] v, Color color){
 
-        Line l1 = new Line(v[0], v[1], color);
-        Line l2 = new Line(v[1], v[2], color);
-        Line l3 = new Line(v[0], v[2], color);
+        Line.draw(v[0], v[1], color);
+        Line.draw(v[1], v[2], color);
+        Line.draw(v[0], v[2], color);
+    }
 
-        l1.draw();
-        l2.draw();
-        l3.draw();
+    public static void drawFilled(Vector3[] v, Color color){
+
+        if((v[0].x == v[1].x && v[1].x == v[2].x) || (v[0].y == v[1].y && v[1].y == v[2].y)){
+            return;
+        }
+
+        Vector3 minYVec = v[0];
+        Vector3 maxYVec = v[0];
+
+        for(int i = 1; i <= 2; i++){
+
+            if(v[i].y < minYVec.y){
+                minYVec = v[i];
+            }
+            else if(v[i].y > maxYVec.y){
+                maxYVec = v[i];
+            }
+        }
+
+        Vector3 middleVec = null;
+
+        for(int i = 0; i <= 2; i++){
+
+            if(v[i] != minYVec && v[i] != maxYVec){
+                middleVec = v[i];
+                break;
+            }
+        }
+
+        if(minYVec.x == maxYVec.x){
+
+            Vector3 buffer;
+
+            if(minYVec.y == middleVec.y){
+
+                buffer = minYVec;
+                minYVec = middleVec;
+            }
+            else{
+
+                buffer = maxYVec;
+                maxYVec = middleVec;
+            }
+
+            middleVec = buffer;
+        }
+
+        if(middleVec.x == minYVec.x){
+            drawFilledOrthodonalBottom(minYVec, middleVec, maxYVec, color);
+        }
+        else if(middleVec.x == maxYVec.x){
+            drawFilledOrthodonalTop(minYVec, middleVec, maxYVec, color);
+        }
+        else{
+            drawFilledValid(minYVec, middleVec, maxYVec, color);
+        }
     }
 
     // ----
@@ -87,13 +154,6 @@ public class Triangle extends Drawable {
         }
     }
 
-    private static void drawValidRow(double topLine1Slope, double topLine1B, double topLine2Slope, double topLine2B, double y, Color color){
-
-        double x1 = Line.getX(topLine1Slope, topLine1B, y);
-
-        drawInvalidRow(topLine2Slope, topLine2B, y, x1, color);
-    }
-
     private static void drawFilledValid(Vector3 minYVec, Vector3 middleVec, Vector3 maxYVec, Color color){
 
         double topLine1Slope = Line.getSlope(minYVec, middleVec);
@@ -115,70 +175,11 @@ public class Triangle extends Drawable {
         }
     }
 
-    public static void drawFilled(Vector3[] v, Color color){
+    private static void drawValidRow(double topLine1Slope, double topLine1B, double topLine2Slope, double topLine2B, double y, Color color){
 
-        Vector3 minYVec = v[0];
-        Vector3 maxYVec = v[0];
+        double x1 = Line.getX(topLine1Slope, topLine1B, y);
 
-        for(int i = 1; i <= 2; i++){
-
-            if(v[i].y < minYVec.y){
-                minYVec = v[i];
-            }
-            else if(v[i].y > maxYVec.y){
-                maxYVec = v[i];
-            }
-        }
-
-        Vector3 middleVec = null;
-
-        for(int i = 0; i <= 2; i++){
-
-            if(v[i] != minYVec && v[i] != maxYVec){
-                middleVec = v[i];
-                break;
-            }
-        }
-
-        if(minYVec.x == maxYVec.x){
-
-            Vector3 buffer;
-
-            if(minYVec.y == middleVec.y){
-
-                buffer = minYVec;
-                minYVec = middleVec;
-            }
-            else{
-
-                buffer = maxYVec;
-                maxYVec = middleVec;
-            }
-
-            middleVec = buffer;
-        }
-
-        if(middleVec.x == minYVec.x){
-            drawFilledOrthodonalBottom(minYVec, middleVec, maxYVec, color);
-        }
-        else if(middleVec.x == maxYVec.x){
-            drawFilledOrthodonalTop(minYVec, middleVec, maxYVec, color);
-        }
-        else{
-            drawFilledValid(minYVec, middleVec, maxYVec, color);
-        }
-    }
-
-    @Override
-    public void draw() {
-
-        if(!isFilled){
-
-            drawEdges(v, color);
-            return;
-        }
-
-        drawFilled(v, color);
+        drawInvalidRow(topLine2Slope, topLine2B, y, x1, color);
     }
 
     @Override

@@ -3,18 +3,22 @@ package pl.engine.render;
 import pl.engine.Triangleable;
 import pl.engine.math.Vector3;
 import pl.engine.shapes.Drawable;
+import pl.engine.shapes.Mesh;
 import pl.engine.shapes.flat.*;
 import pl.engine.shapes.spatial.Cube;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class Renderer {
 
-    private List<Triangleable> toDraw = new ArrayList<>();
-    private List<Drawable> outsideToDraw = new ArrayList<>();
-    private Camera camera;
+    private final List<Triangleable> triangeables = new ArrayList<>();
+    private final List<Drawable> drawables = new ArrayList<>();
+    private final Camera camera;
 
     public Renderer(Camera camera){
 
@@ -25,24 +29,61 @@ public class Renderer {
 
     private void init(){
 
-        Rect square = new Rect(Vector3.of(500, 500, 10), Vector3.of(600, 600, 10), Color.orange, false);
+        Rect rect = new Rect(Vector3.of(500, 500, 10), Vector3.of(600, 600, 10), Color.orange, true);
         Triangle triangle = new Triangle(
             Vector3.of(600, 500, 10),
             Vector3.of(700, 500, 10),
             Vector3.of(700, 700, 10),
             Color.pink,
-            false
+            true
         );
 
-        Cube cube = new Cube(Vector3.of(0, 600, 10), 100, Color.green, false);
-        Cube cube1 = new Cube(Vector3.of(600, 0, 10), 100, Color.orange, false);
-        Cube cube2 = new Cube(Vector3.of(600, 600, 10), 100, Color.magenta, false);
-        Cube cube3 = new Cube(Vector3.of(0, 0, 10), 100, Color.pink, false);
-        Cube cube4 = new Cube(Vector3.of(0, 0, 10), 1000, Color.gray, false);
+        Triangle triangle1 = new Triangle(
+            Vector3.of(600, 600, 10),
+            Vector3.of(700, 600, 10),
+            Vector3.of(600, 600, 100),
+            Color.pink,
+            true
+        );
 
-        toDraw.addAll(List.of(cube, cube1, cube2, cube3, cube4));
+        Disk disk = new Disk(
+            Vector3.of(600, 600, 10),
+            100,
+            Color.green
+        );
 
-        outsideToDraw.addAll(List.of(square, triangle));
+        Circle circle = new Circle(
+            Vector3.of(700, 700, 10),
+            100,
+            Color.pink
+        );
+
+        Line line = new Line(
+            Vector3.of(100, 100, 10),
+            Vector3.of(500, 500, 20),
+            Color.green
+        );
+
+        Line line1 = new Line(
+            Vector3.of(100, 100, 10),
+            Vector3.of(100, 100, 100),
+            Color.green
+        );
+
+        Cube cube = new Cube(Vector3.of(0, 600, 10), 100, Color.green, true);
+        Cube cube1 = new Cube(Vector3.of(600, 0, 10), 100, Color.orange, true);
+        Cube cube2 = new Cube(Vector3.of(800, 800, 10), 100, Color.magenta, true);
+        Cube cube3 = new Cube(Vector3.of(0, 0, 10), 100, Color.pink, true);
+        Cube cube4 = new Cube(Vector3.of(0, 0, 10), 1000, Color.gray, true);
+
+        Mesh ship = Mesh.loadFromObjFile("./meshes/space-ship.obj", Color.orange, false, 0);
+        Mesh teapot = Mesh.loadFromObjFile("./meshes/teapot.obj", Color.orange, false, 0);
+        Mesh axis = Mesh.loadFromObjFile("./meshes/axis.obj", Color.orange, false, 0);
+        Mesh mountains = Mesh.loadFromObjFile("./meshes/mountains.obj", Color.orange, true, 200);
+
+        triangeables.addAll(List.of(mountains));
+
+//        drawables.addAll(List.of(rect));
     }
 
     private Vector3 getVertexAndTransform(Triangleable toDraw, int triangleIndex){
@@ -54,22 +95,30 @@ public class Renderer {
 
     public void draw(){
 
-        toDraw.forEach(toDraw -> {
+        Vector3[] toDrawVertices = new Vector3[]{
+            Vector3.of(),
+            Vector3.of(),
+            Vector3.of()
+        };
 
-            for(int i=0; i < toDraw.getTriangles().length - 3; i += 3){
+        triangeables.forEach(toDraw -> {
 
-                Triangle.drawEdges(
-                    new Vector3[]{
-                        getVertexAndTransform(toDraw, i),
-                        getVertexAndTransform(toDraw, i + 1),
-                        getVertexAndTransform(toDraw, i + 2),
-                    },
+            BiConsumer<Vector3[], Color> drawFunction = toDraw.getDrawFunction();
+
+            for(int i=0; i <= toDraw.getTriangles().length - 3; i += 3){
+
+                for(int j=0; j < 3; j++){
+                    toDrawVertices[j] = getVertexAndTransform(toDraw, i + j);
+                }
+
+                drawFunction.accept(
+                    toDrawVertices,
                     toDraw.getColor()
                 );
             }
         });
 
-        outsideToDraw.forEach(toDraw -> {
+        drawables.forEach(toDraw -> {
             toDraw.draw();
         });
     }

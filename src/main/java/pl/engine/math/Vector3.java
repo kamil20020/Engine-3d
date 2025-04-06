@@ -1,6 +1,8 @@
 package pl.engine.math;
 
 import java.util.Objects;
+import java.util.Vector;
+import java.util.function.UnaryOperator;
 
 public class Vector3 {
 
@@ -21,6 +23,25 @@ public class Vector3 {
     public static Vector3 of(Vector3 v){
 
         return new Vector3(v.x, v.y, v.z);
+    }
+
+    public static Vector3 of(){
+
+        return new Vector3(0, 0, 0);
+    }
+
+    public static boolean equalsXY(Vector3 a, Vector3 b){
+
+        return a.x == b.x && a.y == b.y;
+    }
+
+    public Vector3 change(UnaryOperator<Double> changeFunction){
+
+        return Vector3.of(
+            changeFunction.apply(x),
+            changeFunction.apply(y),
+            changeFunction.apply(z)
+        );
     }
 
     public Vector3 multiply(Matrix m){
