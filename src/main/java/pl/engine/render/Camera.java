@@ -11,10 +11,11 @@ import java.awt.event.KeyEvent;
 
 public class Camera{
 
-    private Vector3 position;
+    public Vector3 position;
     private Vector3 lookAt;
     private Vector3 angles;
     private Vector3 topDirection;
+    public Vector3 forward;
 
     public Camera(Vector3 position, Vector3 angles) {
 
@@ -22,12 +23,27 @@ public class Camera{
 //        this.lookAt = lookAt;
 //        this.topDirection = topDirection;
         this.angles = angles;
+
+        updateForward();
+    }
+
+    private void updateForward(){
+
+        Matrix rotateXMatrix = Transformations.getRotateXMatrix((int) angles.x);
+        Matrix rotateYMatrix = Transformations.getRotateYMatrix((int) angles.y);
+        Matrix rotateZMatrix = Transformations.getRotateZMatrix((int) angles.z);
+
+        Matrix mergedMatrix = rotateZMatrix.multiply(rotateYMatrix.multiply(rotateXMatrix));
+
+        this.forward = Vector3.of(0, 0, -1).multiply(mergedMatrix).normalize();
     }
 
     public void rotate(Vector3 newAngles){
 
         angles = angles.add(newAngles);
         angles = angles.change(x -> x % 360);
+
+        updateForward();
     }
 
     public void move(Vector3 vec){
@@ -39,20 +55,38 @@ public class Camera{
 
         switch (keyCode){
 
-            case KeyEvent.VK_LEFT, KeyEvent.VK_A:
+            case KeyEvent.VK_A:
                 rotate(Vector3.of(0, 1, 0));
                 break;
 
-            case KeyEvent.VK_RIGHT, KeyEvent.VK_D:
+            case KeyEvent.VK_LEFT:
+                move(Vector3.of(-10, 0, 0));
+                break;
+
+            case KeyEvent.VK_D:
                 rotate(Vector3.of(0, -1, 0));
                 break;
 
+            case KeyEvent.VK_RIGHT:
+                move(Vector3.of(10, 0, 0));
+                break;
+
             case KeyEvent.VK_W:
-                move(getMoveInDirection());
+                move(forward);
+//                move(Vector3.of(0, 0, 1));
                 break;
 
             case KeyEvent.VK_S:
-                move(getMoveInDirection().negate());
+                move(forward.negate());
+//                move(Vector3.of(0, 0, -1));
+                break;
+
+            case KeyEvent.VK_NUMPAD1:
+                rotate(Vector3.of(0, 0, -1));
+                break;
+
+            case KeyEvent.VK_NUMPAD2:
+                rotate(Vector3.of(0, 0, 1));
                 break;
 
             case KeyEvent.VK_UP:
@@ -71,17 +105,6 @@ public class Camera{
                 move(Vector3.of(0, 10, 0));
                 break;
         }
-
-        System.out.println(this);
-    }
-
-    private Vector3 getMoveInDirection(){
-
-        double moveX = Trigonometry.cos(angles.x) * 10;
-        double moveY = Trigonometry.sin(angles.y) * 10;
-        double moveZ = Trigonometry.cos(angles.z) * 10;
-
-        return Vector3.of(moveX, moveY, moveZ);
     }
 
     public Vector3 transform(Vector3 point){
@@ -90,13 +113,25 @@ public class Camera{
 
         Matrix rotateXMatrix = Transformations.getRotateXMatrix((int) angles.x);
         Matrix rotateYMatrix = Transformations.getRotateYMatrix((int) angles.y);
+        Matrix rotateZMatrix = Transformations.getRotateZMatrix((int) angles.z);
         Matrix transitionMatrix = Transformations.getTransitionMatrix(positionNegation);
 
         Matrix mergedMatrix = transitionMatrix.multiply(
-            rotateYMatrix.multiply(rotateXMatrix)
+            rotateZMatrix.multiply(
+                rotateYMatrix.multiply(rotateXMatrix)
+            )
         );
 
         return point.multiply(mergedMatrix);
+    }
+
+    public boolean isTriangleHidden(Vector3 triangleA, Vector3 triangleB){
+
+        Vector3 triangleCrossProduct = Vector3.crossProduct(triangleA, triangleB);
+
+        double dotProductWithCamera = Vector3.dotProduct(triangleCrossProduct, forward);
+
+        return dotProductWithCamera < 0;
     }
 
     @Override

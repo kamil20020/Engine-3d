@@ -1,6 +1,7 @@
 package pl.engine.shapes.flat;
 
 import pl.engine.math.Vector3;
+import pl.engine.render.QuadConsumer;
 import pl.engine.shapes.Drawable;
 import pl.engine.texture.Texturable;
 import pl.engine.texture.Texture;
@@ -21,7 +22,7 @@ public class Disk extends Drawable {
     }
 
     @Override
-    public void draw() {
+    public void draw(QuadConsumer<Double, Double, Double, Color> drawFunction) {
 
         double y;
         double prevY = Integer.MIN_VALUE;
@@ -43,7 +44,7 @@ public class Disk extends Drawable {
 
                     for(double x = leftX; x <= rightX; x++){
 
-                        drawPixel(x, y, color);
+                        drawFunction.accept(x, y, mid.z, color);
                     }
                 }
             }
@@ -51,7 +52,7 @@ public class Disk extends Drawable {
 
                 for(double x = leftX; x <= rightX; x++){
 
-                    drawPixel(x, y, color);
+                    drawFunction.accept(x, y, mid.z, color);
                 }
             }
 

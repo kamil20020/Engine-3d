@@ -3,6 +3,7 @@ package pl.engine.shapes.flat;
 import pl.engine.Triangleable;
 import pl.engine.math.Vector3;
 import pl.engine.render.Perspective;
+import pl.engine.render.QuadConsumer;
 import pl.engine.shapes.Drawable;
 import pl.engine.texture.Texturable;
 import pl.engine.texture.Texture;
@@ -12,6 +13,7 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.Vector;
 import java.util.function.BiConsumer;
+import java.util.function.UnaryOperator;
 
 public class Triangle extends Drawable {
 
@@ -26,29 +28,25 @@ public class Triangle extends Drawable {
     }
 
     @Override
-    public void draw() {
+    public void draw(QuadConsumer<Double, Double, Double, Color> drawFunction) {
 
         if(!isFilled){
 
-            drawEdges(v, color);
+            drawEdges(v, color, drawFunction);
             return;
         }
 
-        drawFilled(v, color);
+        drawFilled(v, color, drawFunction);
     }
 
-    public static void drawEdges(Vector3[] v, Color color){
+    public static void drawEdges(Vector3[] v, Color color, QuadConsumer<Double, Double, Double, Color> drawFunction){
 
-        Line.draw(v[0], v[1], color);
-        Line.draw(v[1], v[2], color);
-        Line.draw(v[0], v[2], color);
+        Line.draw(v[0], v[1], color, drawFunction);
+        Line.draw(v[1], v[2], color, drawFunction);
+        Line.draw(v[0], v[2], color, drawFunction);
     }
 
-    public static void drawFilled(Vector3[] v, Color color){
-
-        if((v[0].x == v[1].x && v[1].x == v[2].x) || (v[0].y == v[1].y && v[1].y == v[2].y)){
-            return;
-        }
+    public static void drawFilled(Vector3[] v, Color color, QuadConsumer<Double, Double, Double, Color> drawFunction){
 
         Vector3 minYVec = v[0];
         Vector3 maxYVec = v[0];
@@ -75,14 +73,14 @@ public class Triangle extends Drawable {
 
         if(minYVec.x == maxYVec.x){
 
-            Vector3 buffer;
+            Vector3 buffer = middleVec;
 
             if(minYVec.y == middleVec.y){
 
                 buffer = minYVec;
                 minYVec = middleVec;
             }
-            else{
+            else if(middleVec.y == maxYVec.y){
 
                 buffer = maxYVec;
                 maxYVec = middleVec;
@@ -91,70 +89,10 @@ public class Triangle extends Drawable {
             middleVec = buffer;
         }
 
-        if(middleVec.x == minYVec.x){
-            drawFilledOrthodonalBottom(minYVec, middleVec, maxYVec, color);
-        }
-        else if(middleVec.x == maxYVec.x){
-            drawFilledOrthodonalTop(minYVec, middleVec, maxYVec, color);
-        }
-        else{
-            drawFilledValid(minYVec, middleVec, maxYVec, color);
-        }
+        drawFilledValid(minYVec, middleVec, maxYVec, color, drawFunction);
     }
 
-    // ----
-    // | /
-    // |/
-    private static void drawFilledOrthodonalTop(Vector3 minYVec, Vector3 middleVec, Vector3 maxYVec, Color color){
-
-        double topLine2Slope = Line.getSlope(minYVec, maxYVec);
-
-        double topLine2B = Line.getBCoef(topLine2Slope, maxYVec);
-
-        double x2 = middleVec.x;
-
-        for(double y = maxYVec.y; y >= middleVec.y; y--){
-
-            drawInvalidRow(topLine2Slope, topLine2B, y, x2, color);
-        }
-    }
-
-    // |\
-    // | \
-    // ----
-    private static void drawFilledOrthodonalBottom(Vector3 minYVec, Vector3 middleVec, Vector3 maxYVec, Color color){
-
-        double topLine2Slope = Line.getSlope(minYVec, maxYVec);
-
-        double topLine2B = Line.getBCoef(topLine2Slope, maxYVec);
-
-        double x1 = middleVec.x;
-
-        for(double y = minYVec.y; y <= middleVec.y; y++){
-
-            drawInvalidRow(topLine2Slope, topLine2B, y, x1, color);
-        }
-    }
-
-    private static void drawInvalidRow(double topLine2Slope, double topLine2B, double y, double x2, Color color){
-
-        double x1 = Line.getX(topLine2Slope, topLine2B, y);
-
-        double minX = x1;
-        double maxX = x2;
-
-        if(x1 > x2){
-            minX = x2;
-            maxX = x1;
-        }
-
-        for(double x = minX; x <= maxX; x++){
-
-            drawPixel(x, y, color);
-        }
-    }
-
-    private static void drawFilledValid(Vector3 minYVec, Vector3 middleVec, Vector3 maxYVec, Color color){
+    private static void drawFilledValid(Vector3 minYVec, Vector3 middleVec, Vector3 maxYVec, Color color, QuadConsumer<Double, Double, Double, Color> drawFunction){
 
         double topLine1Slope = Line.getSlope(minYVec, middleVec);
         double topLine2Slope = Line.getSlope(minYVec, maxYVec);
@@ -164,22 +102,68 @@ public class Triangle extends Drawable {
         double topLine2B = Line.getBCoef(topLine2Slope, maxYVec);
         double bottomLineB = Line.getBCoef(bottomLineSlope, maxYVec);
 
-        for(double y = minYVec.y; y < middleVec.y; y++){
+        double defaultX1 = middleVec.x;
+        double defaultX2 = middleVec.x;
 
-            drawValidRow(topLine1Slope, topLine1B, topLine2Slope, topLine2B, y, color);
+        if(minYVec.x == maxYVec.x){
+            defaultX2 = minYVec.x;
         }
 
-        for(double y = maxYVec.y; y >= middleVec.y; y--){
+        for(double y = minYVec.y; (int) y < (int) middleVec.y; y++){
 
-            drawValidRow(topLine2Slope, topLine2B, bottomLineSlope, bottomLineB, y, color);
+            double verticalOneSideZ = interpolateZ(minYVec.z, middleVec.z, minYVec.y, middleVec.y, y);
+            double verticalOtherSizeZ = interpolateZ(minYVec.z, maxYVec.z, minYVec.y, maxYVec.y, y);
+
+            drawValidRow(verticalOneSideZ, verticalOtherSizeZ, topLine1Slope, topLine1B, topLine2Slope, topLine2B, y, defaultX1, defaultX2, color, drawFunction);
+        }
+
+        for(double y = maxYVec.y; (int) y > (int) middleVec.y; y--){
+
+            double verticalOneSideZ = interpolateZ(middleVec.z, maxYVec.z, middleVec.y, maxYVec.y, y);
+            double verticalOtherSizeZ = interpolateZ(minYVec.z, maxYVec.z, minYVec.y, maxYVec.y, y);
+
+            drawValidRow(verticalOneSideZ, verticalOtherSizeZ, topLine2Slope, topLine2B, bottomLineSlope, bottomLineB, y, defaultX2, defaultX1, color, drawFunction);
         }
     }
 
-    private static void drawValidRow(double topLine1Slope, double topLine1B, double topLine2Slope, double topLine2B, double y, Color color){
+    private static void drawValidRow(double verticalOneSideZ, double verticalOtherSizeZ, double topLine1Slope, double topLine1B, double topLine2Slope, double topLine2B, double y, double defaultX1, double defaultX2, Color color, QuadConsumer<Double, Double, Double, Color> drawFunction){
 
-        double x1 = Line.getX(topLine1Slope, topLine1B, y);
+        double x1 = Line.getX(topLine1Slope, topLine1B, y, defaultX1);
+        double x2 = Line.getX(topLine2Slope, topLine2B, y, defaultX2);
 
-        drawInvalidRow(topLine2Slope, topLine2B, y, x1, color);
+        double minX = x1;
+        double maxX = x2;
+
+        if(x1 > x2){
+            minX = x2;
+            maxX = x1;
+        }
+
+        for(double x = minX; x < maxX; x++){
+
+            double horizontalZ = interpolateZ(verticalOneSideZ, verticalOtherSizeZ, minX, maxX, x);
+
+            drawFunction.accept(x, y, horizontalZ, color);
+        }
+    }
+
+    private static double interpolateZ(double aPos, double bPos, double minVal, double maxVal, double val){
+
+        if(minVal == maxVal){
+            return aPos;
+        }
+
+        double completeRatio = (val - minVal) / (maxVal - minVal);
+
+        if(aPos > bPos){
+
+            double buffer = aPos;
+
+            aPos = bPos;
+            bPos = buffer;
+        }
+
+        return (bPos - aPos) * completeRatio + aPos;
     }
 
     @Override

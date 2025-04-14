@@ -25,14 +25,9 @@ public class Vector3 {
         return new Vector3(v.x, v.y, v.z);
     }
 
-    public static Vector3 of(){
+    public static Vector3 empty(){
 
         return new Vector3(0, 0, 0);
-    }
-
-    public static boolean equalsXY(Vector3 a, Vector3 b){
-
-        return a.x == b.x && a.y == b.y;
     }
 
     public Vector3 change(UnaryOperator<Double> changeFunction){
@@ -41,6 +36,29 @@ public class Vector3 {
             changeFunction.apply(x),
             changeFunction.apply(y),
             changeFunction.apply(z)
+        );
+    }
+
+    public Vector3 negate(){
+
+        return Vector3.of(-x, -y, -z);
+    }
+
+    public Vector3 add(Vector3 vec){
+
+        return Vector3.of(
+                x + vec.x,
+                y + vec.y,
+                z + vec.z
+        );
+    }
+
+    public Vector3 multiply(double a){
+
+        return Vector3.of(
+            x * a,
+            y * a,
+            z * a
         );
     }
 
@@ -59,23 +77,46 @@ public class Vector3 {
         );
     }
 
-    public Vector3 negate(){
-
-        return Vector3.of(-x, -y, -z);
-    }
-
-    public Vector3 add(Vector3 vec){
-
-        return Vector3.of(
-            x + vec.x,
-            y + vec.y,
-            z + vec.z
-        );
-    }
-
     private double multiplyWithMatrixRow(Matrix m, int rowIndex){
 
         return m.get(rowIndex, 0) * x + m.get(rowIndex, 1) * y + m.get(rowIndex, 2) * z + m.get(rowIndex, 3);
+    }
+
+    public static double dotProduct(Vector3 a, Vector3 b){
+
+        return a.x * b.x + a.y * b.y + a.z * b.z;
+    }
+
+    public Vector3 normalize(){
+
+        double width = Math.sqrt(x * x + y * y + z * z);
+
+        if(width == 0) {
+            return Vector3.of(this);
+        }
+
+        return Vector3.of(
+            x / width,
+            y / width,
+            z / width
+        );
+    }
+
+    public static Vector3 crossProduct(Vector3 a, Vector3 b){
+
+        // i  j  k
+        // ax ay az
+        // bx by bz
+
+        // i * ay * bz + k * ax * by + j * bx * az - bx * ay * k - by * az * i - bz * ax * j
+        // (ay * bz - by * az) * i + (az * bx - ax * bz) * j + (ax * by - ay * bx) * k
+        // [ay * bz - by * az, az * bx - az * bz, ax * by - ay * bx]
+
+        return Vector3.of(
+            a.y * b.z - a.z * b.y,
+            -a.x * b.z + a.z * b.x,
+            a.x * b.y - a.y * b.x
+        );
     }
 
     @Override

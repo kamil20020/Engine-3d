@@ -20,7 +20,7 @@ public class Screen extends JPanel {
 
         setPreferredSize(screenSize);
 
-        content =  new BufferedImage(screenSize.width, screenSize.height, BufferedImage.TYPE_INT_RGB);
+        content = new BufferedImage(screenSize.width, screenSize.height, BufferedImage.TYPE_INT_RGB);
     }
 
     public void setRenderer(Renderer renderer){

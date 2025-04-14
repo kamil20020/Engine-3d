@@ -30,26 +30,26 @@ public abstract class Texturable extends Drawable {
         return (int) diff % texture.getHeight();
     }
 
-    public BiConsumer<Double, Double> getDrawTextureOrColorPixelFunction(){
-
-        if(texture == null){
-
-            return (x, y) -> {
-
-                drawPixel(x, y, color);
-            };
-        }
-
-        return (Double x, Double y) -> drawPixel(x, y, color);
-    }
-
-    public void drawTexturePixel(Texture texture, double x, double y){
-
-        int textureX = normalizeX(x);
-        int textureY = normalizeY(y);
-
-        Color textureColor = texture.getColorOnPosition(textureX, textureY);
-
-        drawPixel(x, y, textureColor);
-    }
+//    public BiConsumer<Double, Double> getDrawTextureOrColorPixelFunction(){
+//
+//        if(texture == null){
+//
+//            return (x, y) -> {
+//
+//                drawPixel(x, y, color);
+//            };
+//        }
+//
+//        return (Double x, Double y) -> drawPixel(x, y, color);
+//    }
+//
+//    public void drawTexturePixel(Texture texture, double x, double y){
+//
+//        int textureX = normalizeX(x);
+//        int textureY = normalizeY(y);
+//
+//        Color textureColor = texture.getColorOnPosition(textureX, textureY);
+//
+//        drawPixel(x, y, textureColor);
+//    }
 }

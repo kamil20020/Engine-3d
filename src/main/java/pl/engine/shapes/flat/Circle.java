@@ -1,6 +1,7 @@
 package pl.engine.shapes.flat;
 
 import pl.engine.math.Vector3;
+import pl.engine.render.QuadConsumer;
 import pl.engine.shapes.Drawable;
 
 import java.awt.*;
@@ -18,7 +19,7 @@ public class Circle extends Drawable {
     }
 
     @Override
-    public void draw() {
+    public void draw(QuadConsumer<Double, Double, Double, Color> drawFunction) {
 
         double x;
         double y;
@@ -30,7 +31,7 @@ public class Circle extends Drawable {
             x = r * Math.cos(degInRadians) + mid.x;
             y = r * Math.sin(degInRadians) + mid.y;
 
-            drawPixel(x, y, color);
+            drawFunction.accept(x, y, mid.z, color);
         }
     }
 }

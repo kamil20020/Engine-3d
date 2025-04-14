@@ -15,4 +15,11 @@ public class Trigonometry {
 
         return Math.sin(angleInRad);
     }
+
+    public static double tan(double angleInDegree){
+
+        double angleInRad = Math.toRadians(angleInDegree);
+
+        return Math.tan(angleInRad);
+    }
 }

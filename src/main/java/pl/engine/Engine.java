@@ -19,8 +19,8 @@ public class Engine extends Thread {
     public Engine(){
 
         camera = new Camera(
-            Vector3.of(-500, -500, 0), //Vector3.of(-500, -500, 10),
-            Vector3.of(0, 0, 0)
+            Vector3.of(0, -200, 0), //Vector3.of(-500, -500, 10),
+            Vector3.of(0, 0 , -45)
         );
 
         eventsHandler = new EventsHandler(camera);

@@ -51,6 +51,23 @@ public class Transformations {
         return new Matrix(r);
     }
 
+    public static Matrix getRotateZMatrix(int angleDegree){
+
+        double angleInRadians = Math.toRadians(angleDegree);
+
+        double cosValue = Math.cos(angleInRadians);
+        double sinValue = Math.sin(angleInRadians);
+
+        double[][] r = {
+            {cosValue, -sinValue, 0, 0},
+            {sinValue, cosValue, 0, 0},
+            {0, 0, 1, 0},
+            {0, 0, 0, 1},
+        };
+
+        return new Matrix(r);
+    }
+
     public static Vector3 transition(Vector3 point, Vector3 transition){
 
         Matrix transitionMatrix = getTransitionMatrix(transition);
@@ -68,6 +85,13 @@ public class Transformations {
     public static Vector3 rotateY(Vector3 point, int angleDegree){
 
         Matrix rotationMatrix = getRotateYMatrix(angleDegree);
+
+        return point.multiply(rotationMatrix);
+    }
+
+    public static Vector3 rotateZ(Vector3 point, int angleDegree){
+
+        Matrix rotationMatrix = getRotateZMatrix(angleDegree);
 
         return point.multiply(rotationMatrix);
     }

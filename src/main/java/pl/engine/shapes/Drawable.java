@@ -1,6 +1,8 @@
 package pl.engine.shapes;
 
+import pl.engine.render.QuadConsumer;
 import pl.engine.render.Screen;
+import pl.engine.render.Zbuffer;
 
 import java.awt.*;
 
@@ -25,5 +27,12 @@ public abstract class Drawable {
         return color;
     }
 
-    public abstract void draw();
+    public final void draw(){
+
+        draw((x, y, z, color) -> {
+            Drawable.drawPixel(x, y, color);
+        });
+    }
+
+    public abstract void draw(QuadConsumer<Double, Double, Double, Color> drawFunction);
 }

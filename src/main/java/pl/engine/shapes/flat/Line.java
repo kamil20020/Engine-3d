@@ -1,6 +1,7 @@
 package pl.engine.shapes.flat;
 
 import pl.engine.math.Vector3;
+import pl.engine.render.QuadConsumer;
 import pl.engine.shapes.Drawable;
 
 import java.awt.*;
@@ -30,29 +31,13 @@ public class Line extends Drawable {
         }
     }
 
-    private static void drawInvalidLine(Vector3 a, Vector3 b, Color color){
+    @Override
+    public void draw(QuadConsumer<Double, Double, Double, Color> drawFunction) {
 
-        double minY = 0;
-        double maxY = 0;
-
-        if(a.y < b.y){
-            minY = a.y;
-            maxY = b.y;
-        }
-
-        for(double y = minY; y <= maxY; y++){
-
-            double x = a.x;
-
-            drawPixel(x, y, color);
-
-//            for(int w = 0; w < weight; w++, x++){
-//                content.setRGB(x, y, color.getRGB());
-//            }
-        }
+        draw(a, b, color, drawFunction);
     }
 
-    public static void draw(Vector3 a, Vector3 b, Color color){
+    public static void draw(Vector3 a, Vector3 b, Color color, QuadConsumer<Double, Double, Double, Color> drawFunction){
 
         if(a.x > b.x){
 
@@ -66,7 +51,7 @@ public class Line extends Drawable {
 
         if(a.x == b.x){
 
-            drawInvalidLine(a, b, color);
+            drawInvalidLine(a, b, color, drawFunction);
             return;
         }
 
@@ -80,7 +65,10 @@ public class Line extends Drawable {
 
             y += slope;
 
-            drawPixel(x, y, color);
+            double completeStepsRatio = (x - a.x) / (b.x - a.x);
+            double z = completeStepsRatio * (b.z - a.z) + a.z;
+
+            drawFunction.accept(x, y, z, color);
 
 //            for(int w = 0; w < weight; w++, y--){
 //                content.setRGB(x, y, color.getRGB());
@@ -88,15 +76,31 @@ public class Line extends Drawable {
         }
     }
 
-    @Override
-    public void draw() {
+    private static void drawInvalidLine(Vector3 a, Vector3 b, Color color, QuadConsumer<Double, Double, Double, Color> drawFunction){
 
-        draw(a, b, color);
+        if(a.y > b.y){
+
+            Vector3 buffer = a;
+            a = b;
+            b = buffer;
+        }
+
+        for(double y = a.y; y <= b.y; y++){
+
+            double completeStepsRatio = (y - a.y) / (b.y - a.y);
+            double z = completeStepsRatio * (b.z - a.z) + a.z;
+
+            drawFunction.accept(a.x, y, z, color);
+
+//            for(int w = 0; w < weight; w++, x++){
+//                content.setRGB(x, y, color.getRGB());
+//            }
+        }
     }
 
     public static double getSlope(Vector3 v1, Vector3 v2){
 
-        return  (v2.y - v1.y) / (v2.x - v1.x);
+        return (v2.y - v1.y) / (v2.x - v1.x);
     }
 
     public static double getBCoef(double slope, Vector3 v){
@@ -109,9 +113,18 @@ public class Line extends Drawable {
 
     public static double getX(double slope, double bCoef, double y){
 
+        return getX(slope, bCoef, y, 0);
+    }
+
+    public static double getX(double slope, double bCoef, double y, double defaultX){
+
         // y = ax + b
         // ax = y - b
         // x = (y - b) / a
+
+        if(slope == Double.POSITIVE_INFINITY){
+            return defaultX;
+        }
 
         return (y - bCoef) / slope;
     }

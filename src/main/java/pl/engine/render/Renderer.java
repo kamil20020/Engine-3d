@@ -19,17 +19,38 @@ public class Renderer {
     private final List<Triangleable> triangeables = new ArrayList<>();
     private final List<Drawable> drawables = new ArrayList<>();
     private final Camera camera;
+    private final Zbuffer zBuffer;
+    private final QuadConsumer<Double, Double, Double, Color> drawFunction;
+    private final Screen screen;
 
     public Renderer(Camera camera){
 
         this.camera = camera;
+        this.screen = Screen.getInstance();
+        this.zBuffer = Zbuffer.getInstance();
+        this.drawFunction = (Double x, Double y, Double z, Color color) -> {
+
+//            System.out.println(z < 0.1);
+
+//                screen.draw(x, y, color);
+
+            if(zBuffer.update(x.intValue(), y.intValue(), z.intValue())){
+                 screen.draw(x, y, color);
+            }
+        };
 
         init();
     }
 
     private void init(){
 
-        Rect rect = new Rect(Vector3.of(500, 500, 10), Vector3.of(600, 600, 10), Color.orange, true);
+        Rect rect = new Rect(Vector3.of(200, 200, 5), Vector3.of(300, 300, 5), Color.orange, false);
+        Rect rect1 = new Rect(Vector3.of(200, 200, 10), Vector3.of(300, 300, 10), Color.orange, false);
+        Rect rect2 = new Rect(Vector3.of(200, 200, 15), Vector3.of(300, 300, 15), Color.orange, false);
+        Rect rect3 = new Rect(Vector3.of(200, 200, 20), Vector3.of(300, 300, 20), Color.orange, false);
+        Rect rect4 = new Rect(Vector3.of(200, 200, 25), Vector3.of(300, 300, 25), Color.orange, false);
+        Rect rect5 = new Rect(Vector3.of(200, 200, 30), Vector3.of(300, 300, 30), Color.orange, false);
+        Rect rect6 = new Rect(Vector3.of(200, 200, 50), Vector3.of(300, 300, 50), Color.orange, false);
         Triangle triangle = new Triangle(
             Vector3.of(600, 500, 10),
             Vector3.of(700, 500, 10),
@@ -70,40 +91,49 @@ public class Renderer {
             Color.green
         );
 
-        Cube cube = new Cube(Vector3.of(0, 600, 10), 100, Color.green, true);
-        Cube cube1 = new Cube(Vector3.of(600, 0, 10), 100, Color.orange, true);
-        Cube cube2 = new Cube(Vector3.of(800, 800, 10), 100, Color.magenta, true);
-        Cube cube3 = new Cube(Vector3.of(0, 0, 10), 100, Color.pink, true);
-        Cube cube4 = new Cube(Vector3.of(0, 0, 10), 1000, Color.gray, true);
+        Rect floor = new Rect(Vector3.of(-1000, -1000, -1000), Vector3.of(1000, 10, 1000), Color.green, true);
 
-        Mesh ship = Mesh.loadFromObjFile("./meshes/space-ship.obj", Color.orange, false, 0);
+        Cube cube = new Cube(Vector3.of(0, 600, 0), 50, Color.green, false);
+        Cube cube1 = new Cube(Vector3.of(600, 0, 0), 50, Color.orange, false);
+        Cube cube2 = new Cube(Vector3.of(800, 800, 0), 200, Color.magenta, false);
+        Cube cube3 = new Cube(Vector3.of(500, 500, 0), 50, Color.pink, false);
+        Cube cube4 = new Cube(Vector3.of(0, 0, 0), 50, Color.gray, false);
+
+        Mesh ship = Mesh.loadFromObjFile("./meshes/space-ship.obj", Color.orange, false, -20);
         Mesh teapot = Mesh.loadFromObjFile("./meshes/teapot.obj", Color.orange, false, 0);
         Mesh axis = Mesh.loadFromObjFile("./meshes/axis.obj", Color.orange, false, 0);
         Mesh mountains = Mesh.loadFromObjFile("./meshes/mountains.obj", Color.orange, true, 200);
 
-        triangeables.addAll(List.of(mountains));
+        triangeables.addAll(List.of(ship));
 
-//        drawables.addAll(List.of(rect));
+//        drawables.addAll(List.of(cube, cube1));
+    }
+
+    private Vector3 transformVertex(Vector3 vertex){
+
+        return Perspective.transform(camera.transform(vertex));
     }
 
     private Vector3 getVertexAndTransform(Triangleable toDraw, int triangleIndex){
 
        Vector3 vertex = toDraw.getVertexByTriangleIndex(triangleIndex);
 
-        return camera.transform(vertex);
+        return transformVertex(vertex);
     }
 
     public void draw(){
 
+        zBuffer.clear();
+
         Vector3[] toDrawVertices = new Vector3[]{
-            Vector3.of(),
-            Vector3.of(),
-            Vector3.of()
+            Vector3.empty(),
+            Vector3.empty(),
+            Vector3.empty()
         };
 
         triangeables.forEach(toDraw -> {
 
-            BiConsumer<Vector3[], Color> drawFunction = toDraw.getDrawFunction();
+            TriConsumer<Vector3[], Color, QuadConsumer> groupDrawFunction = toDraw.getDrawFunction();
 
             for(int i=0; i <= toDraw.getTriangles().length - 3; i += 3){
 
@@ -111,15 +141,33 @@ public class Renderer {
                     toDrawVertices[j] = getVertexAndTransform(toDraw, i + j);
                 }
 
-                drawFunction.accept(
+                if(camera.isTriangleHidden(toDrawVertices[0], toDrawVertices[1])){
+//                    continue;
+                }
+
+                groupDrawFunction.accept(
                     toDrawVertices,
-                    toDraw.getColor()
+                    toDraw.randomColors[i / 3],
+                    drawFunction
                 );
+
+//                Vector3 cross = Vector3.crossProduct(toDrawVertices[0], toDrawVertices[1]);
+//
+////                if(cross.z > 0){
+////
+//                    cross = Vector3.crossProduct(toDrawVertices[1], toDrawVertices[0]);
+////                }
+////
+//                Line.draw(toDrawVertices[0], cross, Color.pink, drawFunction);
             }
         });
 
+//        Line.draw(camera.position, camera.position.add(camera.forward.multiply(100)), Color.green);
+
+//        Line.draw(Vector3.of(200, 200, 10), Vector3.of(200, 200, 20), Color.pink, drawFunction);
+
         drawables.forEach(toDraw -> {
-            toDraw.draw();
+            toDraw.draw(drawFunction);
         });
     }
 }
