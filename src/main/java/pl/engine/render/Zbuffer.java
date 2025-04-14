@@ -6,7 +6,7 @@ import java.awt.*;
 
 public class Zbuffer {
 
-    public int[][] minVerticesZ;
+    public double[][] minVerticesZ;
     public int[][] frames;
     private static Zbuffer INSTANCE;
     private int frame = 0;
@@ -15,7 +15,7 @@ public class Zbuffer {
 
         Dimension screenDimensions = Screen.getScreenSize();
 
-        minVerticesZ = new int[screenDimensions.height][screenDimensions.width];
+        minVerticesZ = new double[screenDimensions.height][screenDimensions.width];
         frames = new int[screenDimensions.height][screenDimensions.width];
     }
 
@@ -33,7 +33,7 @@ public class Zbuffer {
         frame++;
     }
 
-    public boolean update(int x, int y, int z){
+    public boolean update(int x, int y, double z){
 
         int zbufferWidth = minVerticesZ[0].length;
         int zbufferHeight = minVerticesZ.length;
@@ -42,13 +42,19 @@ public class Zbuffer {
             return false;
         }
 
-        int oldZ = minVerticesZ[y][x];
+        double oldZ = minVerticesZ[y][x];
         int pixelFrame = frames[y][x];
 
-        if(pixelFrame < frame || z < oldZ){
+        if(pixelFrame < frame){
 
             minVerticesZ[y][x] = z;
             frames[y][x] = frame;
+
+            return true;
+        }
+        else if(z < oldZ){
+
+            minVerticesZ[y][x] = z;
 
             return true;
         }

@@ -89,10 +89,10 @@ public class Triangle extends Drawable {
             middleVec = buffer;
         }
 
-        drawFilledValid(minYVec, middleVec, maxYVec, color, drawFunction);
+        drawFilled(minYVec, middleVec, maxYVec, color, drawFunction);
     }
 
-    private static void drawFilledValid(Vector3 minYVec, Vector3 middleVec, Vector3 maxYVec, Color color, QuadConsumer<Double, Double, Double, Color> drawFunction){
+    private static void drawFilled(Vector3 minYVec, Vector3 middleVec, Vector3 maxYVec, Color color, QuadConsumer<Double, Double, Double, Color> drawFunction){
 
         double topLine1Slope = Line.getSlope(minYVec, middleVec);
         double topLine2Slope = Line.getSlope(minYVec, maxYVec);
@@ -105,28 +105,28 @@ public class Triangle extends Drawable {
         double defaultX1 = middleVec.x;
         double defaultX2 = middleVec.x;
 
-        if(minYVec.x == maxYVec.x){
-            defaultX2 = minYVec.x;
+        if(middleVec.y != maxYVec.y && middleVec.y != minYVec.y){
+            defaultX2 = maxYVec.x;
         }
 
-        for(double y = minYVec.y; (int) y < (int) middleVec.y; y++){
+        for(double y = minYVec.y; y <= middleVec.y; y++){
 
             double verticalOneSideZ = interpolateZ(minYVec.z, middleVec.z, minYVec.y, middleVec.y, y);
             double verticalOtherSizeZ = interpolateZ(minYVec.z, maxYVec.z, minYVec.y, maxYVec.y, y);
 
-            drawValidRow(verticalOneSideZ, verticalOtherSizeZ, topLine1Slope, topLine1B, topLine2Slope, topLine2B, y, defaultX1, defaultX2, color, drawFunction);
+            drawFilledRow(verticalOneSideZ, verticalOtherSizeZ, topLine1Slope, topLine1B, topLine2Slope, topLine2B, y, defaultX1, defaultX2, color, drawFunction);
         }
 
-        for(double y = maxYVec.y; (int) y > (int) middleVec.y; y--){
+        for(double y = middleVec.y; y <= maxYVec.y; y++){
 
             double verticalOneSideZ = interpolateZ(middleVec.z, maxYVec.z, middleVec.y, maxYVec.y, y);
             double verticalOtherSizeZ = interpolateZ(minYVec.z, maxYVec.z, minYVec.y, maxYVec.y, y);
 
-            drawValidRow(verticalOneSideZ, verticalOtherSizeZ, topLine2Slope, topLine2B, bottomLineSlope, bottomLineB, y, defaultX2, defaultX1, color, drawFunction);
+            drawFilledRow(verticalOneSideZ, verticalOtherSizeZ, topLine2Slope, topLine2B, bottomLineSlope, bottomLineB, y, defaultX2, defaultX1, color, drawFunction);
         }
     }
 
-    private static void drawValidRow(double verticalOneSideZ, double verticalOtherSizeZ, double topLine1Slope, double topLine1B, double topLine2Slope, double topLine2B, double y, double defaultX1, double defaultX2, Color color, QuadConsumer<Double, Double, Double, Color> drawFunction){
+    private static void drawFilledRow(double verticalOneSideZ, double verticalOtherSizeZ, double topLine1Slope, double topLine1B, double topLine2Slope, double topLine2B, double y, double defaultX1, double defaultX2, Color color, QuadConsumer<Double, Double, Double, Color> drawFunction){
 
         double x1 = Line.getX(topLine1Slope, topLine1B, y, defaultX1);
         double x2 = Line.getX(topLine2Slope, topLine2B, y, defaultX2);
@@ -139,7 +139,7 @@ public class Triangle extends Drawable {
             maxX = x1;
         }
 
-        for(double x = minX; x < maxX; x++){
+        for(double x = minX; x <= maxX; x++){
 
             double horizontalZ = interpolateZ(verticalOneSideZ, verticalOtherSizeZ, minX, maxX, x);
 

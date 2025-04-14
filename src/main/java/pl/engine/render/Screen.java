@@ -34,7 +34,7 @@ public class Screen extends JPanel {
 
         clearRect = new Rect(
             Vector3.of(0, 0, 0),
-            Vector3.of(screenSize.width - 1, screenSize.height - 1, 0),
+            Vector3.of(screenSize.width, screenSize.height, 0),
             Color.black,
             true
         );

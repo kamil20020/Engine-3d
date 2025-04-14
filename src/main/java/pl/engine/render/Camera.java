@@ -35,7 +35,7 @@ public class Camera{
 
         Matrix mergedMatrix = rotateZMatrix.multiply(rotateYMatrix.multiply(rotateXMatrix));
 
-        this.forward = Vector3.of(0, 0, -1).multiply(mergedMatrix).normalize();
+        this.forward = Vector3.of(0, 0, -1).multiply(mergedMatrix);
     }
 
     public void rotate(Vector3 newAngles){

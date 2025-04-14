@@ -34,7 +34,7 @@ public class Renderer {
 
 //                screen.draw(x, y, color);
 
-            if(zBuffer.update(x.intValue(), y.intValue(), z.intValue())){
+            if(zBuffer.update(x.intValue(), y.intValue(), z)){
                  screen.draw(x, y, color);
             }
         };
@@ -44,7 +44,7 @@ public class Renderer {
 
     private void init(){
 
-        Rect rect = new Rect(Vector3.of(200, 200, 5), Vector3.of(300, 300, 5), Color.orange, false);
+        Rect rect = new Rect(Vector3.of(200, 200, 5), Vector3.of(300, 300, 5), Color.orange, true);
         Rect rect1 = new Rect(Vector3.of(200, 200, 10), Vector3.of(300, 300, 10), Color.orange, false);
         Rect rect2 = new Rect(Vector3.of(200, 200, 15), Vector3.of(300, 300, 15), Color.orange, false);
         Rect rect3 = new Rect(Vector3.of(200, 200, 20), Vector3.of(300, 300, 20), Color.orange, false);
@@ -95,7 +95,7 @@ public class Renderer {
 
         Cube cube = new Cube(Vector3.of(0, 600, 0), 50, Color.green, false);
         Cube cube1 = new Cube(Vector3.of(600, 0, 0), 50, Color.orange, false);
-        Cube cube2 = new Cube(Vector3.of(800, 800, 0), 200, Color.magenta, false);
+        Cube cube2 = new Cube(Vector3.of(800, 800, 0), 200, Color.magenta, true);
         Cube cube3 = new Cube(Vector3.of(500, 500, 0), 50, Color.pink, false);
         Cube cube4 = new Cube(Vector3.of(0, 0, 0), 50, Color.gray, false);
 
@@ -104,14 +104,14 @@ public class Renderer {
         Mesh axis = Mesh.loadFromObjFile("./meshes/axis.obj", Color.orange, false, 0);
         Mesh mountains = Mesh.loadFromObjFile("./meshes/mountains.obj", Color.orange, true, 200);
 
-        triangeables.addAll(List.of(ship));
+        triangeables.addAll(List.of(rect));
 
 //        drawables.addAll(List.of(cube, cube1));
     }
 
     private Vector3 transformVertex(Vector3 vertex){
 
-        return Perspective.transform(camera.transform(vertex));
+        return camera.transform(vertex);
     }
 
     private Vector3 getVertexAndTransform(Triangleable toDraw, int triangleIndex){
@@ -142,7 +142,7 @@ public class Renderer {
                 }
 
                 if(camera.isTriangleHidden(toDrawVertices[0], toDrawVertices[1])){
-//                    continue;
+                    continue;
                 }
 
                 groupDrawFunction.accept(
