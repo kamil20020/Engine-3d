@@ -47,9 +47,18 @@ public class Vector3 {
     public Vector3 add(Vector3 vec){
 
         return Vector3.of(
-                x + vec.x,
-                y + vec.y,
-                z + vec.z
+            x + vec.x,
+            y + vec.y,
+            z + vec.z
+        );
+    }
+
+    public Vector3 diff(Vector3 vec){
+
+        return Vector3.of(
+            x - vec.x,
+            y - vec.y,
+            z - vec.z
         );
     }
 

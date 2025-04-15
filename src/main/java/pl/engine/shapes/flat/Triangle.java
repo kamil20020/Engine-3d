@@ -23,7 +23,7 @@ public class Triangle extends Drawable {
     public Triangle(Vector3 a, Vector3 b, Vector3 c, Color color, boolean isFilled){
         super(color);
 
-        this.v = new Vector3[]{a, b, c};
+        this.v = new Vector3[]{Vector3.of(a), Vector3.of(b), Vector3.of(c)};
         this.isFilled = isFilled;
     }
 

@@ -55,38 +55,28 @@ public class Camera{
 
         switch (keyCode){
 
+            case KeyEvent.VK_W:
+                move(forward.negate());
+                break;
+
+            case KeyEvent.VK_S:
+                move(forward);
+                break;
+
             case KeyEvent.VK_A:
+                rotate(Vector3.of(0, -1, 0));
+                break;
+
+            case KeyEvent.VK_D:
                 rotate(Vector3.of(0, 1, 0));
                 break;
 
             case KeyEvent.VK_LEFT:
-                move(Vector3.of(-10, 0, 0));
-                break;
-
-            case KeyEvent.VK_D:
-                rotate(Vector3.of(0, -1, 0));
-                break;
-
-            case KeyEvent.VK_RIGHT:
                 move(Vector3.of(10, 0, 0));
                 break;
 
-            case KeyEvent.VK_W:
-                move(forward);
-//                move(Vector3.of(0, 0, 1));
-                break;
-
-            case KeyEvent.VK_S:
-                move(forward.negate());
-//                move(Vector3.of(0, 0, -1));
-                break;
-
-            case KeyEvent.VK_NUMPAD1:
-                rotate(Vector3.of(0, 0, -1));
-                break;
-
-            case KeyEvent.VK_NUMPAD2:
-                rotate(Vector3.of(0, 0, 1));
+            case KeyEvent.VK_RIGHT:
+                move(Vector3.of(-10, 0, 0));
                 break;
 
             case KeyEvent.VK_UP:
@@ -104,6 +94,14 @@ public class Camera{
             case KeyEvent.VK_Z:
                 move(Vector3.of(0, 10, 0));
                 break;
+
+            case KeyEvent.VK_NUMPAD1:
+                rotate(Vector3.of(0, 0, -1));
+                break;
+
+            case KeyEvent.VK_NUMPAD2:
+                rotate(Vector3.of(0, 0, 1));
+                break;
         }
     }
 
@@ -117,8 +115,8 @@ public class Camera{
         Matrix transitionMatrix = Transformations.getTransitionMatrix(positionNegation);
 
         Matrix mergedMatrix = transitionMatrix.multiply(
-            rotateZMatrix.multiply(
-                rotateYMatrix.multiply(rotateXMatrix)
+            rotateXMatrix.multiply(
+                rotateYMatrix.multiply(rotateZMatrix)
             )
         );
 

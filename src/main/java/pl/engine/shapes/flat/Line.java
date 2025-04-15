@@ -8,7 +8,7 @@ import java.awt.*;
 
 public class Line extends Drawable {
 
-    private Vector3 a, b;
+    public Vector3 a, b;
     private int weight = 1;
 
     public Line(Vector3 a, Vector3 b, Color color, int weight){
@@ -19,6 +19,9 @@ public class Line extends Drawable {
 
     public Line(Vector3 a, Vector3 b, Color color){
         super(color);
+
+        a = Vector3.of(a);
+        b = Vector3.of(b);
 
         if(a.x > b.x){
 
@@ -51,7 +54,13 @@ public class Line extends Drawable {
 
         if(a.x == b.x){
 
-            drawInvalidLine(a, b, color, drawFunction);
+            if(a.y != b.y){
+                drawVerticalLine(a, b, color, drawFunction);
+            }
+            else{
+                drawHorizontalZLine(a, b, color, drawFunction);
+            }
+
             return;
         }
 
@@ -76,11 +85,12 @@ public class Line extends Drawable {
         }
     }
 
-    private static void drawInvalidLine(Vector3 a, Vector3 b, Color color, QuadConsumer<Double, Double, Double, Color> drawFunction){
+    private static void drawVerticalLine(Vector3 a, Vector3 b, Color color, QuadConsumer<Double, Double, Double, Color> drawFunction){
 
         if(a.y > b.y){
 
             Vector3 buffer = a;
+
             a = b;
             b = buffer;
         }
@@ -95,6 +105,22 @@ public class Line extends Drawable {
 //            for(int w = 0; w < weight; w++, x++){
 //                content.setRGB(x, y, color.getRGB());
 //            }
+        }
+    }
+
+    private static void drawHorizontalZLine(Vector3 a, Vector3 b, Color color, QuadConsumer<Double, Double, Double, Color> drawFunction){
+
+        if(a.z > b.z){
+
+            Vector3 buffer = a;
+
+            a = b;
+            b = buffer;
+        }
+
+        for(double z = a.z; z <= b.z; z++){
+
+            drawFunction.accept(a.x, a.y, z, color);
         }
     }
 

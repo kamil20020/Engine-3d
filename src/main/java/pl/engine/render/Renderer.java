@@ -44,13 +44,17 @@ public class Renderer {
 
     private void init(){
 
-        Rect rect = new Rect(Vector3.of(200, 200, 5), Vector3.of(300, 300, 5), Color.orange, true);
-        Rect rect1 = new Rect(Vector3.of(200, 200, 10), Vector3.of(300, 300, 10), Color.orange, false);
-        Rect rect2 = new Rect(Vector3.of(200, 200, 15), Vector3.of(300, 300, 15), Color.orange, false);
-        Rect rect3 = new Rect(Vector3.of(200, 200, 20), Vector3.of(300, 300, 20), Color.orange, false);
-        Rect rect4 = new Rect(Vector3.of(200, 200, 25), Vector3.of(300, 300, 25), Color.orange, false);
-        Rect rect5 = new Rect(Vector3.of(200, 200, 30), Vector3.of(300, 300, 30), Color.orange, false);
-        Rect rect6 = new Rect(Vector3.of(200, 200, 50), Vector3.of(300, 300, 50), Color.orange, false);
+        Rect rect = new Rect(Vector3.of(0, 0, 100), Vector3.of(100, 100, 100), Color.orange, true);
+        Rect recta = new Rect(Vector3.of(200, 200, 5), Vector3.of(100, 200, 5), Color.orange, true);
+        Rect rectb = new Rect(Vector3.of(200, 200, 5), Vector3.of(100, 200, 5), Color.orange, true);
+        Rect rectc = new Rect(Vector3.of(200, 200, 5), Vector3.of(100, 200, 5), Color.orange, true);
+        Rect rect1 = new Rect(Vector3.of(500, 500, 5), Vector3.of(400, 500, 5), Color.orange, true);
+        Rect rect2 = new Rect(Vector3.of(200, 200, 10), Vector3.of(300, 300, 10), Color.orange, false);
+        Rect rect3 = new Rect(Vector3.of(200, 200, 15), Vector3.of(300, 300, 15), Color.orange, false);
+        Rect rect4 = new Rect(Vector3.of(200, 200, 20), Vector3.of(300, 300, 20), Color.orange, false);
+        Rect rect5 = new Rect(Vector3.of(200, 200, 25), Vector3.of(300, 300, 25), Color.orange, false);
+        Rect rect6 = new Rect(Vector3.of(200, 200, 30), Vector3.of(300, 300, 30), Color.orange, false);
+        Rect rect7 = new Rect(Vector3.of(200, 200, 50), Vector3.of(300, 300, 50), Color.orange, false);
         Triangle triangle = new Triangle(
             Vector3.of(600, 500, 10),
             Vector3.of(700, 500, 10),
@@ -80,8 +84,8 @@ public class Renderer {
         );
 
         Line line = new Line(
-            Vector3.of(100, 100, 10),
-            Vector3.of(500, 500, 20),
+            Vector3.of(200, 200, 10),
+            Vector3.of(300, 200, 20),
             Color.green
         );
 
@@ -93,25 +97,25 @@ public class Renderer {
 
         Rect floor = new Rect(Vector3.of(-1000, -1000, -1000), Vector3.of(1000, 10, 1000), Color.green, true);
 
-        Cube cube = new Cube(Vector3.of(0, 600, 0), 50, Color.green, false);
+        Cube cube = new Cube(Vector3.of(0, 0, 0), 50, Color.green, false);
         Cube cube1 = new Cube(Vector3.of(600, 0, 0), 50, Color.orange, false);
-        Cube cube2 = new Cube(Vector3.of(800, 800, 0), 200, Color.magenta, true);
+        Cube cube2 = new Cube(Vector3.of(200, 200, 0), 50, Color.magenta, false);
         Cube cube3 = new Cube(Vector3.of(500, 500, 0), 50, Color.pink, false);
         Cube cube4 = new Cube(Vector3.of(0, 0, 0), 50, Color.gray, false);
 
         Mesh ship = Mesh.loadFromObjFile("./meshes/space-ship.obj", Color.orange, false, -20);
         Mesh teapot = Mesh.loadFromObjFile("./meshes/teapot.obj", Color.orange, false, 0);
         Mesh axis = Mesh.loadFromObjFile("./meshes/axis.obj", Color.orange, false, 0);
-        Mesh mountains = Mesh.loadFromObjFile("./meshes/mountains.obj", Color.orange, true, 200);
+        Mesh mountains = Mesh.loadFromObjFile("./meshes/mountains.obj", Color.orange, true, 150);
 
-        triangeables.addAll(List.of(rect));
+        triangeables.addAll(List.of(cube));
 
-//        drawables.addAll(List.of(cube, cube1));
+//        drawables.addAll(List.of(line));
     }
 
     private Vector3 transformVertex(Vector3 vertex){
 
-        return camera.transform(vertex);
+        return Perspective.transform(camera.transform(vertex));
     }
 
     private Vector3 getVertexAndTransform(Triangleable toDraw, int triangleIndex){
@@ -142,7 +146,7 @@ public class Renderer {
                 }
 
                 if(camera.isTriangleHidden(toDrawVertices[0], toDrawVertices[1])){
-                    continue;
+//                    continue;
                 }
 
                 groupDrawFunction.accept(
