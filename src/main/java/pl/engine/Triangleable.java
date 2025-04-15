@@ -1,17 +1,13 @@
 package pl.engine;
 
 import pl.engine.math.Vector3;
-import pl.engine.render.QuadConsumer;
-import pl.engine.render.TriConsumer;
+import pl.engine.general.QuadConsumer;
+import pl.engine.general.TriConsumer;
 import pl.engine.shapes.Drawable;
 import pl.engine.shapes.flat.Triangle;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
-import java.util.function.BiConsumer;
 
 public abstract class Triangleable extends Drawable {
 

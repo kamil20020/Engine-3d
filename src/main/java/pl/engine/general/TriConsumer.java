@@ -1,4 +1,4 @@
-package pl.engine.render;
+package pl.engine.general;
 
 @FunctionalInterface
 public interface TriConsumer<A, B, C> {

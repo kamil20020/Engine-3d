@@ -1,13 +1,10 @@
 package pl.engine.shapes.flat;
 
 import pl.engine.math.Vector3;
-import pl.engine.render.QuadConsumer;
+import pl.engine.general.QuadConsumer;
 import pl.engine.shapes.Drawable;
-import pl.engine.texture.Texturable;
-import pl.engine.texture.Texture;
 
 import java.awt.*;
-import java.util.function.BiConsumer;
 
 public class Disk extends Drawable {
 

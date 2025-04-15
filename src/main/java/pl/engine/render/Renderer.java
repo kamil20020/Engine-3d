@@ -1,6 +1,8 @@
 package pl.engine.render;
 
 import pl.engine.Triangleable;
+import pl.engine.general.QuadConsumer;
+import pl.engine.general.TriConsumer;
 import pl.engine.math.Vector3;
 import pl.engine.shapes.Drawable;
 import pl.engine.shapes.Mesh;
@@ -9,10 +11,7 @@ import pl.engine.shapes.spatial.Cube;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public class Renderer {
 
@@ -97,7 +96,7 @@ public class Renderer {
 
         Rect floor = new Rect(Vector3.of(-1000, -1000, -1000), Vector3.of(1000, 10, 1000), Color.green, true);
 
-        Cube cube = new Cube(Vector3.of(0, 0, 0), 50, Color.green, false);
+        Cube cube = new Cube(Vector3.of(0, 0, 0), 50, Color.green, true);
         Cube cube1 = new Cube(Vector3.of(600, 0, 0), 50, Color.orange, false);
         Cube cube2 = new Cube(Vector3.of(200, 200, 0), 50, Color.magenta, false);
         Cube cube3 = new Cube(Vector3.of(500, 500, 0), 50, Color.pink, false);
@@ -106,7 +105,7 @@ public class Renderer {
         Mesh ship = Mesh.loadFromObjFile("./meshes/space-ship.obj", Color.orange, false, -20);
         Mesh teapot = Mesh.loadFromObjFile("./meshes/teapot.obj", Color.orange, false, 0);
         Mesh axis = Mesh.loadFromObjFile("./meshes/axis.obj", Color.orange, false, 0);
-        Mesh mountains = Mesh.loadFromObjFile("./meshes/mountains.obj", Color.orange, true, 150);
+        Mesh mountains = Mesh.loadFromObjFile("./meshes/mountains.obj", Color.orange, false, 150);
 
         triangeables.addAll(List.of(cube));
 
@@ -142,11 +141,16 @@ public class Renderer {
             for(int i=0; i <= toDraw.getTriangles().length - 3; i += 3){
 
                 for(int j=0; j < 3; j++){
-                    toDrawVertices[j] = getVertexAndTransform(toDraw, i + j);
+                    toDrawVertices[j] = toDraw.getVertexByTriangleIndex(i + j);
+                    toDrawVertices[j] = camera.transform(toDrawVertices[j]);
                 }
 
-                if(camera.isTriangleHidden(toDrawVertices[0], toDrawVertices[1])){
-//                    continue;
+                if(camera.isTriangleHidden(toDrawVertices)){
+                    continue;
+                }
+
+                for(int j=0; j < 3; j++){
+                    toDrawVertices[j] = Perspective.transform(toDrawVertices[j]);
                 }
 
                 groupDrawFunction.accept(
@@ -155,7 +159,7 @@ public class Renderer {
                     drawFunction
                 );
 
-//                Vector3 cross = Vector3.crossProduct(toDrawVertices[0], toDrawVertices[1]);
+//                Vector3 cross = Vector3.crossProduct(toDrawVertices[1], toDrawVertices[0]);
 //
 ////                if(cross.z > 0){
 ////

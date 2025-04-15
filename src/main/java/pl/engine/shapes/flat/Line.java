@@ -1,7 +1,7 @@
 package pl.engine.shapes.flat;
 
 import pl.engine.math.Vector3;
-import pl.engine.render.QuadConsumer;
+import pl.engine.general.QuadConsumer;
 import pl.engine.shapes.Drawable;
 
 import java.awt.*;

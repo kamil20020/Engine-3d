@@ -1,19 +1,11 @@
 package pl.engine.shapes.flat;
 
-import pl.engine.Triangleable;
 import pl.engine.math.Vector3;
-import pl.engine.render.Perspective;
-import pl.engine.render.QuadConsumer;
+import pl.engine.general.QuadConsumer;
 import pl.engine.shapes.Drawable;
-import pl.engine.texture.Texturable;
-import pl.engine.texture.Texture;
 
 import java.awt.*;
 import java.util.Arrays;
-import java.util.Random;
-import java.util.Vector;
-import java.util.function.BiConsumer;
-import java.util.function.UnaryOperator;
 
 public class Triangle extends Drawable {
 
@@ -164,6 +156,14 @@ public class Triangle extends Drawable {
         }
 
         return (bPos - aPos) * completeRatio + aPos;
+    }
+
+    public static Vector3 getCenter(Vector3 a, Vector3 b, Vector3 c){
+
+        return a
+            .add(b)
+            .add(c)
+            .change(v -> v / 3);
     }
 
     @Override

@@ -10,7 +10,7 @@ public class Rect extends Triangleable {
     public Rect(Vector3 topLeft, Vector3 bottomRight, Color color, boolean isFilled){
         super(
             getVertices(topLeft, bottomRight),
-            new Integer[]{2, 0, 1, 2, 1, 3},
+            new Integer[]{0, 2, 3, 1, 0, 3},
             color,
             isFilled
         );

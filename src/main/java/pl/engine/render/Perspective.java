@@ -6,7 +6,7 @@ import pl.engine.math.Vector3;
 
 public class Perspective {
 
-    private static final double fov = 90.0;
+    private static final double fov = 120.0;
     private static final double near = 0.1;
     private static final double far = 100.0;
     private static final double aspectRatio = 1920.0 / 1080.0;

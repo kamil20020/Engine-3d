@@ -1,4 +1,4 @@
-package pl.engine.render;
+package pl.engine.general;
 
 import java.awt.*;
 

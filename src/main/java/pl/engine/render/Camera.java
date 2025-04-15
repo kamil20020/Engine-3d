@@ -115,19 +115,25 @@ public class Camera{
         Matrix transitionMatrix = Transformations.getTransitionMatrix(positionNegation);
 
         Matrix mergedMatrix = transitionMatrix.multiply(
-            rotateXMatrix.multiply(
-                rotateYMatrix.multiply(rotateZMatrix)
+            rotateZMatrix.multiply(
+                rotateYMatrix.multiply(rotateXMatrix)
             )
         );
 
         return point.multiply(mergedMatrix);
     }
 
-    public boolean isTriangleHidden(Vector3 triangleA, Vector3 triangleB){
+    public boolean isTriangleHidden(Vector3[] triangleVertices){
 
-        Vector3 triangleCrossProduct = Vector3.crossProduct(triangleA, triangleB);
+        Vector3 edge1 = triangleVertices[2].diff(triangleVertices[1]);
+        Vector3 edge2 = triangleVertices[1].diff(triangleVertices[0]);
 
-        double dotProductWithCamera = Vector3.dotProduct(triangleCrossProduct, forward);
+        Vector3 triangleCrossProduct = Vector3.crossProduct(edge1, edge2).normalize();
+
+        Vector3 triangleCenter = Triangle.getCenter(triangleVertices[0], triangleVertices[1], triangleVertices[2]);
+        Vector3 triangleCenterDiffCamera = triangleCenter.diff(position).normalize();
+
+        double dotProductWithCamera = Vector3.dotProduct(triangleCrossProduct, triangleCenterDiffCamera);
 
         return dotProductWithCamera < 0;
     }

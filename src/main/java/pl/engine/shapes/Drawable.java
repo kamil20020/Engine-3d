@@ -1,8 +1,7 @@
 package pl.engine.shapes;
 
-import pl.engine.render.QuadConsumer;
+import pl.engine.general.QuadConsumer;
 import pl.engine.render.Screen;
-import pl.engine.render.Zbuffer;
 
 import java.awt.*;
 
