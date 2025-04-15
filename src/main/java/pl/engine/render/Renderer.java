@@ -96,7 +96,7 @@ public class Renderer {
 
         Rect floor = new Rect(Vector3.of(-1000, -1000, -1000), Vector3.of(1000, 10, 1000), Color.green, true);
 
-        Cube cube = new Cube(Vector3.of(0, 0, 0), 50, Color.green, true);
+        Cube cube = new Cube(Vector3.of(0, 0, 0), 50, Color.green, false);
         Cube cube1 = new Cube(Vector3.of(600, 0, 0), 50, Color.orange, false);
         Cube cube2 = new Cube(Vector3.of(200, 200, 0), 50, Color.magenta, false);
         Cube cube3 = new Cube(Vector3.of(500, 500, 0), 50, Color.pink, false);
