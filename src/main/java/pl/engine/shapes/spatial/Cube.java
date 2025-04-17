@@ -1,9 +1,7 @@
 package pl.engine.shapes.spatial;
 
 import pl.engine.math.Vector3;
-import pl.engine.shapes.Mesh;
-import pl.engine.shapes.flat.Rect;
-import pl.engine.texture.Texture;
+import pl.engine.render.Vertex;
 
 import java.awt.*;
 
@@ -26,17 +24,17 @@ public class Cube extends Mesh {
         );
     }
 
-    private static Vector3[] getVertices(Vector3 leftTopFrontCorner, int a){
+    private static Vertex[] getVertices(Vector3 leftTopFrontCorner, int a){
 
-        return new Vector3[]{
-            Vector3.of(leftTopFrontCorner),
-            Vector3.of(leftTopFrontCorner.x + a, leftTopFrontCorner.y, leftTopFrontCorner.z),
-            Vector3.of(leftTopFrontCorner.x, leftTopFrontCorner.y, leftTopFrontCorner.z + a),
-            Vector3.of(leftTopFrontCorner.x + a, leftTopFrontCorner.y, leftTopFrontCorner.z + a),
-            Vector3.of(leftTopFrontCorner.x, leftTopFrontCorner.y + a, leftTopFrontCorner.z),
-            Vector3.of(leftTopFrontCorner.x + a, leftTopFrontCorner.y + a, leftTopFrontCorner.z),
-            Vector3.of(leftTopFrontCorner.x, leftTopFrontCorner.y + a, leftTopFrontCorner.z + a),
-            Vector3.of(leftTopFrontCorner.x + a, leftTopFrontCorner.y + a, leftTopFrontCorner.z + a),
+        return new Vertex[]{
+            Vertex.of(leftTopFrontCorner),
+            Vertex.of(leftTopFrontCorner.x + a, leftTopFrontCorner.y, leftTopFrontCorner.z),
+            Vertex.of(leftTopFrontCorner.x, leftTopFrontCorner.y, leftTopFrontCorner.z + a),
+            Vertex.of(leftTopFrontCorner.x + a, leftTopFrontCorner.y, leftTopFrontCorner.z + a),
+            Vertex.of(leftTopFrontCorner.x, leftTopFrontCorner.y + a, leftTopFrontCorner.z),
+            Vertex.of(leftTopFrontCorner.x + a, leftTopFrontCorner.y + a, leftTopFrontCorner.z),
+            Vertex.of(leftTopFrontCorner.x, leftTopFrontCorner.y + a, leftTopFrontCorner.z + a),
+            Vertex.of(leftTopFrontCorner.x + a, leftTopFrontCorner.y + a, leftTopFrontCorner.z + a),
         };
     }
 }

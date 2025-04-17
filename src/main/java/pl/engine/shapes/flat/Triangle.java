@@ -1,8 +1,9 @@
 package pl.engine.shapes.flat;
 
-import pl.engine.math.Vector3;
 import pl.engine.general.QuadConsumer;
+import pl.engine.math.Vector3;
 import pl.engine.shapes.Drawable;
+import pl.engine.texture.Texture;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -164,6 +165,38 @@ public class Triangle extends Drawable {
             .add(b)
             .add(c)
             .change(v -> v / 3);
+    }
+
+    public static Vector3 getMinXY(Vector3[] vertices){
+
+        Vector3 minXY = vertices[0];
+
+        for(int i=1; i < vertices.length; i++){
+
+            Vector3 vertex = vertices[i];
+
+            if(vertex.x <= minXY.x && vertex.y <= minXY.y){
+                minXY = vertex;
+            }
+        }
+
+        return minXY;
+    }
+
+    public static Vector3 getMaxXY(Vector3[] vertices){
+
+        Vector3 maxXY = vertices[0];
+
+        for(int i=1; i < vertices.length; i++){
+
+            Vector3 vertex = vertices[i];
+
+            if(vertex.x >= maxXY.x && vertex.y >= maxXY.y){
+                maxXY = vertex;
+            }
+        }
+
+        return maxXY;
     }
 
     @Override

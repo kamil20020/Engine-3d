@@ -53,7 +53,7 @@ public class Texture {
 
     private BufferedImage loadImg(String path) throws IOException{
 
-        URL resourceURL = getClass().getResource(path);
+        URL resourceURL = Texture.class.getClassLoader().getResource(path);
 
         return ImageIO.read(resourceURL);
     }
@@ -78,7 +78,41 @@ public class Texture {
         return width;
     }
 
-    public Color getColorOnPosition(int x, int y){
+    public Color getColorFromLimitedTexture(double x, double y, double minU, double minV, double maxU, double maxV) {
+
+        double minLimitedTextureX = getX(minU);
+        double minLimitedTextureY = getY(minV);
+        double maxLimitedTextureX = getX(maxU);
+        double maxLimitedTextureY = getY(maxV);
+
+        double limitedTextureWidth = maxLimitedTextureX - minLimitedTextureX;
+        double limitedTextureHeight = maxLimitedTextureY - minLimitedTextureY;
+
+        int normalizedTextureX = (int) (x % limitedTextureWidth);
+        int normalizedTextureY = (int) (y % limitedTextureHeight);
+
+        return getColorOnNormalizedPosition(normalizedTextureX, normalizedTextureY);
+    }
+
+    public Color getColorOnUVPosition(double u, double v) {
+
+        int textureX = (int) getX(u);
+        int textureY = (int) getY(v);
+
+        return getColorOnNormalizedPosition(textureX, textureY);
+    }
+
+    public double getX(double u){
+
+        return u * getWidth();
+    }
+
+    public double getY(double v){
+
+        return v * getHeight();
+    }
+
+    private Color getColorOnNormalizedPosition(int x, int y){
 
         x += shiftX;
         y += shiftY;
@@ -86,5 +120,33 @@ public class Texture {
         int pixel = pixels[y * imgWidth + x];
 
         return new Color(pixel);
+    }
+
+    public Color getColorOnRawPosition(double x, double y) {
+
+        int textureX = (int) normalizeX(x);
+        int textureY = (int) normalizeY(y);
+
+        return getColorOnNormalizedPosition(textureX, textureY);
+    }
+
+    public double normalizeX(double x){
+
+        return x % getWidth();
+    }
+
+    public double normalizeY(double y){
+
+        return y % getHeight();
+    }
+
+    public double getU(double x){
+
+        return normalizeX(x) / getWidth();
+    }
+
+    public double getV(double y){
+
+        return normalizeY(y) / getHeight();
     }
 }

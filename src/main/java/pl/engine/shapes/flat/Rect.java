@@ -2,6 +2,7 @@ package pl.engine.shapes.flat;
 
 import pl.engine.Triangleable;
 import pl.engine.math.Vector3;
+import pl.engine.render.Vertex;
 
 import java.awt.*;
 
@@ -16,13 +17,13 @@ public class Rect extends Triangleable {
         );
     }
 
-    public static Vector3[] getVertices(Vector3 topLeft, Vector3 bottomRight){
+    public static Vertex[] getVertices(Vector3 topLeft, Vector3 bottomRight){
 
-        return new Vector3[]{
-            Vector3.of(topLeft),
-            Vector3.of(bottomRight.x, topLeft.y, bottomRight.z),
-            Vector3.of(topLeft.x, bottomRight.y, topLeft.z),
-            Vector3.of(bottomRight.x, bottomRight.y, bottomRight.z),
+        return new Vertex[]{
+            Vertex.of(topLeft),
+            Vertex.of(bottomRight.x, topLeft.y, bottomRight.z),
+            Vertex.of(topLeft.x, bottomRight.y, topLeft.z),
+            Vertex.of(bottomRight.x, bottomRight.y, bottomRight.z),
         };
     }
 

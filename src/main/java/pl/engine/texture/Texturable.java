@@ -1,5 +1,6 @@
 package pl.engine.texture;
 
+import pl.engine.general.QuadConsumer;
 import pl.engine.shapes.Drawable;
 import pl.engine.math.Vector3;
 
@@ -9,47 +10,31 @@ import java.util.function.BiConsumer;
 public abstract class Texturable extends Drawable {
 
     protected Texture texture;
+    protected double minXYU, minXYV;
+    protected double maxXYU, maxXYV;
+
+    public Texturable(Texture texture, Color color){
+        super(color);
+    }
 
     public Texturable(Color color){
         super(color);
     }
 
-    protected abstract Vector3 getMinXY();
+    public void setTexture(Texture texture){
 
-    private int normalizeX(double x){
-
-        double diff = x - getMinXY().x;
-
-        return (int) diff % texture.getWidth();
+        this.texture = texture;
     }
 
-    private  int normalizeY(double y){
+    public QuadConsumer<Double, Double, Double, Color> getDrawFunctionWithTexture(
+        QuadConsumer<Double, Double, Double, Color> basicDrawFunction
+    ){
 
-        double diff = y - getMinXY().y;
+        return (Double x, Double y, Double z, Color color) -> {
 
-        return (int) diff % texture.getHeight();
+            Color textureColor = texture.getColorFromLimitedTexture(x, y, minXYU, minXYV, maxXYU, maxXYV);
+
+            basicDrawFunction.accept(x, y, z, textureColor);
+        };
     }
-
-//    public BiConsumer<Double, Double> getDrawTextureOrColorPixelFunction(){
-//
-//        if(texture == null){
-//
-//            return (x, y) -> {
-//
-//                drawPixel(x, y, color);
-//            };
-//        }
-//
-//        return (Double x, Double y) -> drawPixel(x, y, color);
-//    }
-//
-//    public void drawTexturePixel(Texture texture, double x, double y){
-//
-//        int textureX = normalizeX(x);
-//        int textureY = normalizeY(y);
-//
-//        Color textureColor = texture.getColorOnPosition(textureX, textureY);
-//
-//        drawPixel(x, y, textureColor);
-//    }
 }

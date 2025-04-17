@@ -3,21 +3,24 @@ package pl.engine;
 import pl.engine.math.Vector3;
 import pl.engine.general.QuadConsumer;
 import pl.engine.general.TriConsumer;
+import pl.engine.render.Vertex;
 import pl.engine.shapes.Drawable;
 import pl.engine.shapes.flat.Triangle;
+import pl.engine.texture.Texturable;
+import pl.engine.texture.Texture;
 
 import java.awt.*;
 import java.util.Random;
 
-public abstract class Triangleable extends Drawable {
+public abstract class Triangleable extends Texturable {
 
     protected boolean isFilled;
-    protected Vector3[] vertices;
+    protected Vertex[] vertices;
     protected Integer[] triangles;
     public Color[] randomColors;
 
-    public Triangleable(Vector3[] vertices, Integer[] triangles, Color color, boolean isFilled){
-        super(color);
+    public Triangleable(Vertex[] vertices, Integer[] triangles, Color color, Texture texture, boolean isFilled){
+        super(texture, color);
 
         this.vertices = vertices;
         this.triangles = triangles;
@@ -33,6 +36,10 @@ public abstract class Triangleable extends Drawable {
         }
     }
 
+    public Triangleable(Vertex[] vertices, Integer[] triangles, Color color, boolean isFilled){
+        this(vertices, triangles, color, null, isFilled);
+    }
+
     public Vector3[] getVertices(){
 
         return vertices;
@@ -43,7 +50,7 @@ public abstract class Triangleable extends Drawable {
         return triangles;
     }
 
-    public Vector3 getVertexByTriangleIndex(int triangleIndex){
+    public Vertex getVertexByTriangleIndex(int triangleIndex){
 
         int vertexIndex = triangles[triangleIndex];
 
@@ -51,28 +58,72 @@ public abstract class Triangleable extends Drawable {
     }
 
     @Override
-    public final void draw(QuadConsumer<Double, Double, Double, Color> drawFunction){
+    public final void draw(QuadConsumer<Double, Double, Double, Color> pixelLevelDrawFunction){
 
-        TriConsumer<Vector3[], Color, QuadConsumer> groupDrawFunction = getDrawFunction();
+        if(texture == null){
+            drawRaw(pixelLevelDrawFunction);
+        }
+        else{
+            drawTexture(pixelLevelDrawFunction);
+        }
+    }
+
+    private void drawRaw(QuadConsumer<Double, Double, Double, Color> pixelLevelDrawFunction){
+
+        TriConsumer<Vertex[], Color, QuadConsumer> groupDrawFunction = getTriangleDrawFunction();
 
         for(int i=0; i <= triangles.length - 3; i += 3){
 
             groupDrawFunction.accept(
-                new Vector3[]{
+                new Vertex[]{
                     getVertexByTriangleIndex(i),
                     getVertexByTriangleIndex(i + 1),
                     getVertexByTriangleIndex(i + 2)
                 },
                 color,
-                drawFunction
+                pixelLevelDrawFunction
             );
         }
     }
 
-    public TriConsumer<Vector3[], Color, QuadConsumer> getDrawFunction(){
+    private void drawTexture(QuadConsumer<Double, Double, Double, Color> pixelLevelDrawFunction){
+
+        QuadConsumer<Double, Double, Double, Color> pixelLevelTextureDrawFunction = getDrawFunctionWithTexture(pixelLevelDrawFunction);
+        TriConsumer<Vertex[], Color, QuadConsumer> triangleDrawFunction = getTriangleDrawFunction();
+
+        for(int i=0; i <= triangles.length - 3; i += 3){
+
+            triangleDrawFunction.accept(
+                new Vertex[]{
+                    getVertexByTriangleIndex(i),
+                    getVertexByTriangleIndex(i + 1),
+                    getVertexByTriangleIndex(i + 2)
+                },
+                color,
+                pixelLevelTextureDrawFunction
+            );
+        }
+    }
+
+    public TriConsumer<Vertex[], Color, QuadConsumer> getTriangleDrawFunction(){
 
         if(isFilled){
             return Triangle::drawFilled;
+        }
+        else if(texture != null){
+
+            return (Vertex[] triangleVertices, Color color, QuadConsumer pixelLevelDrawFunction) -> {
+
+                Vertex minXY = (Vertex) Triangle.getMinXY(triangleVertices);
+                Vertex maxXY = (Vertex) Triangle.getMaxXY(triangleVertices);
+
+                this.minXYU = minXY.textureVertex.u;
+                this.minXYV = minXY.textureVertex.v;
+                this.maxXYU = maxXY.textureVertex.u;
+                this.maxXYV = maxXY.textureVertex.v;
+
+                Triangle.drawFilled(triangleVertices, color, getDrawFunctionWithTexture(pixelLevelDrawFunction));
+            };
         }
 
         return Triangle::drawEdges;
