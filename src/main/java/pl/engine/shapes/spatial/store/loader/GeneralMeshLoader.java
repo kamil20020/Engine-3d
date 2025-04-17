@@ -14,13 +14,13 @@ public class GeneralMeshLoader implements MeshLoader{
     private static final Logger log = LoggerFactory.getLogger(GeneralMeshLoader.class);
 
     @Override
-    public Mesh load(String path, Color color, boolean isFilled, int offset) {
+    public Mesh load(String path, Color color, boolean isFilled, int offset, int scale) {
 
         if(path.endsWith(MeshFormatType.OBJ.getExtension())){
 
             log.debug("Selected obj mesh loader for file " + path);
 
-            return new MeshObjLoader().load(path, color, isFilled, offset);
+            return new MeshObjLoader().load(path, color, isFilled, offset, scale);
         }
 
         throw new MeshFormatWasNotFoundException(path, true);

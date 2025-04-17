@@ -29,11 +29,16 @@ public class MeshObjLoader implements MeshLoader{
     private List<TextureVertex> textureVertices = new LinkedList<>();
     private List<Vertex> vertices = new LinkedList<>();
     private LinkedList<Integer> triangles = new LinkedList<>();
+    private int offset;
+    private int scale;
 
     private static final Logger log = LoggerFactory.getLogger(MeshObjLoader.class);
 
     @Override
-    public Mesh load(String meshFilePath, Color color, boolean isFilled, int offset) throws FileLocationException, FileLoadException {
+    public Mesh load(String meshFilePath, Color color, boolean isFilled, int offset, int scale) throws FileLocationException, FileLoadException {
+
+        this.offset = offset;
+        this.scale = scale;
 
         log.debug("Started loading mesh from obj format for " + meshFilePath);
 
@@ -60,7 +65,7 @@ public class MeshObjLoader implements MeshLoader{
                     return;
                 }
 
-                handleLoadedLine(line, offset);
+                handleLoadedLine(line);
             });
 
         log.debug("Finished loading obj");
@@ -85,7 +90,7 @@ public class MeshObjLoader implements MeshLoader{
         return Files.lines(path);
     }
 
-    private void handleLoadedLine(String line, int offset){
+    private void handleLoadedLine(String line){
 
         String[] words = line.trim().split("\\s");
 
@@ -102,7 +107,7 @@ public class MeshObjLoader implements MeshLoader{
         switch (header){
 
             case "v":
-                handleLoadedVertex(words, offset);
+                handleLoadedVertex(words);
                 break;
 
             case "f":
@@ -115,15 +120,15 @@ public class MeshObjLoader implements MeshLoader{
         }
     }
 
-    private void handleLoadedVertex(String[] words, int offset) throws FileLoadException{
+    private void handleLoadedVertex(String[] words) throws FileLoadException{
 
         if(words.length != 4){
             throw new FileLoadException("Invalid vertex coords length");
         }
 
-        double x = Double.parseDouble(words[1]) + offset;
-        double y = Double.parseDouble(words[2]) + offset;
-        double z = Double.parseDouble(words[3]) + offset;
+        double x = Double.parseDouble(words[1]) * scale + offset;
+        double y = Double.parseDouble(words[2]) * scale + offset;
+        double z = Double.parseDouble(words[3]) * scale + offset;
 
         verticesPositions.add(Vector3.of(x, y, z));
     }
@@ -215,7 +220,7 @@ public class MeshObjLoader implements MeshLoader{
         int secondVertexIndex = trianglesLastElementListIterator.previous();
         int firstVertexIndex = trianglesLastElementListIterator.previous();
 
+        triangles.add(firstVertexIndex);
         triangles.add(thirdVertexIndex);
-        triangles.add(secondVertexIndex);
     }
 }

@@ -64,10 +64,6 @@ public class Screen extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        clearContent();
-
-        renderer.draw();
-
         g.drawImage(content, 0, 0, null);
     }
 

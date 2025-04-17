@@ -6,5 +6,5 @@ import java.awt.*;
 
 public interface MeshLoader {
 
-    Mesh load(String path, Color color, boolean isFilled, int offset);
+    Mesh load(String path, Color color, boolean isFilled, int offset, int scale);
 }

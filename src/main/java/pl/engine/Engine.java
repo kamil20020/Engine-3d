@@ -41,7 +41,7 @@ public class Engine extends Thread {
         while(true){
 
             try {
-                screen.repaint();
+                renderer.draw();
 
                 sleep(1000 / FPS);
             }

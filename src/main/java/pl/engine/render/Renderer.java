@@ -105,7 +105,7 @@ public class Renderer {
 
         Rect floor = new Rect(Vector3.of(-1000, -1000, -1000), Vector3.of(1000, 10, 1000), Color.green, true);
 
-        Cube cube = new Cube(Vector3.of(0, 0, 0), 50, Color.green, true);
+        Cube cube = new Cube(Vector3.of(0, 0, 0), 50, Color.green, false);
         Cube cube1 = new Cube(Vector3.of(600, 0, 0), 50, Color.orange, false);
         Cube cube2 = new Cube(Vector3.of(200, 200, 0), 50, Color.magenta, false);
         Cube cube3 = new Cube(Vector3.of(500, 500, 0), 50, Color.pink, false);
@@ -113,23 +113,29 @@ public class Renderer {
 
         log.debug("Created meshes");
 
-        Texture towerTexture = Texture.of("./meshes/moon/texture.png");
+//        Texture towerTexture = Texture.of("./meshes/tower/texture.jpg");
+//        Texture moonTexture = Texture.of("./meshes/moon/texture.png");
+//        Texture houseTexture = Texture.of("./meshes/house/texture.png");
+        Texture grassTexture = Texture.of("./meshes/grass-cube/texture.png");
 
         log.debug("Loaded textures");
 
-        Mesh ship = meshLoader.load("./meshes/space-ship.obj", Color.orange, false, -20);
-        Mesh teapot = meshLoader.load("./meshes/teapot.obj", Color.orange, false, 0);
-        Mesh axis = meshLoader.load("./meshes/axis.obj", Color.orange, false, 0);
-        Mesh mountains = meshLoader.load("./meshes/mountains.obj", Color.orange, false, 150);
-        Mesh cubeLoaded = meshLoader.load("./meshes/cube.obj", Color.orange, true, 50);
-        Mesh house = meshLoader.load("./meshes/house.obj", Color.orange, true, 50);
-        Mesh moon = meshLoader.load("./meshes/moon/moon.obj", Color.orange, true, 10);
-        Mesh tower = meshLoader.load("./meshes/tower/tower.obj", Color.orange, false, 10);
-        tower.setTexture(towerTexture);
+//        Mesh ship = meshLoader.load("./meshes/space-ship.obj", Color.orange, false, -20, 1);
+//        Mesh teapot = meshLoader.load("./meshes/teapot.obj", Color.orange, false, 0, 1);
+//        Mesh axis = meshLoader.load("./meshes/axis.obj", Color.orange, false, 0, 1);
+//        Mesh mountains = meshLoader.load("./meshes/mountains.obj", Color.orange, false, 150, 1);
+//        Mesh cubeLoaded = meshLoader.load("./meshes/cube.obj", Color.orange, true, 50, 1);
+//        Mesh house = meshLoader.load("./meshes/house/house.obj", Color.orange, true, 50, 1);
+//        Mesh moon = meshLoader.load("./meshes/moon/moon.obj", Color.orange, false, 300, 100);
+//        Mesh tower = meshLoader.load("./meshes/tower/tower.obj", Color.orange, false, 10, 1);
+        Mesh grassCube = meshLoader.load("./meshes/grass-cube/grass-cube.obj", Color.orange, true, 10, 1);
+//        tower.setTexture(towerTexture);
+//        moon.setTexture(moonTexture);
+//        grassCube.setTexture(grassTexture);
 
         log.debug("Loaded meshes");
 
-        triangeables.addAll(List.of(tower));
+        triangeables.addAll(List.of(grassCube));
 
 //        drawables.addAll(List.of(line));
 
@@ -139,6 +145,7 @@ public class Renderer {
     public void draw(){
 
         zBuffer.clear();
+        screen.clearContent();
 
         Vertex[] toDrawVertices = new Vertex[]{
             Vertex.empty(),
@@ -148,16 +155,17 @@ public class Renderer {
 
         triangeables.forEach(toDraw -> {
 
-            TriConsumer<Vertex[], Color, QuadConsumer> groupDrawFunction = toDraw.getTriangleDrawFunction();
+            TriConsumer<Vertex[], Color, QuadConsumer<Double, Double, Double, Color>> triangleDrawFunction = toDraw.getTriangleDrawFunction();
 
             for(int i=0; i <= toDraw.getTriangles().length - 3; i += 3){
 
                 for(int j=0; j < 3; j++){
-                    toDrawVertices[j] = toDraw.getVertexByTriangleIndex(i + j);
 
-                    Vector3 positionTransformedByCamera = camera.transform(toDrawVertices[j]);
+                    Vertex toDrawVertex = toDraw.getVertexByTriangleIndex(i + j);
 
-                    toDrawVertices[j].setPosition(positionTransformedByCamera);
+                    Vector3 positionTransformedByCamera = camera.transform(toDrawVertex);
+
+                    toDrawVertices[j] = new Vertex(positionTransformedByCamera, toDrawVertex.textureVertex);
                 }
 
                 if(camera.isTriangleHidden(toDrawVertices)){
@@ -166,12 +174,14 @@ public class Renderer {
 
                 for(int j=0; j < 3; j++){
 
-                    Vector3 positionTransformedByPerspective = Perspective.transform(toDrawVertices[j]);
+                    Vertex toDrawVertex = toDrawVertices[j];
 
-                    toDrawVertices[j].setPosition(positionTransformedByPerspective);
+                    Vector3 positionTransformedByPerspective = Perspective.transform(toDrawVertex);
+
+                    toDrawVertices[j] = new Vertex(positionTransformedByPerspective, toDrawVertex.textureVertex);
                 }
 
-                groupDrawFunction.accept(
+                triangleDrawFunction.accept(
                     toDrawVertices,
                     toDraw.randomColors[i / 3],
                     drawFunction
@@ -182,5 +192,7 @@ public class Renderer {
         drawables.forEach(toDraw -> {
             toDraw.draw(drawFunction);
         });
+
+        screen.repaint();
     }
 }
