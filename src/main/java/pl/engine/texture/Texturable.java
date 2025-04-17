@@ -13,6 +13,8 @@ public abstract class Texturable extends Drawable {
     protected double minXYU, minXYV;
     protected double maxXYU, maxXYV;
 
+    private static final System.Logger LOGGER = System.getLogger(Texturable.class.getName());
+
     public Texturable(Texture texture, Color color){
         super(color);
     }
@@ -32,7 +34,16 @@ public abstract class Texturable extends Drawable {
 
         return (Double x, Double y, Double z, Color color) -> {
 
-            Color textureColor = texture.getColorFromLimitedTexture(x, y, minXYU, minXYV, maxXYU, maxXYV);
+            Color textureColor;
+
+            try{
+                textureColor = texture.getColorFromLimitedTexture(x, y, minXYU, minXYV, maxXYU, maxXYV);
+            }
+            catch(IllegalArgumentException e){
+                LOGGER.log(System.Logger.Level.DEBUG, e.getMessage());
+
+                return;
+            }
 
             basicDrawFunction.accept(x, y, z, textureColor);
         };

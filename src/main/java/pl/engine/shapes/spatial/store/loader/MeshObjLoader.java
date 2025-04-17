@@ -1,11 +1,14 @@
 package pl.engine.shapes.spatial.store.loader;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pl.engine.exceptions.FileLoadException;
 import pl.engine.exceptions.FileLocationException;
 import pl.engine.math.Vector3;
 import pl.engine.render.Vertex;
 import pl.engine.shapes.spatial.Mesh;
 import pl.engine.shapes.spatial.store.MeshFormatType;
+import pl.engine.texture.Texturable;
 import pl.engine.texture.TextureVertex;
 
 import java.awt.*;
@@ -27,8 +30,12 @@ public class MeshObjLoader implements MeshLoader{
     private List<Vertex> vertices = new LinkedList<>();
     private LinkedList<Integer> triangles = new LinkedList<>();
 
+    private static final Logger log = LoggerFactory.getLogger(MeshObjLoader.class);
+
     @Override
     public Mesh load(String meshFilePath, Color color, boolean isFilled, int offset) throws FileLocationException, FileLoadException {
+
+        log.debug("Started loading mesh from obj format for " + meshFilePath);
 
         Stream<String> linesStream;
 
@@ -42,6 +49,8 @@ public class MeshObjLoader implements MeshLoader{
             throw new FileLoadException(meshFilePath, e.getMessage());
         }
 
+        log.debug("Read data from obj file");
+
         linesStream
             .forEach(line -> {
 
@@ -54,13 +63,14 @@ public class MeshObjLoader implements MeshLoader{
                 handleLoadedLine(line, offset);
             });
 
+        log.debug("Finished loading obj");
+
         return new Mesh(
             vertices.toArray(new Vertex[0]),
             triangles.toArray(new Integer[0]),
             color,
             isFilled
         );
-
     }
 
     private static Stream<String> readLinesFormObjFile(String meshPath) throws IllegalArgumentException, URISyntaxException, IOException{

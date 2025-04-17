@@ -78,18 +78,23 @@ public class Texture {
         return width;
     }
 
-    public Color getColorFromLimitedTexture(double x, double y, double minU, double minV, double maxU, double maxV) {
+    public Color getColorFromLimitedTexture(double x, double y, double minU, double minV, double maxU, double maxV) throws IllegalArgumentException{
 
         double minLimitedTextureX = getX(minU);
         double minLimitedTextureY = getY(minV);
         double maxLimitedTextureX = getX(maxU);
         double maxLimitedTextureY = getY(maxV);
 
+//        System.out.println(x + " " + y + " " + minU + " " + minV + " " + maxU + " " + maxV);
+
         double limitedTextureWidth = maxLimitedTextureX - minLimitedTextureX;
         double limitedTextureHeight = maxLimitedTextureY - minLimitedTextureY;
 
-        int normalizedTextureX = (int) (x % limitedTextureWidth);
-        int normalizedTextureY = (int) (y % limitedTextureHeight);
+        double normalizedLimitedTextureX = x % limitedTextureWidth;
+        double normalizedLimitedTextureY = y % limitedTextureHeight;
+
+        int normalizedTextureX = (int) (minLimitedTextureX + normalizedLimitedTextureX);
+        int normalizedTextureY = (int) (minLimitedTextureY + normalizedLimitedTextureY);
 
         return getColorOnNormalizedPosition(normalizedTextureX, normalizedTextureY);
     }
@@ -102,17 +107,29 @@ public class Texture {
         return getColorOnNormalizedPosition(textureX, textureY);
     }
 
-    public double getX(double u){
+    public double getX(double u) throws IllegalArgumentException{
+
+        if(u < 0 || u > 1){
+            throw new IllegalArgumentException("Texture u should be inside <0, 1>, but was: " + u);
+        }
 
         return u * getWidth();
     }
 
     public double getY(double v){
 
+        if(v < 0 || v > 1){
+            throw new IllegalArgumentException("Texture v should be inside <0, 1>, but was: " + v);
+        }
+
         return v * getHeight();
     }
 
-    private Color getColorOnNormalizedPosition(int x, int y){
+    private Color getColorOnNormalizedPosition(int x, int y) throws IllegalArgumentException{
+
+        if(x < 0 || y < 0 || x >= width || y >= height){
+            throw new IllegalArgumentException("Invalid texture x, y: " + x + ", " + y + " but size is: " + width + ", " + height);
+        }
 
         x += shiftX;
         y += shiftY;
@@ -122,7 +139,7 @@ public class Texture {
         return new Color(pixel);
     }
 
-    public Color getColorOnRawPosition(double x, double y) {
+    public Color getColorOnRawPosition(double x, double y) throws IllegalArgumentException {
 
         int textureX = (int) normalizeX(x);
         int textureY = (int) normalizeY(y);

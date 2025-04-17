@@ -1,11 +1,14 @@
 package pl.engine.shapes.spatial.store.writer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pl.engine.exceptions.FileCreateException;
 import pl.engine.exceptions.FileExistsException;
 import pl.engine.exceptions.FileWriteException;
 import pl.engine.math.Vector3;
 import pl.engine.shapes.spatial.Mesh;
 import pl.engine.shapes.spatial.store.MeshFormatType;
+import pl.engine.texture.Texturable;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -20,6 +23,8 @@ public class MeshObjWriter implements MeshWriter{
 
     private static final DecimalFormat vertexDecimalFormat;
 
+    private static final Logger log = LoggerFactory.getLogger(MeshObjWriter.class);
+
     static {
 
         DecimalFormatSymbols vertexDotDecimalFormat = new DecimalFormatSymbols(Locale.GERMAN);
@@ -30,6 +35,8 @@ public class MeshObjWriter implements MeshWriter{
 
     @Override
     public void write(String path, Mesh mesh) {
+
+        log.debug("Started writing mesh to obj for " + path);
 
         Optional<File> createdFileOpt;
 
@@ -43,6 +50,8 @@ public class MeshObjWriter implements MeshWriter{
         if(createdFileOpt.isEmpty()){
             throw new FileCreateException(path);
         }
+
+        log.debug("Created file for mesh obj write");
 
         File createdFile = createdFileOpt.get();
 
@@ -58,6 +67,8 @@ public class MeshObjWriter implements MeshWriter{
         catch (IOException e){
             throw new FileWriteException(path, e.getMessage());
         }
+
+        log.debug("Finished writing mesh to obj file");
     }
 
     private static Optional<File> createFile(String path) throws IOException{
@@ -94,6 +105,8 @@ public class MeshObjWriter implements MeshWriter{
             bufferedWriter.write(vertexStr);
             bufferedWriter.newLine();
         }
+
+        log.debug("Saved mesh vertices to obj file");
     }
 
     private static void saveTriangles(BufferedWriter bufferedWriter, Integer[] triangles) throws IOException {
@@ -109,6 +122,8 @@ public class MeshObjWriter implements MeshWriter{
             bufferedWriter.write(trianglesStr);
             bufferedWriter.newLine();
         }
+
+        log.debug("Saved mesh triangles to obj file");
     }
 
     private static String vertexToObjFormat(Vector3 vertex){

@@ -1,5 +1,7 @@
 package pl.engine.render;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pl.engine.Triangleable;
 import pl.engine.general.QuadConsumer;
 import pl.engine.general.TriConsumer;
@@ -11,6 +13,7 @@ import pl.engine.shapes.flat.*;
 import pl.engine.shapes.spatial.Cube;
 import pl.engine.shapes.spatial.store.loader.MeshLoader;
 import pl.engine.shapes.spatial.store.writer.GeneralMeshWriter;
+import pl.engine.texture.Texturable;
 import pl.engine.texture.Texture;
 
 import java.awt.*;
@@ -26,6 +29,8 @@ public class Renderer {
     private final QuadConsumer<Double, Double, Double, Color> drawFunction;
     private final Screen screen;
     private final MeshLoader meshLoader;
+
+    private static final Logger log = LoggerFactory.getLogger(Renderer.class);
 
     public Renderer(Camera camera){
 
@@ -44,6 +49,8 @@ public class Renderer {
     }
 
     private void init(){
+
+        log.debug("Started renderer init");
 
         Rect rect = new Rect(Vector3.of(0, 0, 100), Vector3.of(100, 100, 100), Color.orange, true);
         Rect recta = new Rect(Vector3.of(200, 200, 5), Vector3.of(100, 200, 5), Color.orange, true);
@@ -104,7 +111,11 @@ public class Renderer {
         Cube cube3 = new Cube(Vector3.of(500, 500, 0), 50, Color.pink, false);
         Cube cube4 = new Cube(Vector3.of(0, 0, 0), 50, Color.gray, false);
 
+        log.debug("Created meshes");
+
         Texture towerTexture = Texture.of("./meshes/moon/texture.png");
+
+        log.debug("Loaded textures");
 
         Mesh ship = meshLoader.load("./meshes/space-ship.obj", Color.orange, false, -20);
         Mesh teapot = meshLoader.load("./meshes/teapot.obj", Color.orange, false, 0);
@@ -116,9 +127,13 @@ public class Renderer {
         Mesh tower = meshLoader.load("./meshes/tower/tower.obj", Color.orange, false, 10);
         tower.setTexture(towerTexture);
 
+        log.debug("Loaded meshes");
+
         triangeables.addAll(List.of(tower));
 
 //        drawables.addAll(List.of(line));
+
+        log.debug("Finished renderer init");
     }
 
     public void draw(){
