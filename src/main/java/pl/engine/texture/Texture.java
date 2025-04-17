@@ -85,8 +85,6 @@ public class Texture {
         double maxLimitedTextureX = getX(maxU);
         double maxLimitedTextureY = getY(maxV);
 
-//        System.out.println(x + " " + y + " " + minU + " " + minV + " " + maxU + " " + maxV);
-
         double limitedTextureWidth = maxLimitedTextureX - minLimitedTextureX;
         double limitedTextureHeight = maxLimitedTextureY - minLimitedTextureY;
 

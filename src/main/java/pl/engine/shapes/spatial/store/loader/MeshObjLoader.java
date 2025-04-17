@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 
 public class MeshObjLoader implements MeshLoader{
 
-    private List<Vector3> verticesPositions = new LinkedList<>();
+    private LinkedList<Vector3> verticesPositions = new LinkedList<>();
     private List<TextureVertex> textureVertices = new LinkedList<>();
     private List<Vertex> vertices = new LinkedList<>();
     private LinkedList<Integer> triangles = new LinkedList<>();
@@ -69,6 +69,15 @@ public class MeshObjLoader implements MeshLoader{
             });
 
         log.debug("Finished loading obj");
+
+        if(textureVertices.size() == 0){
+
+            verticesPositions.stream()
+                .map(vertexPosition -> Vertex.of(vertexPosition))
+                .forEach(vertex -> {
+                    vertices.add(vertex);
+                });
+        }
 
         return new Mesh(
             vertices.toArray(new Vertex[0]),
@@ -165,10 +174,6 @@ public class MeshObjLoader implements MeshLoader{
         triangles.add(a);
         triangles.add(b);
         triangles.add(c);
-
-        verticesPositions.forEach(position -> {
-            vertices.add(Vertex.of(position));
-        });
     }
 
     private void handleLoadedTriangleComplexVertices(String[] words){
@@ -220,7 +225,7 @@ public class MeshObjLoader implements MeshLoader{
         int secondVertexIndex = trianglesLastElementListIterator.previous();
         int firstVertexIndex = trianglesLastElementListIterator.previous();
 
-        triangles.add(firstVertexIndex);
         triangles.add(thirdVertexIndex);
+        triangles.add(firstVertexIndex);
     }
 }

@@ -111,7 +111,7 @@ public class MeshObjWriter implements MeshWriter{
 
     private static void saveTriangles(BufferedWriter bufferedWriter, Integer[] triangles) throws IOException {
 
-        for(int i=0; i < triangles.length - 3; i++){
+        for(int i=0; i <= triangles.length - 3; i += 3){
 
             Integer a = triangles[i] + 1;
             Integer b = triangles[i + 1] + 1;

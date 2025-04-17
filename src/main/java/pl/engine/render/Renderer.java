@@ -15,9 +15,11 @@ import pl.engine.shapes.spatial.store.loader.MeshLoader;
 import pl.engine.shapes.spatial.store.writer.GeneralMeshWriter;
 import pl.engine.texture.Texturable;
 import pl.engine.texture.Texture;
+import pl.engine.texture.TextureVertex;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Renderer {
@@ -128,12 +130,14 @@ public class Renderer {
 //        Mesh house = meshLoader.load("./meshes/house/house.obj", Color.orange, true, 50, 1);
 //        Mesh moon = meshLoader.load("./meshes/moon/moon.obj", Color.orange, false, 300, 100);
 //        Mesh tower = meshLoader.load("./meshes/tower/tower.obj", Color.orange, false, 10, 1);
-        Mesh grassCube = meshLoader.load("./meshes/grass-cube/grass-cube.obj", Color.orange, true, 10, 1);
+        Mesh grassCube = meshLoader.load("./meshes/grass-cube/texture-cube.obj", Color.orange, false, 10, 1);
 //        tower.setTexture(towerTexture);
 //        moon.setTexture(moonTexture);
 //        grassCube.setTexture(grassTexture);
 
         log.debug("Loaded meshes");
+
+//        new GeneralMeshWriter().write("./cube.obj", cube);
 
         triangeables.addAll(List.of(grassCube));
 
@@ -148,10 +152,12 @@ public class Renderer {
         screen.clearContent();
 
         Vertex[] toDrawVertices = new Vertex[]{
-            Vertex.empty(),
-            Vertex.empty(),
-            Vertex.empty()
+            Vertex.of(Vector3.empty(), TextureVertex.of(0, 0)),
+            Vertex.of(Vector3.empty(), TextureVertex.of(0, 0)),
+            Vertex.of(Vector3.empty(), TextureVertex.of(0, 0))
         };
+
+        Vector3[] toDrawVerticesPositions = new Vector3[3];
 
         triangeables.forEach(toDraw -> {
 
@@ -163,12 +169,13 @@ public class Renderer {
 
                     Vertex toDrawVertex = toDraw.getVertexByTriangleIndex(i + j);
 
-                    Vector3 positionTransformedByCamera = camera.transform(toDrawVertex);
+                    Vector3 positionTransformedByCamera = camera.transform(toDrawVertex.position);
 
-                    toDrawVertices[j] = new Vertex(positionTransformedByCamera, toDrawVertex.textureVertex);
+                    toDrawVertex.position = positionTransformedByCamera;
+                    toDrawVerticesPositions[j] = positionTransformedByCamera;
                 }
 
-                if(camera.isTriangleHidden(toDrawVertices)){
+                if(camera.isTriangleHidden(toDrawVerticesPositions)){
                     continue;
                 }
 
@@ -176,9 +183,9 @@ public class Renderer {
 
                     Vertex toDrawVertex = toDrawVertices[j];
 
-                    Vector3 positionTransformedByPerspective = Perspective.transform(toDrawVertex);
+                    Vector3 positionTransformedByPerspective = Perspective.transform(toDrawVertex.position);
 
-                    toDrawVertices[j] = new Vertex(positionTransformedByPerspective, toDrawVertex.textureVertex);
+                    toDrawVertex.position = positionTransformedByPerspective;
                 }
 
                 triangleDrawFunction.accept(

@@ -11,6 +11,7 @@ import pl.engine.texture.Texturable;
 import pl.engine.texture.Texture;
 
 import java.awt.*;
+import java.util.Arrays;
 import java.util.Random;
 
 public abstract class Triangleable extends Texturable {
@@ -20,14 +21,13 @@ public abstract class Triangleable extends Texturable {
     protected Integer[] triangles;
     public Color[] randomColors;
 
-    public Triangleable(Vertex[] vertices, Integer[] triangles, Color color, Texture texture, boolean isFilled){
+    public Triangleable(Vertex[] vertices, Color color, Texture texture, boolean isFilled){
         super(texture, color);
 
         this.vertices = vertices;
-        this.triangles = triangles;
         this.isFilled = isFilled;
 
-        randomColors = new Color[triangles.length / 3];
+        randomColors = new Color[vertices.length / 3];
 
         Random random = new Random();
 

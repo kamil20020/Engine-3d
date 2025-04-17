@@ -30,4 +30,10 @@ public class TextureVertex {
 
         return new TextureVertex(textureVertex.u, textureVertex.v, textureVertex.w);
     }
+
+    public void setUV(TextureVertex textureVertex){
+
+        u = textureVertex.u;
+        v = textureVertex.v;
+    }
 }
