@@ -19,6 +19,9 @@ public abstract class Triangleable extends Texturable {
     protected TextureVertex[] textureVertices;
     protected Vertex[] vertices;
     public Color[] randomColors;
+    private double modelWidth;
+    private double modelHeight;
+    private double modelDepth;
 
     public Triangleable(Vector3[] verticesPositions, TextureVertex[] textureVertices, Vertex[] vertices, Color color, Texture texture, boolean isFilled){
         super(texture, color);
@@ -36,6 +39,44 @@ public abstract class Triangleable extends Texturable {
 
             randomColors[i] = new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256));
         }
+
+        double minX = Double.MAX_VALUE;
+        double maxX = 0;
+        double minY = Double.MAX_VALUE;
+        double maxY = 0;
+        double minZ = Double.MAX_VALUE;
+        double maxZ = 0;
+
+        for(Vector3 vertexPosition : verticesPositions){
+
+            if(vertexPosition.x < minX){
+                minX = vertexPosition.x;
+            }
+
+            if(vertexPosition.x > maxX){
+                maxX = vertexPosition.x;
+            }
+
+            if(vertexPosition.y < minY){
+                minY = vertexPosition.y;
+            }
+
+            if(vertexPosition.y > maxY){
+                maxY = vertexPosition.y;
+            }
+
+            if(vertexPosition.z < minZ){
+                minZ = vertexPosition.z;
+            }
+
+            if(vertexPosition.z > maxZ){
+                maxZ = vertexPosition.z;
+            }
+        }
+
+        modelWidth = maxX - minX;
+        modelHeight = maxY - minY;
+        modelDepth = maxZ - minZ;
     }
 
     public Triangleable(Vector3[] verticesPositions, TextureVertex[] textureVertices, Vertex[] vertices, Color color, boolean isFilled){
@@ -56,9 +97,14 @@ public abstract class Triangleable extends Texturable {
         return verticesPositions;
     }
 
+    public Vector3 getVertexPositionByVertex(Vertex vertex){
+
+        return verticesPositions[vertex.positionIndex];
+    }
+
     public Vector3 getVertexPositionByVertexIndex(int vertexIndex){
 
-        int vertexPositionIndex = getVertexByIndex(vertexIndex).positionIndex;
+        int vertexPositionIndex = vertices[vertexIndex].positionIndex;
 
         return verticesPositions[vertexPositionIndex];
     }
@@ -138,19 +184,55 @@ public abstract class Triangleable extends Texturable {
 
     public void drawTriangleTexture(Vector3[] verticesPositions, Vertex[] vertices, Color color, QuadConsumer<Double, Double, Double, Color> pixelLevelDrawFunction){
 
-        int minXYIndex = Triangle.getMinXYIndex(verticesPositions);
-        int maxXYIndex = Triangle.getMaxXYIndex(verticesPositions);
+        minXYU = Double.MAX_VALUE;
+        minXYV = Double.MAX_VALUE;
+        maxXYU = 0;
+        maxXYV = 0;
+        double minTriangleX = Double.MAX_VALUE;
+        double minTriangleY = Double.MAX_VALUE;
+        double maxTriangleX = 0;
+        double maxTriangleY = 0;
 
-        Vertex minXYVertex = vertices[minXYIndex];
-        Vertex maxXYVertex = vertices[maxXYIndex];
+        for(int i=0; i < 3; i++){
 
-        TextureVertex minXYTextureVertex = textureVertices[minXYVertex.textureVertexIndex];
-        TextureVertex maxXYTextureVertex = textureVertices[maxXYVertex.textureVertexIndex];
+            int textureVertexIndex = vertices[i].textureVertexIndex;
 
-        this.minXYU = minXYTextureVertex.u;
-        this.minXYV = minXYTextureVertex.v;
-        this.maxXYU = maxXYTextureVertex.u;
-        this.maxXYV = maxXYTextureVertex.v;
+            TextureVertex textureVertex = textureVertices[textureVertexIndex];
+
+            if(textureVertex.u < minXYU){
+                minXYU = textureVertex.u;
+            }
+            else if(textureVertex.u > maxXYU){
+                maxXYU = textureVertex.u;
+            }
+
+            if(textureVertex.v < minXYV){
+                minXYV = textureVertex.v;
+            }
+            else if(textureVertex.v > maxXYV){
+                maxXYV = textureVertex.v;
+            }
+
+            Vector3 vertexPosition = verticesPositions[i];
+
+            if(vertexPosition.x < minTriangleX){
+                minTriangleX = vertexPosition.x;
+            }
+            else if(vertexPosition.x > maxTriangleX){
+                maxTriangleX = vertexPosition.x;
+            }
+
+            if(vertexPosition.y < minTriangleY){
+                minTriangleY = vertexPosition.y;
+            }
+            else if(vertexPosition.y > maxTriangleY){
+                maxTriangleY = vertexPosition.y;
+            }
+        }
+
+        triangleWidth = maxTriangleX - minTriangleX;
+        triangleHeight = maxTriangleY - minTriangleY;
+
         this.basicDrawFunction = pixelLevelDrawFunction;
 
         Triangle.drawFilled(verticesPositions, color, this::drawWithTexture);

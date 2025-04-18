@@ -10,6 +10,7 @@ public abstract class Texturable extends Drawable {
     protected Texture texture;
     protected double minXYU, minXYV;
     protected double maxXYU, maxXYV;
+    protected double triangleWidth, triangleHeight;
     protected QuadConsumer<Double, Double, Double, Color> basicDrawFunction;
 
     private static final System.Logger LOGGER = System.getLogger(Texturable.class.getName());
@@ -32,7 +33,7 @@ public abstract class Texturable extends Drawable {
         Color textureColor;
 
         try{
-            textureColor = texture.getColorFromLimitedTexture(x, y, minXYU, minXYV, maxXYU, maxXYV);
+            textureColor = texture.getColorFromLimitedTexture(x % triangleWidth, y % triangleHeight, minXYU, minXYV, maxXYU, maxXYV);
 
             basicDrawFunction.accept(x, y, z, textureColor);
         }

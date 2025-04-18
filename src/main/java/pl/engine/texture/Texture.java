@@ -91,8 +91,8 @@ public class Texture {
         double normalizedLimitedTextureX = x % limitedTextureWidth;
         double normalizedLimitedTextureY = y % limitedTextureHeight;
 
-        int normalizedTextureX = (int) (minLimitedTextureX + normalizedLimitedTextureX);
-        int normalizedTextureY = (int) (minLimitedTextureY + normalizedLimitedTextureY);
+        int normalizedTextureX = (int) normalizeX(minLimitedTextureX + normalizedLimitedTextureX);
+        int normalizedTextureY = (int) normalizeY(minLimitedTextureY + normalizedLimitedTextureY);
 
         return getColorOnNormalizedPosition(normalizedTextureX, normalizedTextureY);
     }

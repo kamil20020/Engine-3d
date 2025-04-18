@@ -207,7 +207,7 @@ public class MeshObjLoader implements MeshLoader{
         Vertex secondVertex = trianglesLastElementListIterator.previous();
         Vertex firstVertex = trianglesLastElementListIterator.previous();
 
-        vertices.add(new Vertex(thirdVertex.positionIndex, thirdVertex.textureVertexIndex));
         vertices.add(new Vertex(firstVertex.positionIndex, firstVertex.textureVertexIndex));
+        vertices.add(new Vertex(thirdVertex.positionIndex, thirdVertex.textureVertexIndex));
     }
 }

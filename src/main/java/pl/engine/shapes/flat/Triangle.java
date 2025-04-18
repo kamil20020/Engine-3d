@@ -168,16 +168,17 @@ public class Triangle extends Drawable {
 
     public static int getMinXYIndex(Vector3[] vertices){
 
-        int minIndex = 1;
+        int minIndex = 0;
 
         Vector3 minXY = vertices[0];
 
-        for(; minIndex < vertices.length; minIndex++){
+        for(int i=0; i < vertices.length; i++){
 
             Vector3 vertex = vertices[minIndex];
 
             if(vertex.x <= minXY.x && vertex.y <= minXY.y){
                 minXY = vertex;
+                minIndex = i;
             }
         }
 
@@ -186,16 +187,17 @@ public class Triangle extends Drawable {
 
     public static int getMaxXYIndex(Vector3[] vertices){
 
-        int maxIndex = 1;
+        int maxIndex = 0;
 
         Vector3 maxXY = vertices[0];
 
-        for(; maxIndex < vertices.length; maxIndex++){
+        for(int i=1; i < vertices.length; i++){
 
             Vector3 vertex = vertices[maxIndex];
 
             if(vertex.x >= maxXY.x && vertex.y >= maxXY.y){
                 maxXY = vertex;
+                maxIndex = i;
             }
         }
 
