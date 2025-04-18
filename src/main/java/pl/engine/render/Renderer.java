@@ -4,24 +4,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.engine.Triangleable;
 import pl.engine.general.QuadConsumer;
-import pl.engine.general.TriConsumer;
 import pl.engine.math.Vector3;
 import pl.engine.shapes.Drawable;
 import pl.engine.shapes.spatial.store.loader.GeneralMeshLoader;
 import pl.engine.shapes.spatial.Mesh;
-import pl.engine.shapes.flat.*;
-import pl.engine.shapes.spatial.Cube;
 import pl.engine.shapes.spatial.store.loader.MeshLoader;
 import pl.engine.texture.Texture;
-import pl.engine.texture.TextureVertex;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 public class Renderer {
 

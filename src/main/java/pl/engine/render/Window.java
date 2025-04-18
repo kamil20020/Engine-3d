@@ -3,8 +3,6 @@ package pl.engine.render;
 import pl.engine.EventsHandler;
 
 import javax.swing.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 public class Window extends JFrame {
 
