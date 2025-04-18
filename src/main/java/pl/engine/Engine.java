@@ -1,12 +1,15 @@
 package pl.engine;
 
 import pl.engine.math.Vector3;
-import pl.engine.render.Camera;
-import pl.engine.render.Renderer;
-import pl.engine.render.Screen;
-import pl.engine.render.Window;
+import pl.engine.render.*;
+import pl.engine.render.screen.Screen;
+import pl.engine.render.window.OpenGLWindow;
+import pl.engine.render.window.SwingWindow;
+import pl.engine.render.window.Window;
 
-public class Engine extends Thread {
+import static java.lang.Thread.sleep;
+
+public class Engine {
 
     private static final int FPS = 60;
 
@@ -19,26 +22,23 @@ public class Engine extends Thread {
     public Engine(){
 
         camera = new Camera(
-            Vector3.of(0, 0, -50), //Vector3.of(-500, -500, 10),
+            Vector3.of(0, 0, -10), //Vector3.of(-500, -500, 10),
             Vector3.of(0, 0 , 0)
         );
 
         eventsHandler = new EventsHandler(camera);
 
-        window = new Window(eventsHandler);
+        window = new OpenGLWindow(eventsHandler);
         screen = window.getScreen();
 
-        renderer = new Renderer(camera);
-
-        screen.setRenderer(renderer);
+        renderer = new Renderer(camera, screen);
     }
 
-    @Override
     public void run() {
 
-        window.setVisible(true);
+        window.setVisible();
 
-        while(true){
+        while(!window.shouldClose()){
 
             try {
                 renderer.draw();

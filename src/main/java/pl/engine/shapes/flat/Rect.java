@@ -24,8 +24,6 @@ public class Rect extends Triangleable {
         );
     }
 
-
-
     public static Vector3[] getVerticesPositions(Vector3 topLeft, Vector3 bottomRight){
 
         return new Vector3[]{

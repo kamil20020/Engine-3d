@@ -1,5 +1,7 @@
 package pl.engine.render;
 
+import pl.engine.render.screen.SwingScreen;
+
 import java.awt.*;
 
 public class Zbuffer {
@@ -11,7 +13,7 @@ public class Zbuffer {
 
     private Zbuffer(){
 
-        Dimension screenDimensions = Screen.getScreenSize();
+        Dimension screenDimensions = SwingScreen.getScreenSize();
 
         minVerticesZ = new double[screenDimensions.height][screenDimensions.width];
         frames = new int[screenDimensions.height][screenDimensions.width];

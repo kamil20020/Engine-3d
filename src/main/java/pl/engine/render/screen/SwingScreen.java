@@ -1,20 +1,19 @@
-package pl.engine.render;
+package pl.engine.render.screen;
 
 import pl.engine.math.Vector3;
+import pl.engine.render.Renderer;
 import pl.engine.shapes.flat.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Screen extends JPanel {
+public class SwingScreen extends JPanel implements Screen{
 
     private final BufferedImage content;
     private Rect clearRect;
 
-    private Renderer renderer;
-
-    private Screen(){
+    public SwingScreen(){
 
         Dimension screenSize = getScreenSize();
 
@@ -23,11 +22,7 @@ public class Screen extends JPanel {
         content = new BufferedImage(screenSize.width, screenSize.height, BufferedImage.TYPE_INT_RGB);
     }
 
-    public void setRenderer(Renderer renderer){
-
-        this.renderer = renderer;
-    }
-
+    @Override
     public void init(){
 
         Dimension screenSize = getScreenSize();
@@ -40,17 +35,14 @@ public class Screen extends JPanel {
         );
     }
 
+    @Override
     public void clearContent(){
 
-        clearRect.draw();
+        clearRect.draw(this::drawPixel);
     }
 
-    public static Screen getInstance(){
-
-        return Holder.INSTANCE;
-    }
-
-    public void draw(double x, double y, Color color){
+    @Override
+    public void drawPixel(double x, double y, double z, Color color){
 
         try{
             content.setRGB((int) x, (int) y, color.getRGB());
@@ -69,10 +61,5 @@ public class Screen extends JPanel {
 
     public static Dimension getScreenSize(){
         return Toolkit.getDefaultToolkit().getScreenSize();
-    }
-
-    private static class Holder{
-
-        private static final Screen INSTANCE = new Screen();
     }
 }

@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import pl.engine.Triangleable;
 import pl.engine.general.QuadConsumer;
 import pl.engine.math.Vector3;
+import pl.engine.render.screen.Screen;
 import pl.engine.shapes.Drawable;
 import pl.engine.shapes.spatial.store.loader.GeneralMeshLoader;
 import pl.engine.shapes.spatial.Mesh;
@@ -32,16 +33,16 @@ public class Renderer {
 
     private static final Logger log = LoggerFactory.getLogger(Renderer.class);
 
-    public Renderer(Camera camera){
+    public Renderer(Camera camera, Screen screen){
 
         this.camera = camera;
-        this.screen = Screen.getInstance();
+        this.screen = screen;
         this.zBuffer = Zbuffer.getInstance();
         meshLoader = new GeneralMeshLoader();
         this.drawFunction = (Double x, Double y, Double z, Color color) -> {
 
             if(zBuffer.update(x.intValue(), y.intValue(), z)){
-                 screen.draw(x, y, color);
+                 screen.drawPixel(x, y, z, color);
             }
         };
 
