@@ -5,34 +5,38 @@ import pl.engine.texture.TextureVertex;
 
 public class Vertex {
 
-    public Vector3 position;
-    public TextureVertex textureVertex;
+    public int positionIndex;
+    public int textureVertexIndex;
 
-    public Vertex(Vector3 position, double u, double v) {
+    public Vertex(int positionIndex, int textureVertexIndex) {
 
-        this.position = position;
+        this(positionIndex);
 
-        textureVertex = new TextureVertex(u, v);
+        this.textureVertexIndex = textureVertexIndex;
     }
 
-    public Vertex(Vector3 position, TextureVertex textureVertex) {
+    public Vertex(int positionIndex) {
 
-        this.position = position;
-        textureVertex = textureVertex;
+        this.positionIndex = positionIndex;
     }
 
-    public static Vertex of(Vector3 position, TextureVertex textureVertex) {
+    public Vertex(){
 
-        return new Vertex(position, textureVertex);
+
     }
 
-    public void setTextureVertex(TextureVertex textureVertex){
+    public static Vertex of(int positionIndex, int textureVertexIndex) {
 
-       if(textureVertex == null || this.textureVertex == null){
-           this.textureVertex = TextureVertex.of(textureVertex);
-       }
-       else{
-           this.textureVertex.setUV(textureVertex);
-       }
+        return new Vertex(positionIndex, textureVertexIndex);
+    }
+
+    public static Vertex of(int positionIndex) {
+
+        return new Vertex(positionIndex);
+    }
+
+    public static Vertex empty() {
+
+        return new Vertex();
     }
 }

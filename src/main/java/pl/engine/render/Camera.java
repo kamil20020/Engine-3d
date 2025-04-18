@@ -1,9 +1,7 @@
 package pl.engine.render;
 
-import pl.engine.exceptions.InvalidCloneException;
 import pl.engine.math.Matrix;
 import pl.engine.math.Transformations;
-import pl.engine.math.Trigonometry;
 import pl.engine.math.Vector3;
 import pl.engine.shapes.flat.Triangle;
 

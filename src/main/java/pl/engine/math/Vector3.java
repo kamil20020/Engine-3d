@@ -1,7 +1,6 @@
 package pl.engine.math;
 
 import java.util.Objects;
-import java.util.Vector;
 import java.util.function.UnaryOperator;
 
 public class Vector3 {

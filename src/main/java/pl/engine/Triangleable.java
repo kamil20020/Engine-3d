@@ -1,30 +1,31 @@
 package pl.engine;
 
-import pl.engine.general.PentaConsumer;
 import pl.engine.math.Vector3;
 import pl.engine.general.QuadConsumer;
 import pl.engine.general.TriConsumer;
 import pl.engine.render.Vertex;
-import pl.engine.shapes.Drawable;
 import pl.engine.shapes.flat.Triangle;
 import pl.engine.texture.Texturable;
 import pl.engine.texture.Texture;
+import pl.engine.texture.TextureVertex;
 
 import java.awt.*;
-import java.util.Arrays;
 import java.util.Random;
 
 public abstract class Triangleable extends Texturable {
 
     protected boolean isFilled;
+    protected Vector3[] verticesPositions;
+    protected TextureVertex[] textureVertices;
     protected Vertex[] vertices;
-    protected Integer[] triangles;
     public Color[] randomColors;
 
-    public Triangleable(Vertex[] vertices, Color color, Texture texture, boolean isFilled){
+    public Triangleable(Vector3[] verticesPositions, TextureVertex[] textureVertices, Vertex[] vertices, Color color, Texture texture, boolean isFilled){
         super(texture, color);
 
+        this.verticesPositions = verticesPositions;
         this.vertices = vertices;
+        this.textureVertices = textureVertices;
         this.isFilled = isFilled;
 
         randomColors = new Color[vertices.length / 3];
@@ -37,23 +38,32 @@ public abstract class Triangleable extends Texturable {
         }
     }
 
-    public Triangleable(Vertex[] vertices, Integer[] triangles, Color color, boolean isFilled){
-        this(vertices, triangles, color, null, isFilled);
+    public Triangleable(Vector3[] verticesPositions, TextureVertex[] textureVertices, Vertex[] vertices, Color color, boolean isFilled){
+        this(verticesPositions, textureVertices, vertices, color, null, isFilled);
     }
 
-    public Vector3[] getVertices(){
+    public Triangleable(Vector3[] verticesPositions, Vertex[] vertices, Color color, boolean isFilled){
+        this(verticesPositions, new TextureVertex[0], vertices, color, null, isFilled);
+    }
+
+    public Vertex[] getVertices(){
 
         return vertices;
     }
 
-    public Integer[] getTriangles(){
+    public Vector3[] getVerticesPositions(){
 
-        return triangles;
+        return verticesPositions;
     }
 
-    public Vertex getVertexByTriangleIndex(int triangleIndex){
+    public Vector3 getVertexPositionByVertexIndex(int vertexIndex){
 
-        int vertexIndex = triangles[triangleIndex];
+        int vertexPositionIndex = getVertexByIndex(vertexIndex).positionIndex;
+
+        return verticesPositions[vertexPositionIndex];
+    }
+
+    public Vertex getVertexByIndex(int vertexIndex){
 
         return vertices[vertexIndex];
     }
@@ -71,15 +81,18 @@ public abstract class Triangleable extends Texturable {
 
     private void drawRaw(QuadConsumer<Double, Double, Double, Color> pixelLevelDrawFunction){
 
-        TriConsumer<Vertex[], Color, QuadConsumer<Double, Double, Double, Color>> triangleDrawFunction = getTriangleDrawFunction();
+        for(int i=0; i <= vertices.length - 3; i += 3){
 
-        for(int i=0; i <= triangles.length - 3; i += 3){
-
-            triangleDrawFunction.accept(
+            drawTriangle(
+                new Vector3[]{
+                    getVertexPositionByVertexIndex(i),
+                    getVertexPositionByVertexIndex(i + 1),
+                    getVertexPositionByVertexIndex(i + 2)
+                },
                 new Vertex[]{
-                    getVertexByTriangleIndex(i),
-                    getVertexByTriangleIndex(i + 1),
-                    getVertexByTriangleIndex(i + 2)
+                    vertices[i],
+                    vertices[i + 1],
+                    vertices[i + 2],
                 },
                 color,
                 pixelLevelDrawFunction
@@ -89,16 +102,20 @@ public abstract class Triangleable extends Texturable {
 
     private void drawTexture(QuadConsumer<Double, Double, Double, Color> pixelLevelDrawFunction){
 
-        TriConsumer<Vertex[], Color, QuadConsumer<Double, Double, Double, Color>> triangleDrawFunction = getTriangleDrawFunction();
         this.basicDrawFunction = pixelLevelDrawFunction;
 
-        for(int i=0; i <= triangles.length - 3; i += 3){
+        for(int i=0; i <= vertices.length - 3; i += 3){
 
-            triangleDrawFunction.accept(
+            drawTriangle(
+                new Vector3[]{
+                    getVertexPositionByVertexIndex(i),
+                    getVertexPositionByVertexIndex(i + 1),
+                    getVertexPositionByVertexIndex(i + 2)
+                },
                 new Vertex[]{
-                    getVertexByTriangleIndex(i),
-                    getVertexByTriangleIndex(i + 1),
-                    getVertexByTriangleIndex(i + 2)
+                    vertices[i],
+                    vertices[i + 1],
+                    vertices[i + 2],
                 },
                 color,
                 pixelLevelDrawFunction
@@ -106,29 +123,36 @@ public abstract class Triangleable extends Texturable {
         }
     }
 
-    public void drawTriangleTexture(Vertex[] vertices, Color color, QuadConsumer<Double, Double, Double, Color> pixelLevelDrawFunction){
-
-        Vertex minXY = (Vertex) Triangle.getMinXY(vertices);
-        Vertex maxXY = (Vertex) Triangle.getMaxXY(vertices);
-
-        this.minXYU = minXY.textureVertex.u;
-        this.minXYV = minXY.textureVertex.v;
-        this.maxXYU = maxXY.textureVertex.u;
-        this.maxXYV = maxXY.textureVertex.v;
-        this.basicDrawFunction = pixelLevelDrawFunction;
-
-        Triangle.drawFilled(vertices, color, this::drawWithTexture);
-    }
-
-    public TriConsumer<Vertex[], Color, QuadConsumer<Double, Double, Double, Color>> getTriangleDrawFunction(){
+    public void drawTriangle(Vector3[] verticesPositions, Vertex[] vertices, Color color, QuadConsumer<Double, Double, Double, Color> pixelLevelDrawFunction){
 
         if(isFilled){
-            return Triangle::drawFilled;
+            Triangle.drawFilled(verticesPositions, color, pixelLevelDrawFunction);
         }
         else if(texture != null){
-            return this::drawTriangleTexture;
+            drawTriangleTexture(verticesPositions, vertices, color, pixelLevelDrawFunction);
         }
+        else{
+            Triangle.drawEdges(verticesPositions, color, pixelLevelDrawFunction);
+        }
+    }
 
-        return Triangle::drawEdges;
+    public void drawTriangleTexture(Vector3[] verticesPositions, Vertex[] vertices, Color color, QuadConsumer<Double, Double, Double, Color> pixelLevelDrawFunction){
+
+        int minXYIndex = Triangle.getMinXYIndex(verticesPositions);
+        int maxXYIndex = Triangle.getMaxXYIndex(verticesPositions);
+
+        Vertex minXYVertex = vertices[minXYIndex];
+        Vertex maxXYVertex = vertices[maxXYIndex];
+
+        TextureVertex minXYTextureVertex = textureVertices[minXYVertex.textureVertexIndex];
+        TextureVertex maxXYTextureVertex = textureVertices[maxXYVertex.textureVertexIndex];
+
+        this.minXYU = minXYTextureVertex.u;
+        this.minXYV = minXYTextureVertex.v;
+        this.maxXYU = maxXYTextureVertex.u;
+        this.maxXYV = maxXYTextureVertex.v;
+        this.basicDrawFunction = pixelLevelDrawFunction;
+
+        Triangle.drawFilled(verticesPositions, color, this::drawWithTexture);
     }
 }

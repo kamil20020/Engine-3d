@@ -12,14 +12,11 @@ import pl.engine.shapes.spatial.Mesh;
 import pl.engine.shapes.flat.*;
 import pl.engine.shapes.spatial.Cube;
 import pl.engine.shapes.spatial.store.loader.MeshLoader;
-import pl.engine.shapes.spatial.store.writer.GeneralMeshWriter;
-import pl.engine.texture.Texturable;
 import pl.engine.texture.Texture;
 import pl.engine.texture.TextureVertex;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Renderer {
@@ -130,7 +127,7 @@ public class Renderer {
 //        Mesh house = meshLoader.load("./meshes/house/house.obj", Color.orange, true, 50, 1);
 //        Mesh moon = meshLoader.load("./meshes/moon/moon.obj", Color.orange, false, 300, 100);
 //        Mesh tower = meshLoader.load("./meshes/tower/tower.obj", Color.orange, false, 10, 1);
-        Mesh grassCube = meshLoader.load("./meshes/grass-cube/texture-cube.obj", Color.orange, false, 10, 1);
+        Mesh grassCube = meshLoader.load("./meshes/grass-cube/cube.obj", Color.orange, false, 10, 1);
 //        tower.setTexture(towerTexture);
 //        moon.setTexture(moonTexture);
 //        grassCube.setTexture(grassTexture);
@@ -139,7 +136,7 @@ public class Renderer {
 
 //        new GeneralMeshWriter().write("./cube.obj", cube);
 
-        triangeables.addAll(List.of(grassCube));
+        triangeables.addAll(List.of(cube));
 
 //        drawables.addAll(List.of(line));
 
@@ -151,27 +148,22 @@ public class Renderer {
         zBuffer.clear();
         screen.clearContent();
 
-        Vertex[] toDrawVertices = new Vertex[]{
-            Vertex.of(Vector3.empty(), TextureVertex.of(0, 0)),
-            Vertex.of(Vector3.empty(), TextureVertex.of(0, 0)),
-            Vertex.of(Vector3.empty(), TextureVertex.of(0, 0))
-        };
+        Vertex[] toDrawVertices = new Vertex[3];
 
         Vector3[] toDrawVerticesPositions = new Vector3[3];
 
         triangeables.forEach(toDraw -> {
 
-            TriConsumer<Vertex[], Color, QuadConsumer<Double, Double, Double, Color>> triangleDrawFunction = toDraw.getTriangleDrawFunction();
-
-            for(int i=0; i <= toDraw.getTriangles().length - 3; i += 3){
+            for(int i=0; i <= toDraw.getVertices().length - 3; i += 3){
 
                 for(int j=0; j < 3; j++){
 
-                    Vertex toDrawVertex = toDraw.getVertexByTriangleIndex(i + j);
+                    Vertex toDrawVertex = toDraw.getVertexByIndex(i + j);
+                    Vector3 toDrawVertexPosition = toDraw.getVertexPositionByVertexIndex(toDrawVertex.positionIndex);
 
-                    Vector3 positionTransformedByCamera = camera.transform(toDrawVertex.position);
+                    Vector3 positionTransformedByCamera = camera.transform(toDrawVertexPosition);
 
-                    toDrawVertex.position = positionTransformedByCamera;
+                    toDrawVertices[j] = toDrawVertex;
                     toDrawVerticesPositions[j] = positionTransformedByCamera;
                 }
 
@@ -181,14 +173,15 @@ public class Renderer {
 
                 for(int j=0; j < 3; j++){
 
-                    Vertex toDrawVertex = toDrawVertices[j];
+                    Vector3 toDrawVertexPosition = toDrawVerticesPositions[j];
 
-                    Vector3 positionTransformedByPerspective = Perspective.transform(toDrawVertex.position);
+                    Vector3 positionTransformedByPerspective = Perspective.transform(toDrawVertexPosition);
 
-                    toDrawVertex.position = positionTransformedByPerspective;
+                    toDrawVerticesPositions[j] = positionTransformedByPerspective;
                 }
 
-                triangleDrawFunction.accept(
+                toDraw.drawTriangle(
+                    toDrawVerticesPositions,
                     toDrawVertices,
                     toDraw.randomColors[i / 3],
                     drawFunction

@@ -1,7 +1,5 @@
 package pl.engine.render;
 
-import pl.engine.math.Vector3;
-
 import java.awt.*;
 
 public class Zbuffer {

@@ -1,24 +1,20 @@
 package pl.engine.shapes.spatial;
 
 import pl.engine.Triangleable;
-import pl.engine.exceptions.FileLoadException;
-import pl.engine.exceptions.FileLocationException;
 import pl.engine.math.Vector3;
 import pl.engine.render.Vertex;
+import pl.engine.texture.Texture;
+import pl.engine.texture.TextureVertex;
 
 import java.awt.*;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Stream;
 
 public class Mesh extends Triangleable{
 
-    public Mesh(Vertex[] v, Integer[] triangles, Color color, boolean isFilled){
-        super(v, triangles, color, isFilled);
+    public Mesh(Vector3[] verticesPositions, TextureVertex[] textureVertices, Vertex[] vertices, Color color, boolean isFilled) {
+        super(verticesPositions, textureVertices, vertices, color, null, isFilled);
+    }
+
+    public Mesh(Vector3[] verticesPositions, Vertex[] vertices, Color color, boolean isFilled) {
+        super(verticesPositions, vertices, color, isFilled);
     }
 }

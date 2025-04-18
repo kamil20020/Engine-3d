@@ -2,10 +2,8 @@ package pl.engine.texture;
 
 import pl.engine.general.QuadConsumer;
 import pl.engine.shapes.Drawable;
-import pl.engine.math.Vector3;
 
 import java.awt.*;
-import java.util.function.BiConsumer;
 
 public abstract class Texturable extends Drawable {
 

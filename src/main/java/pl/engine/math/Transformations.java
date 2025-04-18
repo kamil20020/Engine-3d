@@ -1,8 +1,5 @@
 package pl.engine.math;
 
-import pl.engine.math.Matrix;
-import pl.engine.math.Vector3;
-
 public class Transformations {
 
     public static Matrix getTransitionMatrix(Vector3 transition){

@@ -3,7 +3,6 @@ package pl.engine.shapes.flat;
 import pl.engine.general.QuadConsumer;
 import pl.engine.math.Vector3;
 import pl.engine.shapes.Drawable;
-import pl.engine.texture.Texture;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -167,36 +166,40 @@ public class Triangle extends Drawable {
             .change(v -> v / 3);
     }
 
-    public static Vector3 getMinXY(Vector3[] vertices){
+    public static int getMinXYIndex(Vector3[] vertices){
+
+        int minIndex = 1;
 
         Vector3 minXY = vertices[0];
 
-        for(int i=1; i < vertices.length; i++){
+        for(; minIndex < vertices.length; minIndex++){
 
-            Vector3 vertex = vertices[i];
+            Vector3 vertex = vertices[minIndex];
 
             if(vertex.x <= minXY.x && vertex.y <= minXY.y){
                 minXY = vertex;
             }
         }
 
-        return minXY;
+        return minIndex;
     }
 
-    public static Vector3 getMaxXY(Vector3[] vertices){
+    public static int getMaxXYIndex(Vector3[] vertices){
+
+        int maxIndex = 1;
 
         Vector3 maxXY = vertices[0];
 
-        for(int i=1; i < vertices.length; i++){
+        for(; maxIndex < vertices.length; maxIndex++){
 
-            Vector3 vertex = vertices[i];
+            Vector3 vertex = vertices[maxIndex];
 
             if(vertex.x >= maxXY.x && vertex.y >= maxXY.y){
                 maxXY = vertex;
             }
         }
 
-        return maxXY;
+        return maxIndex;
     }
 
     @Override

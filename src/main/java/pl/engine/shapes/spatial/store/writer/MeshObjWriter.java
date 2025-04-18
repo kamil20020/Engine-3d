@@ -6,9 +6,9 @@ import pl.engine.exceptions.FileCreateException;
 import pl.engine.exceptions.FileExistsException;
 import pl.engine.exceptions.FileWriteException;
 import pl.engine.math.Vector3;
+import pl.engine.render.Vertex;
 import pl.engine.shapes.spatial.Mesh;
 import pl.engine.shapes.spatial.store.MeshFormatType;
-import pl.engine.texture.Texturable;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -61,8 +61,8 @@ public class MeshObjWriter implements MeshWriter{
             );
         ){
 
-            saveVertices(bufferedWriter, mesh.getVertices());
-            saveTriangles(bufferedWriter, mesh.getTriangles());
+            saveVertices(bufferedWriter, mesh.getVerticesPositions());
+            saveTriangles(bufferedWriter, mesh.getVertices());
         }
         catch (IOException e){
             throw new FileWriteException(path, e.getMessage());
@@ -109,13 +109,13 @@ public class MeshObjWriter implements MeshWriter{
         log.debug("Saved mesh vertices to obj file");
     }
 
-    private static void saveTriangles(BufferedWriter bufferedWriter, Integer[] triangles) throws IOException {
+    private static void saveTriangles(BufferedWriter bufferedWriter, Vertex[] triangles) throws IOException {
 
         for(int i=0; i <= triangles.length - 3; i += 3){
 
-            Integer a = triangles[i] + 1;
-            Integer b = triangles[i + 1] + 1;
-            Integer c = triangles[i + 2] + 1;
+            Integer a = triangles[i].positionIndex + 1;
+            Integer b = triangles[i + 1].positionIndex + 1;
+            Integer c = triangles[i + 2].positionIndex + 1;
 
             String trianglesStr = triangleToObjFormat(a, b, c);
 

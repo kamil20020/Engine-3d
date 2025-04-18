@@ -8,7 +8,6 @@ import pl.engine.math.Vector3;
 import pl.engine.render.Vertex;
 import pl.engine.shapes.spatial.Mesh;
 import pl.engine.shapes.spatial.store.MeshFormatType;
-import pl.engine.texture.Texturable;
 import pl.engine.texture.TextureVertex;
 
 import java.awt.*;
@@ -20,7 +19,6 @@ import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Vector;
 import java.util.stream.Stream;
 
 public class MeshObjLoader implements MeshLoader{
@@ -28,7 +26,6 @@ public class MeshObjLoader implements MeshLoader{
     private LinkedList<Vector3> verticesPositions = new LinkedList<>();
     private List<TextureVertex> textureVertices = new LinkedList<>();
     private List<Vertex> vertices = new LinkedList<>();
-    private LinkedList<Integer> triangles = new LinkedList<>();
     private int offset;
     private int scale;
 
@@ -70,18 +67,10 @@ public class MeshObjLoader implements MeshLoader{
 
         log.debug("Finished loading obj");
 
-        if(textureVertices.size() == 0){
-
-            verticesPositions.stream()
-                .map(vertexPosition -> Vertex.of(vertexPosition))
-                .forEach(vertex -> {
-                    vertices.add(vertex);
-                });
-        }
-
         return new Mesh(
+            verticesPositions.toArray(new Vector3[0]),
+            textureVertices.toArray(new TextureVertex[0]),
             vertices.toArray(new Vertex[0]),
-            triangles.toArray(new Integer[0]),
             color,
             isFilled
         );
@@ -171,9 +160,9 @@ public class MeshObjLoader implements MeshLoader{
         int b = Integer.parseInt(words[2]) - 1;
         int c = Integer.parseInt(words[3]) - 1;
 
-        triangles.add(a);
-        triangles.add(b);
-        triangles.add(c);
+        vertices.add(Vertex.of(a));
+        vertices.add(Vertex.of(b));
+        vertices.add(Vertex.of(c));
     }
 
     private void handleLoadedTriangleComplexVertices(String[] words){
@@ -199,33 +188,26 @@ public class MeshObjLoader implements MeshLoader{
         String textureVertexIndexStr = vertexInfo[1];
 
         int vertexIndex = Integer.parseInt(vertexIndexStr) - 1;
-
-        Vector3 vertexPosition = verticesPositions.get(vertexIndex);
-        TextureVertex textureVertex = null;
+        int textureVertexIndex = -1;
 
         if(!textureVertexIndexStr.isBlank()){
 
-            int textureVertexIndex = Integer.parseInt(textureVertexIndexStr) - 1;
-
-            textureVertex = textureVertices.get(textureVertexIndex);
+            textureVertexIndex = Integer.parseInt(textureVertexIndexStr) - 1;
         }
 
-        Vertex newVertex = new Vertex(vertexPosition, textureVertex);
-
-        vertices.add(newVertex);
-        triangles.add(vertexIndex);
+        vertices.add(Vertex.of(vertexIndex, textureVertexIndex));
     }
 
     private void handleFourVerticesShape(){
 
-        ListIterator<Integer> trianglesLastElementListIterator = triangles.listIterator(triangles.size());
+        ListIterator<Vertex> trianglesLastElementListIterator = vertices.listIterator(vertices.size());
 
-        int lastVertexIndex = trianglesLastElementListIterator.previous();
-        int thirdVertexIndex = trianglesLastElementListIterator.previous();
-        int secondVertexIndex = trianglesLastElementListIterator.previous();
-        int firstVertexIndex = trianglesLastElementListIterator.previous();
+        Vertex lastVertex = trianglesLastElementListIterator.previous();
+        Vertex thirdVertex = trianglesLastElementListIterator.previous();
+        Vertex secondVertex = trianglesLastElementListIterator.previous();
+        Vertex firstVertex = trianglesLastElementListIterator.previous();
 
-        triangles.add(thirdVertexIndex);
-        triangles.add(firstVertexIndex);
+        vertices.add(new Vertex(thirdVertex.positionIndex, thirdVertex.textureVertexIndex));
+        vertices.add(new Vertex(firstVertex.positionIndex, firstVertex.textureVertexIndex));
     }
 }
