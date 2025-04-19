@@ -10,7 +10,6 @@ import pl.engine.texture.Texture;
 import pl.engine.texture.TextureVertex;
 
 import java.awt.*;
-import java.util.Random;
 
 public abstract class Triangleable extends Texturable {
 
@@ -18,7 +17,6 @@ public abstract class Triangleable extends Texturable {
     protected Vector3[] verticesPositions;
     protected TextureVertex[] textureVertices;
     protected Vertex[] vertices;
-    public Color[] randomColors;
     private double modelWidth;
     private double modelHeight;
     private double modelDepth;
@@ -30,15 +28,6 @@ public abstract class Triangleable extends Texturable {
         this.vertices = vertices;
         this.textureVertices = textureVertices;
         this.isFilled = isFilled;
-
-        randomColors = new Color[vertices.length / 3];
-
-        Random random = new Random();
-
-        for(int i=0; i < randomColors.length; i++){
-
-            randomColors[i] = new Color(random.nextInt(256), random.nextInt(256), random.nextInt(256));
-        }
 
         double minX = Double.MAX_VALUE;
         double maxX = 0;
@@ -236,5 +225,6 @@ public abstract class Triangleable extends Texturable {
         this.basicDrawFunction = pixelLevelDrawFunction;
 
         Triangle.drawFilled(verticesPositions, color, this::drawWithTexture);
+        Triangle.drawEdges(verticesPositions, Color.black, pixelLevelDrawFunction);
     }
 }

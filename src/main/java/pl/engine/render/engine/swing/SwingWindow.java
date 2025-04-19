@@ -1,12 +1,13 @@
-package pl.engine.render.window;
+package pl.engine.render.engine.swing;
 
-import pl.engine.EventsHandler;
-import pl.engine.render.screen.Screen;
-import pl.engine.render.screen.SwingScreen;
+import pl.engine.render.engine.EventsHandler;
+import pl.engine.render.engine.Screen;
+import pl.engine.render.engine.Window;
 
 import javax.swing.*;
+import java.awt.event.KeyListener;
 
-public class SwingWindow extends JFrame implements Window{
+public class SwingWindow extends JFrame implements Window {
 
     private final Screen screen;
 
@@ -17,7 +18,7 @@ public class SwingWindow extends JFrame implements Window{
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
         setExtendedState(MAXIMIZED_BOTH);
-        addKeyListener(eventsHandler);
+        addKeyListener((KeyListener) eventsHandler);
 
         screen = new SwingScreen();
         screen.init();

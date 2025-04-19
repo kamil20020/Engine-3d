@@ -1,6 +1,6 @@
 package pl.engine.render;
 
-import pl.engine.render.screen.SwingScreen;
+import pl.engine.render.engine.swing.SwingScreen;
 
 import java.awt.*;
 

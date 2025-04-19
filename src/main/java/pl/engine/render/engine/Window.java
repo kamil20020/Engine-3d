@@ -1,6 +1,6 @@
-package pl.engine.render.window;
+package pl.engine.render.engine;
 
-import pl.engine.render.screen.Screen;
+import pl.engine.render.engine.Screen;
 
 public interface Window {
 

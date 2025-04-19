@@ -1,4 +1,4 @@
-package pl.engine.render.screen;
+package pl.engine.render.engine;
 
 import pl.engine.render.Renderer;
 

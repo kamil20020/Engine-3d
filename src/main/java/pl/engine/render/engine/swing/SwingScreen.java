@@ -1,14 +1,14 @@
-package pl.engine.render.screen;
+package pl.engine.render.engine.swing;
 
 import pl.engine.math.Vector3;
-import pl.engine.render.Renderer;
+import pl.engine.render.engine.Screen;
 import pl.engine.shapes.flat.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class SwingScreen extends JPanel implements Screen{
+public class SwingScreen extends JPanel implements Screen {
 
     private final BufferedImage content;
     private Rect clearRect;

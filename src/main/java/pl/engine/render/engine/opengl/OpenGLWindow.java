@@ -1,4 +1,4 @@
-package pl.engine.render.window;
+package pl.engine.render.engine.opengl;
 
 import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFW;
@@ -8,17 +8,18 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pl.engine.EventsHandler;
-import pl.engine.render.screen.OpenGLScreen;
-import pl.engine.render.screen.Screen;
+import pl.engine.render.engine.EventsHandler;
+import pl.engine.render.engine.Window;
+import pl.engine.render.engine.Screen;
 
+import java.awt.event.KeyEvent;
 import java.nio.IntBuffer;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
-public class OpenGLWindow implements Window{
+public class OpenGLWindow implements Window {
 
     private final OpenGLScreen screen;
 
@@ -54,7 +55,31 @@ public class OpenGLWindow implements Window{
         log.debug("Created window");
 
         // init OpenGL
-        GLFW.glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {});
+        GLFW.glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
+
+            if(key == GLFW_KEY_UP){
+                key = 38;
+            }
+            else if(key == GLFW_KEY_DOWN){
+                key = 40;
+            }
+            else if(key == GLFW_KEY_LEFT){
+                key = 37;
+            }
+            else if(key == GLFW_KEY_RIGHT){
+                key = 39;
+            }
+
+            if(action == GLFW_PRESS){
+                eventsHandler.keyPressed(key);
+            }
+            else if(action == GLFW_REPEAT){
+                eventsHandler.keyTyped(key);
+            }
+            else if(action == GLFW_RELEASE){
+                eventsHandler.keyTyped(key);
+            }
+        });
 
         try(MemoryStack stack = stackPush()){
             IntBuffer pWidth = stack.mallocInt(1);

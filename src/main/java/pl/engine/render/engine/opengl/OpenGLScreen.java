@@ -1,9 +1,8 @@
-package pl.engine.render.screen;
+package pl.engine.render.engine.opengl;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
-import pl.engine.render.Renderer;
-import pl.engine.shapes.flat.Rect;
+import pl.engine.render.engine.Screen;
 
 import java.awt.*;
 import java.nio.ByteBuffer;
@@ -11,7 +10,7 @@ import java.nio.ByteBuffer;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL30.glGenerateMipmap;
 
-public class OpenGLScreen implements Screen{
+public class OpenGLScreen implements Screen {
 
     private ByteBuffer buffer;
     private long window;
@@ -51,17 +50,15 @@ public class OpenGLScreen implements Screen{
     @Override
     public void repaint() {
 
-        buffer.flip();
-
         glBindTexture(GL_TEXTURE_2D, textureID);
         glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, buffer);
 
         glEnable(GL_TEXTURE_2D);
         glBegin(GL_QUADS);
         glTexCoord2f(0, 0); glVertex2f(-1, -1);
-        glTexCoord2f(1, 0); glVertex2f( 1, -1);
-        glTexCoord2f(1, 1); glVertex2f( 1,  1);
-        glTexCoord2f(0, 1); glVertex2f(-1,  1);
+        glTexCoord2f(1, 0); glVertex2f(1, -1);
+        glTexCoord2f(1, 1); glVertex2f(1, 1);
+        glTexCoord2f(0, 1); glVertex2f(-1, 1);
         glEnd();
         glDisable(GL_TEXTURE_2D);
 
@@ -73,6 +70,11 @@ public class OpenGLScreen implements Screen{
     public void clearContent() {
 
         buffer.clear();
+
+        for (int i = 0; i < buffer.capacity(); i++) {
+            buffer.put(i, (byte) 0);
+        }
+
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
     }
 
@@ -80,11 +82,11 @@ public class OpenGLScreen implements Screen{
     public void drawPixel(double x, double y, double z, Color color){
 
         try{
-            byte r = (byte) color.getRed(); // 255
+            byte r = (byte)color.getRed(); // 255
             byte g = (byte) color.getGreen(); // 100
             byte b = (byte) color.getBlue(); // 50
 
-            int index = (int) ((x + y * width) * 3);
+            int index = ((int) y * width + (int) x) * 3;
 
             buffer.put(index, r);
             buffer.put(index + 1, g);
