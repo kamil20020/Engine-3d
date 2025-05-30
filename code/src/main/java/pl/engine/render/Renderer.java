@@ -70,19 +70,19 @@ public class Renderer {
 
         log.debug("Loaded textures");
 
-        cube = new Cube(Vector3.of(0, 0, 0), 1, Color.green, true);
+        cube = new Cube(Vector3.of(0, 0, 0), 1, Color.gray, true);
 
-        grassCube = meshLoader.load("./meshes/grass-cube/grass-cube.obj", Color.orange, false, 0, 1);
-        grassCube.setTexture(grassTexture);
+        grassCube = meshLoader.load("./meshes/mountains.obj", Color.white, false, 100, 1);
+//        grassCube.setTexture(grassTexture);
 
         log.debug("Loaded meshes");
 
-//        triangeables.addAll(List.of(grassCube));
+        triangeables.addAll(List.of(grassCube));
 
         log.debug("Finished renderer init");
     }
 
-    private void drawTrianlgeable(Triangleable toDraw, Vertex[] toDrawVertices,  Vector3[] toDrawVerticesPositions, Vector3 toMove){
+    private void drawTriangleable(Triangleable toDraw, Vertex[] toDrawVertices,  Vector3[] toDrawVerticesPositions, Vector3 toMove){
 
         for(int i=0; i <= toDraw.getVertices().length - 3; i += 3){
 
@@ -95,7 +95,8 @@ public class Renderer {
             toDraw.drawTriangle(
                 toDrawVerticesPositions,
                 toDrawVertices,
-                (toMove.x + toMove.y + toMove.z) % 2 == 0 ? Color.white : Color.green,
+                toDraw.getColor(),
+//                (toMove.x + toMove.y + toMove.z) % 2 == 0 ? Color.white : Color.green,
                 drawFunction
             );
         }
@@ -140,41 +141,41 @@ public class Renderer {
 
         Vector3 toMove = Vector3.empty();
 
-        for(int z = 0; z < 16; z++){
+//        for(int z = 0; z < 16; z++){
+//
+//            toMove.z = z;
+//
+//            for(int y = 0; y < 16; y++){
+//
+//                toMove.y = y;
+//
+//                for(int x = 0; x < 16; x++){
+//
+//                    toMove.x = x;
+//
+//                    drawTriangleable(cube, toDrawVertices, toDrawVerticesPositions, toMove);
+//                }
+//            }
+//        }
+//
+//        for(int z = 40; z < 50; z++){
+//
+//            toMove.z = z;
+//
+//            for(int y = 40; y < 50; y++){
+//
+//                toMove.y = y;
+//
+//                for(int x = 40; x < 50; x++){
+//
+//                    toMove.x = x;
+//
+//                    drawTriangleable(cube, toDrawVertices, toDrawVerticesPositions, toMove);
+//                }
+//            }
+//        }
 
-            toMove.z = z;
-
-            for(int y = 0; y < 16; y++){
-
-                toMove.y = y;
-
-                for(int x = 0; x < 16; x++){
-
-                    toMove.x = x;
-
-                    drawTrianlgeable(cube, toDrawVertices, toDrawVerticesPositions, toMove);
-                }
-            }
-        }
-
-        for(int z = 40; z < 50; z++){
-
-            toMove.z = z;
-
-            for(int y = 40; y < 50; y++){
-
-                toMove.y = y;
-
-                for(int x = 40; x < 50; x++){
-
-                    toMove.x = x;
-
-                    drawTrianlgeable(cube, toDrawVertices, toDrawVerticesPositions, toMove);
-                }
-            }
-        }
-
-//        triangeables.forEach(toDraw -> drawTrianlgeable(toDraw, toDrawVertices, toDrawVerticesPositions));
+        triangeables.forEach(toDraw -> drawTriangleable(toDraw, toDrawVertices, toDrawVerticesPositions, toMove));
 
         drawables.forEach(toDraw -> {
             toDraw.draw(drawFunction);

@@ -44,9 +44,9 @@ public class OpenGLWindow implements Window {
         GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);
         GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, GLFW.GLFW_TRUE);
 
-        GLFWVidMode videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+//        GLFWVidMode videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor()); //videoMode.width()
 
-        window = glfwCreateWindow(videoMode.width(), videoMode.height(), "BufferedImage to OpenGL", glfwGetPrimaryMonitor(), 0);
+        window = glfwCreateWindow(1200, 800, "BufferedImage to OpenGL", 0, 0);
 
         if (window == NULL) {
             throw new RuntimeException("Nie udało się stworzyć okna GLFW");

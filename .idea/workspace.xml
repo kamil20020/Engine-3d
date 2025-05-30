@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="e801123f-ff93-4a9e-9ed4-16b535e93a5b" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.mvn/jvm.config" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.mvn/maven.config" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cube.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/App.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/Engine.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/Triangleable.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/exceptions/FileCreateException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/exceptions/FileExistsException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/exceptions/FileLoadException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/exceptions/FileLocationException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/exceptions/FileWriteException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/exceptions/InvalidCloneException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/exceptions/MeshFormatWasNotFoundException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/general/PentaConsumer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/general/QuadConsumer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/general/TriConsumer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/math/Matrix.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/math/Transformations.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/math/Trigonometry.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/math/Vector3.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/render/Camera.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/render/Perspective.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/render/Renderer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/render/Vertex.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/render/Zbuffer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/render/engine/EventsHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/render/engine/RenderEngineFactory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/render/engine/Screen.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/render/engine/Window.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/render/engine/opengl/OpenGLEventsHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/render/engine/opengl/OpenGLRenderEngineFactory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/render/engine/opengl/OpenGLScreen.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/render/engine/opengl/OpenGLWindow.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/render/engine/swing/SwingEventsHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/render/engine/swing/SwingRenderEngineFactory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/render/engine/swing/SwingScreen.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/render/engine/swing/SwingWindow.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/shapes/Drawable.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/shapes/flat/Circle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/shapes/flat/Disk.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/shapes/flat/Line.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/shapes/flat/Rect.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/shapes/flat/Triangle.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/shapes/spatial/Cube.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/shapes/spatial/Mesh.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/shapes/spatial/store/MeshFormatType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/shapes/spatial/store/loader/GeneralMeshLoader.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/shapes/spatial/store/loader/MeshLoader.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/shapes/spatial/store/loader/MeshObjLoader.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/shapes/spatial/store/writer/GeneralMeshWriter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/shapes/spatial/store/writer/MeshObjWriter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/shapes/spatial/store/writer/MeshWriter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/texture/GridTexture.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/texture/Texturable.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/texture/Texture.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pl/engine/texture/TextureVertex.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/meshes/axis.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/meshes/castle-tower/castle-tower.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/meshes/crow/crow.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/meshes/crow/texture.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/meshes/cube.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/meshes/grass-cube/cube.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/meshes/grass-cube/grass-cube.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/meshes/grass-cube/texture-cube.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/meshes/grass-cube/texture.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/meshes/gun/gun.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/meshes/gun/texture.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/meshes/house-1/house-1.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/meshes/house-1/texture.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/meshes/house/house.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/meshes/house/texture.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/meshes/moon/moon.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/meshes/moon/texture.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/meshes/mountains.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/meshes/space-ship.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/meshes/teapot.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/meshes/tower/texture.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/meshes/tower/tower.obj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/simplelogger.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/textures/grass-grid.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/textures/grass-grid1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/textures/grass.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/pl/engine/AppTest.java" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2tjbgkOSzKik08JdK3q1HsOhqJn" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\biezace-projekty\engine-3d\engine\src\main\resources\meshes\crow" />
+      <recent name="D:\biezace-projekty\engine-3d\engine\src\main\resources\meshes\gun" />
+      <recent name="D:\biezace-projekty\engine-3d\engine\src\main\resources\meshes" />
+      <recent name="D:\biezace-projekty\engine-3d\engine\src\main\resources\textures" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="pl.engine" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="pl.engine.exceptions" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.App">
+    <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="pl.engine.App" />
+      <module name="engine3d" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="pl.engine.math.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Matrix" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="pl.engine.math.Matrix" />
+      <module name="engine3d" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="pl.engine.math.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="OpenGLScreen" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="pl.engine.render.opengl.OpenGLScreen" />
+      <module name="engine3d" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="pl.engine.render.engine.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Perspective" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="pl.engine.render.Perspective" />
+      <module name="engine3d" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="pl.engine.general.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.App" />
+        <item itemvalue="Application.OpenGLScreen" />
+        <item itemvalue="Application.Perspective" />
+        <item itemvalue="Application.Matrix" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e801123f-ff93-4a9e-9ed4-16b535e93a5b" name="Changes" comment="" />
+      <created>1740872583450</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1740872583450</updated>
+      <workItem from="1740872585667" duration="401000" />
+      <workItem from="1740918522341" duration="33000" />
+      <workItem from="1742056639055" duration="22552000" />
+      <workItem from="1742157276016" duration="409000" />
+      <workItem from="1742338219214" duration="862000" />
+      <workItem from="1742501677372" duration="13910000" />
+      <workItem from="1742558808267" duration="5265000" />
+      <workItem from="1742573405501" duration="529000" />
+      <workItem from="1742579356431" duration="209000" />
+      <workItem from="1742672001655" duration="16955000" />
+      <workItem from="1742722166578" duration="3487000" />
+      <workItem from="1742755436063" duration="1751000" />
+      <workItem from="1742768919862" duration="380000" />
+      <workItem from="1742858853002" duration="335000" />
+      <workItem from="1742908405969" duration="598000" />
+      <workItem from="1743104097716" duration="9664000" />
+      <workItem from="1743278449354" duration="14002000" />
+      <workItem from="1743371406849" duration="5175000" />
+      <workItem from="1743694837612" duration="20000" />
+      <workItem from="1743711599986" duration="11720000" />
+      <workItem from="1743862823198" duration="381000" />
+      <workItem from="1743885036803" duration="7139000" />
+      <workItem from="1743892664422" duration="71000" />
+      <workItem from="1743892763388" duration="6173000" />
+      <workItem from="1743925390121" duration="1224000" />
+      <workItem from="1743951286078" duration="50000" />
+      <workItem from="1743966307393" duration="15089000" />
+      <workItem from="1744063089525" duration="959000" />
+      <workItem from="1744301713858" duration="129000" />
+      <workItem from="1744463633222" duration="28926000" />
+      <workItem from="1744545153700" duration="42569000" />
+      <workItem from="1744589277392" duration="231000" />
+      <workItem from="1744627179873" duration="3216000" />
+      <workItem from="1744636423448" duration="5160000" />
+      <workItem from="1744660533941" duration="14681000" />
+      <workItem from="1744705801453" duration="2855000" />
+      <workItem from="1744747395482" duration="10585000" />
+      <workItem from="1744819049862" duration="26812000" />
+      <workItem from="1744893345449" duration="19298000" />
+      <workItem from="1744916301544" duration="17704000" />
+      <workItem from="1744966059740" duration="4257000" />
+      <workItem from="1744982983944" duration="13625000" />
+      <workItem from="1745002143207" duration="4797000" />
+      <workItem from="1745007558234" duration="11349000" />
+      <workItem from="1745019127092" duration="588000" />
+      <workItem from="1745066972383" duration="7750000" />
+      <workItem from="1745101203608" duration="241000" />
+      <workItem from="1748389456195" duration="717000" />
+      <workItem from="1748453661407" duration="72000" />
+      <workItem from="1748646572681" duration="1530000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="drawFunction" language="JAVA" />
+        <watch expression="grassCube.isFilled" />
+      </configuration>
+    </watches-manager>
+  </component>
+</project>
