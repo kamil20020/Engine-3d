@@ -32,15 +32,15 @@ Unfortunatelly algorithms written are so inefficient that I decided to focus on 
 
 Mesh of tower:
 <p align="center">
-    <img src="screenshoty/logowanie-4.png">
+    <img src="screenshots/tower.png">
 <p>
 
 Mesh of mountains:
 <p align="center">
-    <img src="screenshoty/logowanie-4.png">
+    <img src="screenshots/mountains.png">
 <p>
 
 Two cubes of cubes:
 <p align="center">
-    <img src="screenshoty/logowanie-4.png">
+    <img src="screenshots/cubes.png">
 <p>
